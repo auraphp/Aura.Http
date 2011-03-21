@@ -31,26 +31,37 @@ class MimeUtilityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    // todo better testing ~ check rfc
     public function testHeaderValue()
     {
         $mime      = $this->newUtility();
-        $text      = str_repeat('Foobar', 15);
-        $text     .= "ö "; // non ascii char
-        $text     .= str_repeat('Foobar ', 8);
-        $text     .= '|';
-        
-        $expected  = '=?utf-8?Q?'; // prefix
-        $expected .= substr(str_repeat('Foobar', 15), 0, 62);
-        $expected .= "?=\r\n";
-        $expected .= ' =?utf-8?Q?';// space + prefix
-        $expected .= substr(str_repeat('Foobar', 15), 62);
-        $expected .= "=C3=B6?= "; // encoded non-ascii char + suffix + space
-        $expected .= str_repeat('Foobar ', 8);
-        $expected .= '|';
+        $text      = 'A value with a quoted "Leö" non ascii char';
+        $expected  = 'A value with a quoted=?utf-8?Q?_"Le=C3=B6"?= non ascii char';
         
         $actual    = $mime->headerValue('Label-Foobar', $text);
         
-        // todo needs more testing
+        $this->assertEquals($expected, $actual);
+        
+        $text      = '"Leö was here"';
+        $expected  = '=?utf-8?Q?"Le=C3=B6?= was here"';
+        
+        $actual    = $mime->headerValue('Label-Foobar', $text);
+        
+        $this->assertEquals($expected, $actual);
+        
+        $mime      = $this->newUtility();
+        $text      = 'TheBirdIsTheWord-ö-TheBirdIsTheWord-ö-TheBirdIsTheWord-ö-TheBirdIsTheWord-ö-TheBirdIsTheWord';
+        $exp_text  = str_replace("ö", '=C3=B6', $text);
+        
+        $expected  = '=?utf-8?Q?';
+        $expected .= substr($exp_text, 0, 62);
+        $expected .= "?=\r\n ";
+        $expected .= '=?utf-8?Q?'; // prefix
+        $expected .= substr($exp_text, 62);
+        $expected .= "?="; // suffix 
+        
+        $actual    = $mime->headerValue('Label-Foobar', $text);
+        
         $this->assertEquals($expected, $actual);
     }
 

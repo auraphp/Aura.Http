@@ -121,7 +121,6 @@ class MimeUtility
             
             // any non-ascii characters?
             if (preg_match('/[\x80-\xFF]{1}/', $hdr_val)){
-                
                 // Check if there is a double quote at beginning or end of the string to 
                 // prevent that an open or closing quote gets ignored because its encapsuled
                 // by an encoding prefix or suffix. 
@@ -181,7 +180,7 @@ class MimeUtility
                 $reg = $reg1st;
                 
                 // Prevent lines that are just way too short.
-                if ($maxLength1stLine > 1){
+                if ($maxLength1stLine > 1){ // todo is this right?
                     $reg = $reg2nd;
                 }
                 
@@ -203,12 +202,12 @@ class MimeUtility
                         $hdr_val = substr($hdr_val, strlen($matches[0]));
                     }else{
                         $part    = $hdr_val;
-                        $hdr_val = "";
+                        $hdr_val = '';
                     }
                     
                     // RFC 2047 specifies that any split header should be
                     // separated by a CRLF SPACE. 
-                    if ($output){
+                    if (! empty($output)) {
                         $output .= "\r\n ";
                     }
                     

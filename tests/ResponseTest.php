@@ -244,16 +244,28 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         
         $this->assertSame('hello', $actual);
     }
-
-    /**
-     * @todo Implement testRedirect().
-     */
+    
     public function testRedirect()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $response = $this->newResponse();
+        
+        // overwrite the header that is set by default in setUp()
+        $this->header_expect[0] = array('HTTP/1.1 302 Found', true, 302);
+        $this->header_expect[]  = array('Location: http://google.com/q=search');
+        
+        ob_start();
+        //  \r\n should be removed
+        $response->redirect("http://google.com/\r\nq=search");
+    }
+    
+    public function testRedirectWithoutFullUriException()
+    {
+        $response = $this->newResponse();
+        
+        $this->setExpectedException('aura\http\Exception');
+        
+        // full uri requires scheme
+        $response->redirect('google.com');
     }
 
     public function headerCallback($header, $replace, $response_code)

@@ -369,7 +369,7 @@ abstract class AbstractResponse
     
     /**
      *
-     * 
+     * Set multiple headers.
      * 
      * @param array $headers
      * 
@@ -386,7 +386,7 @@ abstract class AbstractResponse
             $header = array_merge($default, $header);
             
             if (! $header['name'] || ! $header['value']) {
-                throw new \UnexpectedValueException();// todo (option to) skip instead
+                throw new \UnexpectedValueException();// todo (option to?) skip instead?
             }
             
             $this->setHeader($header['name'], $header['value'], $header['replace']);
@@ -496,7 +496,7 @@ abstract class AbstractResponse
     
     /**
      *
-     * 
+     * Set multiple cookies.
      * 
      * @param array $cookies
      * 

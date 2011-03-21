@@ -138,20 +138,13 @@ class Response extends AbstractResponse
      * @param int|string $code The HTTP status code to redirect with; default
      * is '302 Found'.
      * 
-     * @param boolean   $cocheable Is this redirect cacheable. If false HTTP 
-     * caching is disabled. Defaults to false.
-     * 
      * @return void
      * 
      * @throws aura\http\Exception Missing or incomplete URI.
      * 
      */
-    public function redirect($href, $code = '302', $cacheable = false)
+    public function redirect($href, $code = '302')
     {
-        if ($cacheable) {
-            $this->setNoCache();
-        }
-        
         // make sure there's actually an href
         $href = trim($href);
         if (! $href || false === strpos($href, '://')) {
@@ -178,7 +171,7 @@ class Response extends AbstractResponse
         session_write_close();
         
         // send the response directly -- done.
-        $this->display();
+        return $this->display();
     }
     
     /**

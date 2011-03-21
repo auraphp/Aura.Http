@@ -136,7 +136,11 @@ abstract class AbstractResponse
 
 
 
-
+    /**
+     *
+     * @param MimeUtility $mime_utility 
+     * 
+     */
     public function __construct(MimeUtility $mime_utility)
     {
         $this->mime_utility = $mime_utility;
@@ -151,7 +155,7 @@ abstract class AbstractResponse
      * 
      * @return mixed The property value.
      * 
-     * @throws \LogicException 
+     * @throws \UnexpectedValueException 
      * 
      */
     public function __get($key)
@@ -166,7 +170,7 @@ abstract class AbstractResponse
         );
         
         if (empty($valid[$key])) {
-            throw new \LogicException("'{$key}' is protected or does not exist.");
+            throw new \UnexpectedValueException("'{$key}' is protected or does not exist.");
         }
         
         return $this->$valid[$key];
@@ -182,7 +186,7 @@ abstract class AbstractResponse
      * 
      * @param mixed $value 
      * 
-     * @throws \LogicException 
+     * @throws \UnexpectedValueException 
      * 
      */
     public function __set($key, $value)
@@ -195,7 +199,7 @@ abstract class AbstractResponse
         );
         
         if (empty($valid[$key])) {
-            throw new \LogicException("'{$key}' is protected or does not exist.");
+            throw new \UnexpectedValueException("'{$key}' is protected or does not exist.");
         }
         
         $this->{$valid[$key]}($value);
@@ -207,9 +211,9 @@ abstract class AbstractResponse
      * 
      * @param string $version The HTTP version to use for this response.
      * 
-     * @return aura\web\Response This response object.
+     * @return aura\http\Response This response object.
      * 
-     * @throws \LogicException when the version number
+     * @throws \UnexpectedValueException when the version number
      * is not '1.0' or '1.1'.
      * 
      */
@@ -217,7 +221,7 @@ abstract class AbstractResponse
     {
         $version = trim($version);
         if ($version != '1.0' && $version != '1.1') {
-            throw new \LogicException('Invalid HTTP version.');
+            throw new \UnexpectedValueException('Invalid HTTP version.');
         }
         
         $this->version = (string) $version;
@@ -245,9 +249,9 @@ abstract class AbstractResponse
      * 
      * @param int $code An HTTP status code, such as 200, 302, 404, etc.
      * 
-     * @return aura\web\Response This response object.
+     * @return aura\http\Response This response object.
      * 
-     * @throws \LogicException when the status code is less than 100
+     * @throws \UnexpectedValueException when the status code is less than 100
      * or greater than 599
      * 
      */
@@ -255,7 +259,7 @@ abstract class AbstractResponse
     {
         $code = (int) $code;
         if ($code < 100 || $code > 599) {
-            throw new \LogicException('Invalid status code');
+            throw new \UnexpectedValueException('Invalid status code');
         }
         
         $this->status_code = $code;
@@ -271,7 +275,7 @@ abstract class AbstractResponse
      * @param string $text The status text; if empty, will set the text to the
      * default for the current status code.
      * 
-     * @return aura\web\Response This response object.
+     * @return aura\http\Response This response object.
      * 
      */
     public function setStatusText($text)
@@ -319,8 +323,8 @@ abstract class AbstractResponse
      * Sets a header value in $this->headers.
      * 
      * This method will not set 'HTTP' headers for response status codes; use
-     * the [[aura\web\Response::setStatusCode() | ]] and 
-     * [[aura\web\Response::setStatusText() | ]] methods instead.
+     * the [[aura\http\Response::setStatusCode() | ]] and 
+     * [[aura\http\Response::setStatusText() | ]] methods instead.
      * 
      * @param string $name The header label, such as "Content-Type".
      * 
@@ -330,9 +334,9 @@ abstract class AbstractResponse
      * values of the same key.  When false, the same header key is sent
      * multiple times with the different values.
      * 
-     * @return aura\web\Response This response object.
+     * @return aura\http\Response This response object.
      * 
-     * @throws \LogicException When trying to set a 'HTTP' header.
+     * @throws \UnexpectedValueException When trying to set a 'HTTP' header.
      * 
      * @see [[php::header() | ]]
      * 
@@ -347,7 +351,7 @@ abstract class AbstractResponse
         if ($lower == 'http') {
             $msg = 'Cannot set HTTP headers. ' .
                    'Use setStatusCode() / setStatusText() instead.';
-            throw new \LogicException($msg);
+            throw new \UnexpectedValueException($msg);
         }
         
         // add the header to the list
@@ -363,18 +367,29 @@ abstract class AbstractResponse
         return $this;
     }
     
+    /**
+     *
+     * 
+     * 
+     * @param array $headers
+     * 
+     * @return AbstractResponse 
+     * 
+     * @see setHeader()
+     * 
+     */
     public function setHeaders(array $headers)
     {
         $default = array('name' => null, 'value' => null, 'replace' => false);
         
         foreach ($headers as $header) {
-            list($name, $value, $replace) = array_merge($header, $default);
+            $header = array_merge($default, $header);
             
-            if (! $name || ! $value) {
-                throw new \LogicException();// todo (option to) skip instead
+            if (! $header['name'] || ! $header['value']) {
+                throw new \UnexpectedValueException();// todo (option to) skip instead
             }
             
-            $this->setHeader($name, $value, $replace);
+            $this->setHeader($header['name'], $header['value'], $header['replace']);
         }
         
         return $this;
@@ -415,7 +430,7 @@ abstract class AbstractResponse
      * 
      * @param string $content The body content of the response.
      * 
-     * @return aura\web\Response This response object.
+     * @return aura\http\Response This response object.
      * 
      */
     public function setContent($content)
@@ -459,7 +474,7 @@ abstract class AbstractResponse
      * only through the HTTP protocol. This means that the cookie won't be
      * accessible by scripting languages, such as JavaScript.
      * 
-     * @return aura\web\Response This response object.
+     * @return aura\http\Response This response object.
      * 
      * @see [[php::setcookie() | ]]
      * 
@@ -479,6 +494,17 @@ abstract class AbstractResponse
         return $this;
     }
     
+    /**
+     *
+     * 
+     * 
+     * @param array $cookies
+     * 
+     * @return AbstractResponse 
+     * 
+     * @see setCookie()
+     * 
+     */
     public function setCookies(array $cookies)
     {
         $default = array(
@@ -492,14 +518,15 @@ abstract class AbstractResponse
         );
         
         foreach ($cookies as $cookie) {
-            $cookie = array_merge($cookie, $default);
-            list($name, $val, $exp, $path, $domain, $secure, $httponly) = $cookie;
+            $cookie = array_merge($default, $cookie);
             
-            if (! $name) {
-                throw new \LogicException();// todo (option to) skip instead
+            if (! $cookie['name']) {
+                throw new \UnexpectedValueException();// todo (option to?) skip instead
             }
             
-            $this->setCookie($name, $val, $exp, $path, $domain, $secure, $httponly);
+            $this->setCookie($cookie['name'], $cookie['value'], $cookie['expires'], 
+                             $cookie['path'], $cookie['domain'], 
+                             $cookie['secure'], $cookie['httponly']);
         }
         
         return $this;

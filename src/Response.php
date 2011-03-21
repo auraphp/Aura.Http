@@ -68,7 +68,7 @@ class Response extends AbstractResponse
      * @param bool $flag True to send by HTTP only, false to send by any
      * method.
      * 
-     * @return aura\web\Response This response object.
+     * @return aura\http\Response This response object.
      * 
      */
     public function setCookiesHttponly($flag)
@@ -187,7 +187,7 @@ class Response extends AbstractResponse
      * 
      * @return void
      * 
-     * @throws aura\web\Exception_HeadersSent if headers have
+     * @throws aura\http\Exception_HeadersSent if headers have
      * already been sent.
      * 
      */

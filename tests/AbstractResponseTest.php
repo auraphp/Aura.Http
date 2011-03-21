@@ -23,7 +23,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
         $resp->status_text;
         
         // invalid or protected should cause an exception
-        $this->setExpectedException('\LogicException');
+        $this->setExpectedException('\UnexpectedValueException');
         $resp->invalid;
     }
 
@@ -38,25 +38,28 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
         $resp->status_text = 'Status';
         
         // invalid or protected should cause an exception
-        $this->setExpectedException('\LogicException');
+        $this->setExpectedException('\UnexpectedValueException');
         $resp->invalid = 'xxx';
     }
 
     public function testSetVersion()
     {
         $resp   = $this->newAbstractResponse();
-        $resp->setVersion('1.0');
+        $return = $resp->setVersion('1.0');
         $actual = $resp->getVersion();
         $this->assertSame('1.0', $actual);
         
         $resp->version = '1.0';
         $actual = $resp->getVersion();
         $this->assertSame('1.0', $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
     }
 
     public function testSetVersionExceptionOnInvalidVersion()
     {
-        $this->setExpectedException('\LogicException');
+        $this->setExpectedException('\UnexpectedValueException');
         $resp   = $this->newAbstractResponse();
         $resp->setVersion('2.0');
     }
@@ -75,25 +78,28 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetStatusCode()
     {
         $resp   = $this->newAbstractResponse();
-        $resp->setStatusCode(101);
+        $return = $resp->setStatusCode(101);
         $actual = $resp->getStatusCode();
         $this->assertSame(101, $actual);
         
         $resp->status_code = 102;
         $actual = $resp->getStatusCode();
         $this->assertSame(102, $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
     }
 
     public function testSetStatusCodeExceptionLessThan100()
     {
-        $this->setExpectedException('\LogicException');
+        $this->setExpectedException('\UnexpectedValueException');
         $resp   = $this->newAbstractResponse();
         $resp->setStatusCode(99);
     }
 
     public function testSetStatusCodeExceptionGreaterThan599()
     {
-        $this->setExpectedException('\LogicException');
+        $this->setExpectedException('\UnexpectedValueException');
         $resp   = $this->newAbstractResponse();
         $resp->setStatusCode(600);
     }
@@ -101,7 +107,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetStatusText()
     {
         $resp   = $this->newAbstractResponse();
-        $resp->setStatusText("I'm a teapot");
+        $return = $resp->setStatusText("I'm a teapot");
         $actual = $resp->getStatusText();
         $this->assertSame("I'm a teapot", $actual);
         
@@ -109,6 +115,9 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
         $resp->status_text = "I'm a teapot";
         $actual = $resp->getStatusText();
         $this->assertSame("I'm a teapot", $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
     }
 
     public function testGetStatusCode()
@@ -140,13 +149,16 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetHeader()
     {
         $resp     = $this->newAbstractResponse();
-        $resp->setHeader('foo_bar', 'foobar header');
+        $return   = $resp->setHeader('foo_bar', 'foobar header');
         
         $actual   = $this->readAttribute($resp, 'headers');
         $expected = array(
             'Foo-Bar' => 'foobar header'
         );
         $this->assertEquals($expected, $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
     }
     
     public function testSetHeaderReplace()
@@ -177,9 +189,44 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     
     public function testSetHeaderExceptionWhenSettingHttpHeader()
     {
-        $this->setExpectedException('\LogicException');
+        $this->setExpectedException('\UnexpectedValueException');
         $resp   = $this->newAbstractResponse();
-        $resp->setHeader('Http', 'dont set here');
+        $resp->setHeader('Http', 'dont set');
+    }
+
+    public function testSetHeaders()
+    {
+        $resp      = $this->newAbstractResponse();
+        $headers[] = array('name' => 'foo', 'value' => 'bar');
+        $headers[] = array('name' => 'bar', 'value' => 'foobars', 'replace' => true);
+        
+        $return    = $resp->setHeaders($headers);
+        
+        $actual    = $this->readAttribute($resp, 'headers');
+        $expected  = array('Foo'  => 'bar', 'Bar' => 'foobars');
+        
+        $this->assertEquals($expected, $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
+    }
+
+    public function testSetHeadersNoNameException()
+    {
+        $resp      = $this->newAbstractResponse();
+        $headers[] = array('value' => 'foobars');
+        
+        $this->setExpectedException('\UnexpectedValueException');
+        $resp->setHeaders($headers);
+    }
+
+    public function testSetHeadersNoValueException()
+    {
+        $resp      = $this->newAbstractResponse();
+        $headers[] = array('name' => 'foo');
+        
+        $this->setExpectedException('\UnexpectedValueException');
+        $resp->setHeaders($headers);
     }
 
     public function testGetHeader()
@@ -218,7 +265,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetContent()
     {
         $resp   = $this->newAbstractResponse();
-        $resp->setContent('Hello World!');
+        $return = $resp->setContent('Hello World!');
         $actual = $resp->getContent();
         $this->assertSame('Hello World!', $actual);
         
@@ -226,6 +273,9 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
         $resp->content = 'Hello World!';
         $actual = $resp->getContent();
         $this->assertSame('Hello World!', $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
     }
 
     public function testGetContent()
@@ -246,7 +296,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetCookie()
     {
         $resp     = $this->newAbstractResponse();
-        $resp->setCookie('login', '1234567890');
+        $return   = $resp->setCookie('login', '1234567890');
         
         $actual   = $this->readAttribute($resp, 'cookies');
         $expected = array(
@@ -260,6 +310,51 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertEquals($expected, $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
+    }
+
+    public function testSetCookies()
+    {
+        $resp      = $this->newAbstractResponse();
+        $cookies[] = array('name' => 'foo');
+        $cookies[] = array('name' => 'bar', 'value' => 'foobars');
+        
+        $return    = $resp->setCookies($cookies);
+        
+        $actual    = $this->readAttribute($resp, 'cookies');
+        $expected  = array(
+            'foo' => array(
+                'value'     => null,
+                'expires'   => 0,
+                'path'      => '',
+                'domain'    => '',
+                'secure'    => false,
+                'httponly'  => null,
+            ),
+            'bar' => array(
+                'value'     => 'foobars',
+                'expires'   => 0,
+                'path'      => '',
+                'domain'    => '',
+                'secure'    => false,
+                'httponly'  => null,
+            ),
+        );
+        $this->assertEquals($expected, $actual);
+        
+        // returns self  
+        $this->assertInstanceOf('\aura\http\AbstractResponse', $return);
+    }
+
+    public function testSetCookiesNoNameException()
+    {
+        $resp      = $this->newAbstractResponse();
+        $cookies[] = array('value' => 'foobars');
+        
+        $this->setExpectedException('\UnexpectedValueException');
+        $resp->setCookies($cookies);
     }
 
     public function testGetCookie()

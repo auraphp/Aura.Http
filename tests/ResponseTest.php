@@ -9,7 +9,7 @@ function header($header, $replace = -1, $response_code = -1)
 }
 
 function setcookie($name, $val = -1, $expires = -1, $path = -1, $domain = -1,
-                $secure = -1, $httponly = -1)
+                   $secure = -1, $httponly = -1)
 {
     ResponseTest::$callback->cookieCallBack($name, $val, $expires, $path, 
                                             $domain, $secure, $httponly);
@@ -264,7 +264,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         
         $this->setExpectedException('aura\http\Exception');
         
-        // full uri requires scheme
+        // A full uri requires a scheme
         $response->redirect('google.com');
     }
 

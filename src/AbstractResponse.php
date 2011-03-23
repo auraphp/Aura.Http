@@ -386,7 +386,8 @@ abstract class AbstractResponse
             $header = array_merge($default, $header);
             
             if (! $header['name'] || ! $header['value']) {
-                throw new \UnexpectedValueException();// todo (option to?) skip instead?
+                $msg = 'Header has a missing name or value.';
+                throw new \UnexpectedValueException($msg);
             }
             
             $this->setHeader($header['name'], $header['value'], $header['replace']);
@@ -521,7 +522,7 @@ abstract class AbstractResponse
             $cookie = array_merge($default, $cookie);
             
             if (! $cookie['name']) {
-                throw new \UnexpectedValueException();// todo (option to?) skip instead
+                throw new \UnexpectedValueException('Cookie has a missing name');
             }
             
             $this->setCookie($cookie['name'], $cookie['value'], $cookie['expires'], 

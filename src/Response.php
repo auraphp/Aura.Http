@@ -1,203 +1,100 @@
 <?php
-/**
- * 
- * This file is part of the Aura project for PHP.
- * 
- * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
- */
 namespace aura\http;
-
-/**
- * 
- * Generic HTTP response object for sending headers, cookies, and content.
- * 
- * This is a fluent class; the set() methods can be chained together like so:
- * 
- * {{code: php
- *     $response->setStatusCode(404)
- *              ->setHeader('X-Foo', 'Bar')
- *              ->setCookie('baz', 'dib')
- *              ->setContent('Page not found.')
- *              ->display();
- * }}
- * 
- * @package aura.web
- * 
- * @author Paul M. Jones <pmjones@solarphp.com>
- * 
- * @todo Add charset param so that headers get sent with right encoding?
- * 
- */
-class Response extends AbstractResponse
+class Response
 {
+    protected $cookies;
+    
+    protected $content;
+    
+    protected $headers;
+    
+    protected $status_code;
+    
+    protected $status_text;
+    
     /**
      * 
-     * Whether or not cookies should default being sent by HTTP only.
+     * List of the HTTP status text default values.
      * 
-     * @var bool
+     * @var array
      * 
      */
-    protected $cookies_httponly = true;
+    protected $status_text_default = array(
+        '100' => 'Continue',
+        '101' => 'Switching Protocols',
+
+        '200' => 'OK',
+        '201' => 'Created',
+        '202' => 'Accepted',
+        '203' => 'Non-Authoritative Information',
+        '204' => 'No Content',
+        '205' => 'Reset Content',
+        '206' => 'Partial Content',
+
+        '300' => 'Multiple Choices',
+        '301' => 'Moved Permanently',
+        '302' => 'Found',
+        '303' => 'See Other',
+        '304' => 'Not Modified',
+        '305' => 'Use Proxy',
+        '307' => 'Temporary Redirect',
+
+        '400' => 'Bad Request',
+        '401' => 'Unauthorized',
+        '402' => 'Payment Required',
+        '403' => 'Forbidden',
+        '404' => 'Not Found',
+        '405' => 'Method Not Allowed',
+        '406' => 'Not Acceptable',
+        '407' => 'Proxy Authentication Required',
+        '408' => 'Request Timeout',
+        '409' => 'Conflict',
+        '410' => 'Gone',
+        '411' => 'Length Required',
+        '412' => 'Precondition Failed',
+        '413' => 'Request Entity Too Large',
+        '414' => 'Request Uri Too Long',
+        '415' => 'Unsupported Media Type',
+        '416' => 'Requested Range Not Satisfiable',
+        '417' => 'Expectation Failed',
+
+        '500' => 'Internal Server Error',
+        '501' => 'Not Implemented',
+        '502' => 'Bad Gateway',
+        '503' => 'Service Unavailable',
+        '504' => 'Gateway Timeout',
+        '505' => 'HTTP Version Not Supported',
+    );
     
+    protected $version;
     
     /**
-     * 
-     * Sends all headers and cookies, then returns the body.
-     * 
-     * @return string
+     *
+     * @param MimeUtility $mime_utility 
      * 
      */
-    public function __toString()
+    public function __construct(MimeUtility $mime_utility)
     {
-        // __toString cannot throw exceptions
-        try {
-            $this->sendHeaders();
-        } catch (Exception $e) {
-            return ''; // todo what to do? trigger_error? let the fatal error happen?
-        }
-        
-        // cast to string to avoid fatal error when returning nulls
-        return (string) $this->content;
+        $this->mime_utility = $mime_utility;
     }
     
-    /**
-     * 
-     * By default, should cookies be sent by HTTP only?
-     * 
-     * @param bool $flag True to send by HTTP only, false to send by any
-     * method.
-     * 
-     * @return aura\http\Response This response object.
-     * 
-     */
-    public function setCookiesHttponly($flag)
-    {
-        $this->cookies_httponly = (bool) $flag;
-        return $this;
-    }
-    
-    /**
-     * 
-     * Should the response disable HTTP caching?
-     * 
-     * When true, the response will send these headers:
-     * 
-     * {{code:
-     *     Pragma: no-cache
-     *     Cache-Control: no-store, no-cache, must-revalidate
-     *     Cache-Control: post-check=0, pre-check=0
-     *     Expires: 1
-     * }}
-     * 
-     * @param bool $flag When true, disable browser caching. Default is true.
-     * 
-     * @see redirectNoCache()
-     * 
-     * @return void
-     * 
-     */
-    public function setNoCache($flag = true)
-    {
-        if ($flag) {
-            $this->headers['Pragma']        = 'no-cache';
-            $this->headers['Cache-Control'] = array(
-                'no-store, no-cache, must-revalidate',
-                'post-check=0, pre-check=0',
-            );
-            $this->headers['Expires']       = '1';
-        } else {
-            unset($this->headers['Pragma']);
-            unset($this->headers['Cache-Control']);
-            unset($this->headers['Expires']);
-        }
-        
-        return $this;
-    }
-    
-    /**
-     * 
-     * Sends all headers and cookies, then prints the response content.
-     * 
-     * @return void
-     * 
-     */
-    public function display()
+    public function send()
     {
         $this->sendHeaders();
-        echo $this->content;
+        echo $this->getContent();
     }
     
-    /**
-     * 
-     * Issues an immediate "Location" redirect.  Use instead of display()
-     * to perform a redirect.  You should die() or exit() after calling this.
-     * 
-     * @param string $href The URI to redirect.
-     * 
-     * @param int|string $code The HTTP status code to redirect with; default
-     * is '302 Found'.
-     * 
-     * @return void
-     * 
-     * @throws aura\http\Exception Missing or incomplete URI.
-     * 
-     */
-    public function redirect($href, $code = '302')
-    {
-        // make sure there's actually an href
-        $href = trim($href);
-        if (! $href || false === strpos($href, '://')) {
-            throw new Exception('Missing or incomplete URI cannot redirect.');
-        }
-
-        // external link, protect against header injections
-        $href = str_replace(array("\r", "\n"), '', $href);
-        
-        // kill off all output buffers
-        while(@ob_end_clean());
-        
-        
-        // set the status code
-        $this->setStatusCode($code);
-        
-        // set the redirect location 
-        $this->setHeader('Location', $href);
-        
-        // clear the response body
-        $this->content = null;
-        
-        // save the session
-        session_write_close();
-        
-        // send the response directly -- done.
-        return $this->display();
-    }
-    
-    /**
-     * 
-     * Sends all headers and cookies.
-     * 
-     * @return void
-     * 
-     * @throws aura\http\Exception_HeadersSent if headers have
-     * already been sent.
-     * 
-     */
-    protected function sendHeaders()
+    public function sendHeaders()
     {
         if (headers_sent($file, $line)) {
             throw new Exception_HeadersSent($file, $line);
         }
         
-        // build the full status header string. The values have already been
-        // sanitized by setStatus() and setStatusText().
+        // build and send the status header
         $status = "HTTP/{$this->version} {$this->status_code}";
         if ($this->status_text) {
             $status .= " {$this->status_text}";
         }
-        
-        // send the status header
         header($status, true, $this->status_code);
         
         // send each of the remaining headers
@@ -210,31 +107,17 @@ class Response extends AbstractResponse
             
             // send each value for the header
             foreach ((array) $list as $val) {
-                // we don't need full MIME escaping here, just sanitize the
-                // value by stripping CR and LF chars
-                $val = str_replace(array("\r", "\n"), '', $val);
+                $line = $this->mime_utility->headerLine($key, $val);
                 header("$key: $val");
             }
         }
         
         // send each of the cookies
         foreach ($this->cookies as $key => $val) {
-            
-            // was httponly set for this cookie?  if not, use the default.
-            $httponly = ($val['httponly'] === null)
-                ? $this->cookies_httponly
-                : (bool) $val['httponly'];
-            
-            // try to allow for times not in unix-timestamp format
-            if (! is_numeric($val['expires'])) {
-                $val['expires'] = strtotime($val['expires']);
-            }
-            
-            // actually set the cookie
             setcookie(
                 $key,
                 $val['value'],
-                (int) $val['expires'],
+                (int) $val['expire'],
                 $val['path'],
                 $val['domain'],
                 (bool) $val['secure'],
@@ -242,4 +125,162 @@ class Response extends AbstractResponse
             );
         }
     }
+    
+    public function setCookies(array $cookies = array())
+    {
+        $this->cookies = $cookies;
+    }
+    
+    public function getCookies()
+    {
+        return $this->cookies;
+    }
+    
+    /**
+     * 
+     * Sets the content of the response.
+     * 
+     * @param string $content The body content of the response.
+     * 
+     * @return void
+     * 
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+    
+    /**
+     * 
+     * Gets the content of the response.
+     * 
+     * @return string The body content of the response.
+     * 
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+    
+    /**
+     * 
+     * Sets the headers for the response (not including cookies).
+     * 
+     * @param array $headers An array of headers.
+     * 
+     * @return void
+     * 
+     */
+    public function setHeaders(array $headers = array())
+    {
+        $this->headers = $headers;
+    }
+    
+    /**
+     * 
+     * Returns the headers for the response (not including cookies).
+     * 
+     * @return array An array of headers.
+     * 
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+    
+    /**
+     * 
+     * Sets the HTTP status code to for the response.
+     * 
+     * Automatically resets the status text to null.
+     * 
+     * @param int $code An HTTP status code, such as 200, 302, 404, etc.
+     * 
+     */
+    public function setStatusCode($code)
+    {
+        $code = (int) $code;
+        if ($code < 100 || $code > 599) {
+            throw new Exception("Status code $code not recognized.");
+        }
+        
+        $this->status_code = $code;
+        
+        if (isset($this->status_text_default[$code])) {
+            $this->setStatusText($this->status_text_default[$code]);
+        } else {
+            $this->setStatusText(null);
+        }
+    }
+    
+    /**
+     * 
+     * Returns the HTTP status code for the response.
+     * 
+     * @return int
+     * 
+     */
+    public function getStatusCode()
+    {
+        return $this->status_code;
+    }
+    
+    /**
+     * 
+     * Sets the HTTP status text for the response.
+     * 
+     * @param string $text The status text.
+     * 
+     * @return void
+     * 
+     */
+    public function setStatusText($text)
+    {
+        $text = trim(str_replace(array("\r", "\n"), '', $text));
+        $this->status_text = $text;
+    }
+    
+    /**
+     * 
+     * Returns the HTTP status text for the response.
+     * 
+     * @return string
+     * 
+     */
+    public function getStatusText()
+    {
+        return $this->status_text;
+    }
+    
+    /**
+     * 
+     * Sets the HTTP version for the response to '1.0' or '1.1'.
+     * 
+     * @param string $version The HTTP version to use for this response.
+     * 
+     * @return void
+     * 
+     */
+    public function setVersion($version)
+    {
+        $version = trim($version);
+        if ($version != '1.0' && $version != '1.1') {
+            throw new Exception("HTTP version '$version' not recognized.");
+        } else {
+            $this->version = $version;
+        }
+    }
+    
+    /**
+     * 
+     * Returns the HTTP version for the response.
+     * 
+     * @return string
+     * 
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+    
 }

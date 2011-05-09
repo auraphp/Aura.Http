@@ -2,11 +2,11 @@
 namespace aura\http;
 class Response
 {
-    protected $cookies;
+    protected $cookies = array();
     
     protected $content;
     
-    protected $headers;
+    protected $headers = array();
     
     protected $status_code;
     
@@ -66,7 +66,7 @@ class Response
         '505' => 'HTTP Version Not Supported',
     );
     
-    protected $version;
+    protected $version = '1.1';
     
     /**
      *
@@ -75,6 +75,7 @@ class Response
      */
     public function __construct(MimeUtility $mime_utility)
     {
+        $this->setStatusCode(200);
         $this->mime_utility = $mime_utility;
     }
     
@@ -100,7 +101,7 @@ class Response
         // send each of the remaining headers
         foreach ($this->headers as $key => $list) {
             
-            // skip empty keys, keys have been sanitized by setHeader.
+            // skip empty keys
             if (! $key) {
                 continue;
             }
@@ -126,6 +127,8 @@ class Response
         }
     }
     
+    // extract to a Cookie struct object, and a Cookies collection object,
+    // and probably a CookieFactory object
     public function setCookies(array $cookies = array())
     {
         $this->cookies = $cookies;
@@ -169,6 +172,8 @@ class Response
      * @param array $headers An array of headers.
      * 
      * @return void
+     * 
+     * @todo extract to a Headers object
      * 
      */
     public function setHeaders(array $headers = array())

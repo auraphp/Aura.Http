@@ -68,15 +68,27 @@ class Response
     
     protected $version = '1.1';
     
-    /**
-     *
-     * @param MimeUtility $mime_utility 
-     * 
-     */
-    public function __construct(MimeUtility $mime_utility)
+    public function __construct(
+        Headers $headers,
+        Cookies $cookies
+    )
     {
         $this->setStatusCode(200);
-        $this->mime_utility = $mime_utility;
+        $this->headers = $headers;
+        $this->cookies = $cookies;
+    }
+    
+    public function __get($key)
+    {
+        if ($key == 'headers') {
+            return $this->headers;
+        }
+        
+        if ($key == 'cookies') {
+            return $this->cookies;
+        }
+        
+        throw new Exception("No such property '$key'");
     }
     
     public function send()
@@ -90,46 +102,21 @@ class Response
         if (headers_sent($file, $line)) {
             throw new Exception_HeadersSent($file, $line);
         }
-        
-        // build and send the status header
+        // build and send the status
         $status = "HTTP/{$this->version} {$this->status_code}";
         if ($this->status_text) {
             $status .= " {$this->status_text}";
         }
         header($status, true, $this->status_code);
         
-        // send each of the remaining headers
-        foreach ($this->headers as $key => $list) {
-            
-            // skip empty keys
-            if (! $key) {
-                continue;
-            }
-            
-            // send each value for the header
-            foreach ((array) $list as $val) {
-                $line = $this->mime_utility->headerLine($key, $val);
-                header("$key: $val");
-            }
-        }
+        // send the non-cookie headers
+        $this->headers->send();
         
-        // send each of the cookies
-        foreach ($this->cookies as $key => $val) {
-            setcookie(
-                $key,
-                $val['value'],
-                (int) $val['expire'],
-                $val['path'],
-                $val['domain'],
-                (bool) $val['secure'],
-                (bool) $httponly
-            );
-        }
+        // send the cookie headers
+        $this->cookies->send();
     }
     
-    // extract to a Cookie struct object, and a Cookies collection object,
-    // and probably a CookieFactory object
-    public function setCookies(array $cookies = array())
+    public function setCookies(Cookies $cookies)
     {
         $this->cookies = $cookies;
     }
@@ -176,7 +163,7 @@ class Response
      * @todo extract to a Headers object
      * 
      */
-    public function setHeaders(array $headers = array())
+    public function setHeaders(Headers $headers)
     {
         $this->headers = $headers;
     }

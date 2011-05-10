@@ -1,0 +1,50 @@
+<?php
+namespace aura\http;
+
+// mock the function for this namespace
+function header($string)
+{
+    MockHttp::$headers[] = $string;
+    MockHttp::$headers_sent = true;
+}
+
+// mock the function for this namespace
+function headers_sent(&$file, &$line)
+{
+    if (MockHttp::$headers_sent) {
+        $file = __FILE__;
+        $line = __LINE__;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// mock the function for this namespace
+function setcookie($name, $value, $expire = 0, $path = null,
+    $domain = null, $secure = false, $httponly = false
+) {
+    MockHttp::$cookies[] = array(
+        'name'     => $name,
+        'value'    => $value,
+        'expire'   => $expire,
+        'path'     => $path,
+        'domain'   => $domain,
+        'secure'   => $secure,
+        'httponly' => $httponly,
+    );
+}
+
+// retains results of mocked functions
+class MockHttp
+{
+    static public $headers = array();
+    static public $cookies = array();
+    static public $headers_sent = false;
+    static public function reset()
+    {
+        self::$headers = array();
+        self::$cookies = array();
+        self::$headers_sent = false;
+    }
+}

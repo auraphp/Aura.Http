@@ -3,8 +3,8 @@ title: The Aura HTTP package provides objects to build and send HTTP responses f
 layout: default
 ---
 
-Introduction
-============
+Aura HTTP
+=========
 
 The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.
 

@@ -2,14 +2,14 @@
 /**
  * Constructor params.
  */
-$di->params['aura\http\Response'] = array(
-    'headers' => $di->lazyNew('aura\http\Headers'),
-    'cookies' => $di->lazyNew('aura\http\Cookies'),
+$di->params['Aura\Http\Response'] = array(
+    'headers' => $di->lazyNew('Aura\Http\Headers'),
+    'cookies' => $di->lazyNew('Aura\Http\Cookies'),
 );
 
 /**
  * Dependency services.
  */
 $di->set('http_response', function() use ($di) {
-    return $di->newInstance('aura\http\Response');
+    return $di->newInstance('Aura\Http\Response');
 });

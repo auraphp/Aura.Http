@@ -1,6 +1,6 @@
 <?php
 
-namespace aura\http;
+namespace Aura\Http;
 
 // function header($header, $replace = -1, $response_code = -1)
 // {
@@ -53,13 +53,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function test__get()
     {
         $response = $this->newResponse();
-        $this->assertType('aura\http\Headers', $response->headers);
-        $this->assertType('aura\http\Cookies', $response->cookies);
+        $this->assertType('Aura\Http\Headers', $response->headers);
+        $this->assertType('Aura\Http\Cookies', $response->cookies);
     }
     
     public function test__getNoSuchProperty()
     {
-        $this->setExpectedException('aura\http\Exception');
+        $this->setExpectedException('Aura\Http\Exception');
         $response = $this->newResponse();
         $response->no_such_property;
     }
@@ -74,7 +74,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testSetVersionExceptionOnInvalidVersion()
     {
-        $this->setExpectedException('aura\http\Exception');
+        $this->setExpectedException('Aura\Http\Exception');
         $resp   = $this->newResponse();
         $resp->setVersion('2.0');
     }
@@ -106,14 +106,14 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     
     public function testSetStatusCodeExceptionLessThan100()
     {
-        $this->setExpectedException('aura\http\Exception');
+        $this->setExpectedException('Aura\Http\Exception');
         $resp   = $this->newResponse();
         $resp->setStatusCode(99);
     }
 
     public function testSetStatusCodeExceptionGreaterThan599()
     {
-        $this->setExpectedException('aura\http\Exception');
+        $this->setExpectedException('Aura\Http\Exception');
         $resp   = $this->newResponse();
         $resp->setStatusCode(600);
     }
@@ -208,7 +208,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     
     public function testSendHeadersAlreadySent()
     {
-        $this->setExpectedException('aura\http\Exception_HeadersSent');
+        $this->setExpectedException('Aura\Http\Exception\HeadersSent');
         MockHttp::$headers_sent = true;
         $response = $this->newResponse();
         $response->sendHeaders();

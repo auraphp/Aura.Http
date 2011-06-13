@@ -1,8 +1,8 @@
 <?php
 
-namespace aura\http;
+namespace Aura\Http\Exception;
 
-class Exception_HeadersSent extends Exception
+class HeadersSent extends \Aura\Http\Exception
 {
     public function __construct($file, $line)
     {

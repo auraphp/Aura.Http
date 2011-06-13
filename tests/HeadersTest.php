@@ -1,5 +1,5 @@
 <?php
-namespace aura\http;
+namespace Aura\Http;
 
 /**
  * Test class for Headers.

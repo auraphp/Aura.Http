@@ -1,5 +1,5 @@
 <?php
-namespace aura\http;
+namespace Aura\Http;
 
 // mock the function for this namespace
 function header($string)

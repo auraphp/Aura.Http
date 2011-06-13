@@ -1,6 +1,6 @@
 <?php
 
 
-namespace aura\http;
+namespace Aura\Http;
 
 class Exception extends \Exception {}

@@ -1,5 +1,5 @@
 <?php
-namespace aura\http;
+namespace Aura\Http;
 class Response
 {
     protected $cookies = array();
@@ -100,7 +100,7 @@ class Response
     public function sendHeaders()
     {
         if (headers_sent($file, $line)) {
-            throw new Exception_HeadersSent($file, $line);
+            throw new Exception\HeadersSent($file, $line);
         }
         // build and send the status
         $status = "HTTP/{$this->version} {$this->status_code}";

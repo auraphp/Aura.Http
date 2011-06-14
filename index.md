@@ -18,14 +18,14 @@ Instantiation
 The easiest way to get started is to use the `scripts/instance.php` script to get a new `Response` object.
 
     <?php
-    $response = include '/path/to/aura.http/scripts/instance.php';
+    $response = include '/path/to/Aura.Http/scripts/instance.php';
 
-Alternatively, you can add `'/path/to/aura.http/src'` to your autoloader and build a `Response` object manually:
+Alternatively, you can add `'/path/to/Aura.Http/src'` to your autoloader and build a `Response` object manually:
 
     <?php
-    use aura\http\Response;
-    use aura\http\Headers;
-    use aura\http\Cookies;
+    use Aura\Http\Response;
+    use Aura\Http\Headers;
+    use Aura\Http\Cookies;
     $response = new Response(new Headers, new Cookies);
 
 

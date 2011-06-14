@@ -1,1 +1,1 @@
-Read Documentation : [http://auraphp.github.com/aura.http](http://auraphp.github.com/aura.http)
+Read Documentation : [http://auraphp.github.com/Aura.Http](http://auraphp.github.com/Aura.Http)

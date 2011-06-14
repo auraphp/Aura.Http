@@ -12,7 +12,7 @@ namespace Aura\Http;
  * 
  * Collection of non-cookie HTTP headers.
  * 
- * @package aura.http
+ * @package Aura.Http
  * 
  */
 class Cookies

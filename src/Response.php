@@ -134,6 +134,9 @@ class Response
      * 
      * @return void
      * 
+     * @todo Make this stream-aware so it can stream out resources (e.g., file
+     * handles).
+     * 
      */
     public function setContent($content)
     {

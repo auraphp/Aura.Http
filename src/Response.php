@@ -94,7 +94,15 @@ class Response
     public function send()
     {
         $this->sendHeaders();
-        echo $this->getContent();
+        $content = $this->getContent();
+        if (is_resource($content)) {
+            while (! feof($content)) {
+                echo fread($content, 8192);
+            }
+            fclose($content);
+        } else {
+            echo $this->getContent();
+        }
     }
     
     public function sendHeaders()

@@ -226,4 +226,28 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         
         $this->assertSame('hello', $actual);
     }
+    
+    public function testSend_resource()
+    {
+        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
+              . 'tmp' . DIRECTORY_SEPARATOR
+              . 'resource.txt';
+        
+        @mkdir(dirname($file));
+        file_put_contents($file, 'hello resource');
+        
+        $fh = fopen($file, 'r');
+        
+        $response = $this->newResponse();
+        $response->setContent($fh);
+        
+        ob_start();
+        $response->send();
+        $actual = ob_get_contents();
+        ob_end_clean();
+        
+        $this->assertSame('hello resource', $actual);
+        
+        unlink($file);
+    }
 }

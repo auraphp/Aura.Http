@@ -1,5 +1,10 @@
 <?php
 /**
+ * Package prefix for autoloader.
+ */
+$loader->addPrefix('Aura\Http\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
+
+/**
  * Constructor params.
  */
 $di->params['Aura\Http\Response'] = array(

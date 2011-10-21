@@ -53,8 +53,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function test__get()
     {
         $response = $this->newResponse();
-        $this->assertType('Aura\Http\Headers', $response->headers);
-        $this->assertType('Aura\Http\Cookies', $response->cookies);
+        $this->assertInstanceOf('Aura\Http\Headers', $response->headers);
+        $this->assertInstanceOf('Aura\Http\Cookies', $response->cookies);
     }
     
     public function test__getNoSuchProperty()

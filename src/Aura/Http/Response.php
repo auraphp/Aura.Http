@@ -1,15 +1,54 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura Project for PHP.
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Http;
+
+/**
+ * 
+ * The Aura Response class
+ * 
+ * @package Aura.Http
+ * 
+ */
 class Response
 {
+    /**
+     * Cookies array
+     * 
+     * @var array $cookies cookies
+     * 
+     */
     protected $cookies = array();
     
     protected $content;
     
+    /**
+     * Headers array
+     * 
+     * @var array $headers headers
+     * 
+     */
     protected $headers = array();
     
+    /**
+     * Http Status Code
+     * 
+     * @var int $status_code Http Status Code
+     * 
+     */
     protected $status_code;
     
+    /**
+     * Http Status Code Message
+     * 
+     * @var string $status_text Http Status Code Text
+     * 
+     */
     protected $status_text;
     
     /**
@@ -66,8 +105,22 @@ class Response
         '505' => 'HTTP Version Not Supported',
     );
     
+    /** 
+     * 
+     * Http Version 
+     * 
+     */
     protected $version = '1.1';
     
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param Headers $template The Header
+     * 
+     * @param Cookies $cookies Cookie
+     * 
+     */
     public function __construct(
         Headers $headers,
         Cookies $cookies
@@ -78,6 +131,14 @@ class Response
         $this->cookies = $cookies;
     }
     
+    /*
+     * Magic method to get headers and cookies
+     * 
+     * @param string $key whether to get headers or cookies
+     * 
+     * @return array
+     * 
+     */
     public function __get($key)
     {
         if ($key == 'headers') {
@@ -91,6 +152,11 @@ class Response
         throw new Exception("No such property '$key'");
     }
     
+    /**
+     * 
+     * Send http headers
+     * 
+     */
     public function send()
     {
         $this->sendHeaders();
@@ -105,6 +171,11 @@ class Response
         }
     }
     
+    /**
+     * 
+     * Sent http status messages and headers
+     * 
+     */
     public function sendHeaders()
     {
         if (headers_sent($file, $line)) {
@@ -124,11 +195,26 @@ class Response
         $this->cookies->send();
     }
     
+    /** 
+     * 
+     * Set cookies
+     * 
+     * @param Cookies $cookies
+     * 
+     */
     public function setCookies(Cookies $cookies)
     {
         $this->cookies = $cookies;
     }
     
+    /** 
+     * 
+     * Get cookies
+     * 
+     * 
+     * @return array $cookies
+     * 
+     */
     public function getCookies()
     {
         return $this->cookies;

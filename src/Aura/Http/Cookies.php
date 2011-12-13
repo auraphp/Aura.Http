@@ -29,6 +29,14 @@ class Cookies
         'httponly' => true,
     );
     
+    /** 
+     * Set
+     * 
+     * @param string $name 
+     * 
+     * @param array $info
+     * 
+     */
     public function set($name, array $info = array())
     {
         $info = array_merge($this->base, $info);
@@ -38,11 +46,20 @@ class Cookies
         $this->list[$name] = $info;
     }
     
+    /** 
+     * 
+     * Get all 
+     * 
+     */
     public function getAll()
     {
         return $this->list;
     }
     
+    /**
+     *
+     * @param array $cookies 
+     */
     public function setAll(array $cookies = array())
     {
         $this->list = array();
@@ -51,6 +68,9 @@ class Cookies
         }
     }
     
+    /**
+     * Set the cookies
+     */
     public function send()
     {
         foreach ($this->list as $name => $info) {

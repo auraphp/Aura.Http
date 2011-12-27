@@ -18,42 +18,53 @@ namespace Aura\Http;
 class Response
 {
     /**
-     * Cookies array
      * 
-     * @var array $cookies cookies
+     * The cookies for this response.
+     * 
+     * @var Cookies
      * 
      */
-    protected $cookies = array();
+    protected $cookies;
     
+    /**
+     * 
+     * The content of this response.
+     * 
+     * @var string
+     * 
+     */
     protected $content;
     
     /**
-     * Headers array
      * 
-     * @var array $headers headers
+     * The headers for this response.
+     * 
+     * @var Headers
      * 
      */
-    protected $headers = array();
+    protected $headers;
     
     /**
-     * Http Status Code
      * 
-     * @var int $status_code Http Status Code
+     * The HTTP status code of the response.
+     * 
+     * @var int
      * 
      */
     protected $status_code;
     
     /**
-     * Http Status Code Message
      * 
-     * @var string $status_text Http Status Code Text
+     * The HTTP status message of the response.
+     * 
+     * @var string
      * 
      */
     protected $status_text;
     
     /**
      * 
-     * List of the HTTP status text default values.
+     * List of default HTTP status messages.
      * 
      * @var array
      * 
@@ -107,7 +118,9 @@ class Response
     
     /** 
      * 
-     * Http Version 
+     * The HTTP version for this response.
+     * 
+     * @var string
      * 
      */
     protected $version = '1.1';
@@ -116,27 +129,25 @@ class Response
      * 
      * Constructor.
      * 
-     * @param Headers $template The Header
+     * @param Headers $headers A Headers object.
      * 
-     * @param Cookies $cookies Cookie
+     * @param Cookies $cookies A Cookies object.
      * 
      */
-    public function __construct(
-        Headers $headers,
-        Cookies $cookies
-    )
+    public function __construct(Headers $headers, Cookies $cookies)
     {
         $this->setStatusCode(200);
         $this->headers = $headers;
         $this->cookies = $cookies;
     }
     
-    /*
-     * Magic method to get headers and cookies
+    /**
      * 
-     * @param string $key whether to get headers or cookies
+     * Read-only access to $headers and $cookies objects.
      * 
-     * @return array
+     * @param string $key The property to retrieve.
+     * 
+     * @return mixed
      * 
      */
     public function __get($key)
@@ -154,7 +165,9 @@ class Response
     
     /**
      * 
-     * Send http headers
+     * Sends the full HTTP response.
+     * 
+     * @return void
      * 
      */
     public function send()
@@ -173,7 +186,9 @@ class Response
     
     /**
      * 
-     * Sent http status messages and headers
+     * Sends the HTTP status code, status test, headers, and cookies.
+     * 
+     * @return void
      * 
      */
     public function sendHeaders()
@@ -197,9 +212,11 @@ class Response
     
     /** 
      * 
-     * Set cookies
+     * Sets the cookies for the response.
      * 
-     * @param Cookies $cookies
+     * @param Cookies $cookies The cookies object.
+     * 
+     * @return void
      * 
      */
     public function setCookies(Cookies $cookies)
@@ -209,10 +226,9 @@ class Response
     
     /** 
      * 
-     * Get cookies
+     * Returns the $cookies object.
      * 
-     * 
-     * @return array $cookies
+     * @return Cookies
      * 
      */
     public function getCookies()
@@ -224,12 +240,10 @@ class Response
      * 
      * Sets the content of the response.
      * 
-     * @param string $content The body content of the response.
+     * @param mixed $content The body content of the response. Note that this
+     * may be a resource, in which case it will be streamed out when sending.
      * 
      * @return void
-     * 
-     * @todo Make this stream-aware so it can stream out resources (e.g., file
-     * handles).
      * 
      */
     public function setContent($content)
@@ -241,7 +255,7 @@ class Response
      * 
      * Gets the content of the response.
      * 
-     * @return string The body content of the response.
+     * @return mixed The body content of the response.
      * 
      */
     public function getContent()
@@ -253,11 +267,9 @@ class Response
      * 
      * Sets the headers for the response (not including cookies).
      * 
-     * @param array $headers An array of headers.
+     * @param Headers $headers A Headers object.
      * 
      * @return void
-     * 
-     * @todo extract to a Headers object
      * 
      */
     public function setHeaders(Headers $headers)
@@ -269,7 +281,7 @@ class Response
      * 
      * Returns the headers for the response (not including cookies).
      * 
-     * @return array An array of headers.
+     * @return Headers
      * 
      */
     public function getHeaders()
@@ -279,9 +291,8 @@ class Response
     
     /**
      * 
-     * Sets the HTTP status code to for the response.
-     * 
-     * Automatically resets the status text to null.
+     * Sets the HTTP status code to for the response. Automatically resets the
+     * status text to the default for that code, if any.
      * 
      * @param int $code An HTTP status code, such as 200, 302, 404, etc.
      * 
@@ -371,5 +382,4 @@ class Response
     {
         return $this->version;
     }
-    
 }

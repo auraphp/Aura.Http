@@ -17,9 +17,24 @@ namespace Aura\Http;
  */
 class Cookies
 {
+    /**
+     * 
+     * The list of all cookies.
+     * 
+     * @var array
+     * 
+     */
     protected $list = array();
     
-    // extract to a Cookie struct, and probably a CookieFactory
+    /**
+     * 
+     * Base values for a single cookie.
+     * 
+     * @todo Extract to a Cookie struct, and probably a CookieFactory.
+     * 
+     * @var array
+     * 
+     */
     protected $base = array(
         'value'    => null,
         'expire'   => null,
@@ -29,12 +44,13 @@ class Cookies
         'httponly' => true,
     );
     
-    /** 
-     * Set
+    /**
      * 
-     * @param string $name 
+     * Sets a single cookie by name.
      * 
-     * @param array $info
+     * @param string $name The cookie name.
+     * 
+     * @param array $info The cookie info.
      * 
      */
     public function set($name, array $info = array())
@@ -48,7 +64,9 @@ class Cookies
     
     /** 
      * 
-     * Get all 
+     * Gets all cookies.
+     * 
+     * @return array
      * 
      */
     public function getAll()
@@ -57,8 +75,14 @@ class Cookies
     }
     
     /**
-     *
-     * @param array $cookies 
+     * 
+     * Sets all cookies at once.
+     * 
+     * @param array $cookies The array of all cookies where the key is the
+     * name and the value is the array of cookie info.
+     * 
+     * @return void
+     * 
      */
     public function setAll(array $cookies = array())
     {
@@ -69,7 +93,11 @@ class Cookies
     }
     
     /**
-     * Set the cookies
+     * 
+     * Sends the cookies using `setcookie()`.
+     * 
+     * @return void
+     * 
      */
     public function send()
     {

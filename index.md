@@ -1,5 +1,5 @@
 ---
-title: The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.
+title: Aura for PHP: HTTP Responses
 layout: default
 ---
 

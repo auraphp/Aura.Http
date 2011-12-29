@@ -2,26 +2,6 @@
 
 namespace Aura\Http;
 
-// function header($header, $replace = -1, $response_code = -1)
-// {
-//     ResponseTest::$callback->headerCallBack($header, $replace, $response_code);
-// }
-
-// function setcookie($name, $val = -1, $expires = -1, $path = -1, $domain = -1,
-//                    $secure = -1, $httponly = -1)
-// {
-//     ResponseTest::$callback->cookieCallBack($name, $val, $expires, $path, 
-//                                             $domain, $secure, $httponly);
-// }
-
-// function headers_sent(&$file, &$line)
-// {
-//     $file = 'file/foo.php';
-//     $line = 1;
-//     
-//     return ResponseTest::$headers_sent;
-// }
-
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     public static $callback;
@@ -199,6 +179,32 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         
         $expect = array (
           0 => 'HTTP/1.1 200 OK',
+          1 => 'Foo: hello world',
+          2 => 'Bar: hello world 2',
+        );
+        
+        $this->assertSame($expect, MockHttp::$headers);
+    }
+    
+    public function testSendHeaders_cgi()
+    {
+        $response = $this->newResponse();
+        $response->setCgi(true);
+        
+        $headers = new Headers;
+        $headers->setAll(array(
+            'Foo' => 'hello world',
+            'Bar' => 'hello world 2',
+        ));
+        
+        $response->setHeaders($headers);
+        
+        ob_start();
+        $response->sendHeaders();
+        ob_end_clean();
+        
+        $expect = array (
+          0 => 'Status: 200 OK',
           1 => 'Foo: hello world',
           2 => 'Bar: hello world 2',
         );

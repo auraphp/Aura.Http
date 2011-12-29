@@ -136,9 +136,11 @@ class Response
      */
     public function __construct(Headers $headers, Cookies $cookies)
     {
-        $this->setStatusCode(200);
         $this->headers = $headers;
         $this->cookies = $cookies;
+        $this->setStatusCode(200);
+        $is_cgi = (strpos(php_sapi_name(), 'cgi') !== false);
+        $this->setCgi($is_cgi);
     }
     
     /**
@@ -165,6 +167,33 @@ class Response
     
     /**
      * 
+     * Optionally force the response to act as if it is in CGI mode. (This
+     * changes how the status header is sent.)
+     * 
+     * @param bool $is_cgi True to force into CGI mode, false to not do so.
+     * 
+     * @return void
+     * 
+     */
+    public function setCgi($is_cgi)
+    {
+        $this->is_cgi = (bool) $is_cgi;
+    }
+    
+    /**
+     * 
+     * Is the response currently acting in CGI mode?
+     * 
+     * @return bool
+     * 
+     */
+    public function isCgi()
+    {
+        return (bool) $this->is_cgi;
+    }
+    
+    /**
+     * 
      * Sends the full HTTP response.
      * 
      * @return void
@@ -173,15 +202,7 @@ class Response
     public function send()
     {
         $this->sendHeaders();
-        $content = $this->getContent();
-        if (is_resource($content)) {
-            while (! feof($content)) {
-                echo fread($content, 8192);
-            }
-            fclose($content);
-        } else {
-            echo $this->getContent();
-        }
+        $this->sendContent();
     }
     
     /**
@@ -196,11 +217,21 @@ class Response
         if (headers_sent($file, $line)) {
             throw new Exception\HeadersSent($file, $line);
         }
-        // build and send the status
-        $status = "HTTP/{$this->version} {$this->status_code}";
+        
+        // determine status header type
+        // cf. <http://www.php.net/manual/en/function.header.php>
+        if ($this->isCgi()) {
+            $status = "Status: {$this->status_code}";
+        } else {
+            $status = "HTTP/{$this->version} {$this->status_code}";
+        }
+        
+        // add status text
         if ($this->status_text) {
             $status .= " {$this->status_text}";
         }
+        
+        // send the status header
         header($status, true, $this->status_code);
         
         // send the non-cookie headers
@@ -208,6 +239,27 @@ class Response
         
         // send the cookie headers
         $this->cookies->send();
+    }
+    
+    /**
+     * 
+     * Sends the HTTP content; if the content is a resource, it streams out
+     * the resource 8192 bytes at a time.
+     * 
+     * @return void
+     * 
+     */
+    public function sendContent()
+    {
+        $content = $this->getContent();
+        if (is_resource($content)) {
+            while (! feof($content)) {
+                echo fread($content, 8192);
+            }
+            fclose($content);
+        } else {
+            echo $content;
+        }
     }
     
     /** 

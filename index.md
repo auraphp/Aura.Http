@@ -1,5 +1,5 @@
 ---
-title: Aura for PHP: HTTP Responses
+title: Aura for PHP; HTTP Responses
 layout: default
 ---
 

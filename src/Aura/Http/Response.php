@@ -69,7 +69,7 @@ class Response
      * @var array
      * 
      */
-    protected $status_text_default = array(
+    protected $status_text_default = [
         '100' => 'Continue',
         '101' => 'Switching Protocols',
 
@@ -114,7 +114,7 @@ class Response
         '503' => 'Service Unavailable',
         '504' => 'Gateway Timeout',
         '505' => 'HTTP Version Not Supported',
-    );
+    ];
     
     /** 
      * 
@@ -388,7 +388,7 @@ class Response
      */
     public function setStatusText($text)
     {
-        $text = trim(str_replace(array("\r", "\n"), '', $text));
+        $text = trim(str_replace(["\r", "\n"], '', $text));
         $this->status_text = $text;
     }
     

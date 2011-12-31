@@ -41,17 +41,17 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->headers->set('Baz', 'dib');
         $this->headers->add('Baz', 'zim');
         $actual = $this->headers->getAll();
-        $expect = array (
+        $expect = [
           'Foo' => 
-          array (
+          [
             0 => 'bar',
-          ),
+          ],
           'Baz' => 
-          array (
+          [
             0 => 'dib',
             1 => 'zim',
-          ),
-        );
+          ],
+        ];
         $this->assertSame($expect, $actual);
     }
 
@@ -60,22 +60,22 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAndGetAll()
     {
-        $this->headers->setAll(array(
+        $this->headers->setAll([
             "Foo\r\nBar" => 'foo header',
             "baz-dib_gir" => 'baz header',
-        ));
+        ]);
         
         $actual = $this->headers->getAll();
-        $expect = array (
+        $expect = [
           'Foobar' => 
-          array (
+          [
             0 => 'foo header',
-          ),
+          ],
           'Baz-Dib-Gir' => 
-          array (
+          [
             0 => 'baz header',
-          ),
-        );
+          ],
+        ];
         
         $this->assertSame($expect, $actual);
     }
@@ -89,11 +89,11 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->headers->set('Baz', 'dib');
         $this->headers->add('Baz', 'zim');
         $this->headers->send();
-        $expect = array (
+        $expect = [
           0 => 'Foo: bar',
           1 => 'Baz: dib',
           2 => 'Baz: zim',
-        );
+        ];
         
         $this->assertSame(MockHttp::$headers, $expect);
     }

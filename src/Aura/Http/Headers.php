@@ -24,7 +24,7 @@ class Headers
      * @var array
      * 
      */
-    protected $list = array();
+    protected $list = [];
     
     /**
      * 
@@ -58,7 +58,7 @@ class Headers
     public function set($label, $value)
     {
         $label = $this->sanitizeLabel($label);
-        $this->list[$label] = array($value);
+        $this->list[$label] = [$value];
     }
     
     /**
@@ -83,9 +83,9 @@ class Headers
      * @return void
      * 
      */
-    public function setAll(array $headers = array())
+    public function setAll(array $headers = [])
     {
-        $this->list = array();
+        $this->list = [];
         foreach ($headers as $label => $values) {
             foreach ((array) $values as $value) {
                 $this->add($label, $value);
@@ -126,7 +126,7 @@ class Headers
     protected function sanitizeLabel($label)
     {
         $label = preg_replace('/[^a-zA-Z0-9_-]/', '', $label);
-        $label = ucwords(strtolower(str_replace(array('-', '_'), ' ', $label)));
+        $label = ucwords(strtolower(str_replace(['-', '_'], ' ', $label)));
         $label = str_replace(' ', '-', $label);
         return $label;
     }

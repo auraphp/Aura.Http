@@ -24,7 +24,7 @@ function headers_sent(&$file, &$line)
 function setcookie($name, $value, $expire = 0, $path = null,
     $domain = null, $secure = false, $httponly = false
 ) {
-    MockHttp::$cookies[] = array(
+    MockHttp::$cookies[] = [
         'name'     => $name,
         'value'    => $value,
         'expire'   => $expire,
@@ -32,19 +32,19 @@ function setcookie($name, $value, $expire = 0, $path = null,
         'domain'   => $domain,
         'secure'   => $secure,
         'httponly' => $httponly,
-    );
+    ];
 }
 
 // retains results of mocked functions
 class MockHttp
 {
-    static public $headers = array();
-    static public $cookies = array();
+    static public $headers = [];
+    static public $cookies = [];
     static public $headers_sent = false;
     static public function reset()
     {
-        self::$headers = array();
-        self::$cookies = array();
+        self::$headers = [];
+        self::$cookies = [];
         self::$headers_sent = false;
     }
 }

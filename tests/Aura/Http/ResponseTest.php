@@ -6,8 +6,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     public static $callback;
     public static $headers_sent = false;
-    protected $header_expect    = array();
-    protected $cookie_expect    = array();
+    protected $header_expect    = [];
+    protected $cookie_expect    = [];
     
     protected $response;
 
@@ -22,9 +22,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     
     protected function newResponse()
     {
-        $this->header_expect    = array();
-        $this->cookie_expect    = array();
-        $this->header_expect[0] = array('HTTP/1.1 200 OK', true, 200);
+        $this->header_expect    = [];
+        $this->cookie_expect    = [];
+        $this->header_expect[0] = ['HTTP/1.1 200 OK', true, 200];
         static::$headers_sent   = false;
         
         return new Response(new Headers, new Cookies);
@@ -166,10 +166,10 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response = $this->newResponse();
         
         $headers = new Headers;
-        $headers->setAll(array(
+        $headers->setAll([
             'Foo' => 'hello world',
             'Bar' => 'hello world 2',
-        ));
+        ]);
         
         $response->setHeaders($headers);
         
@@ -177,11 +177,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response->sendHeaders();
         ob_end_clean();
         
-        $expect = array (
+        $expect = [
           0 => 'HTTP/1.1 200 OK',
           1 => 'Foo: hello world',
           2 => 'Bar: hello world 2',
-        );
+        ];
         
         $this->assertSame($expect, MockHttp::$headers);
     }
@@ -192,10 +192,10 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response->setCgi(true);
         
         $headers = new Headers;
-        $headers->setAll(array(
+        $headers->setAll([
             'Foo' => 'hello world',
             'Bar' => 'hello world 2',
-        ));
+        ]);
         
         $response->setHeaders($headers);
         
@@ -203,11 +203,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response->sendHeaders();
         ob_end_clean();
         
-        $expect = array (
+        $expect = [
           0 => 'Status: 200 OK',
           1 => 'Foo: hello world',
           2 => 'Bar: hello world 2',
-        );
+        ];
         
         $this->assertSame($expect, MockHttp::$headers);
     }

@@ -7,10 +7,10 @@ $loader->add('Aura\Http\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
 /**
  * Constructor params.
  */
-$di->params['Aura\Http\Response'] = array(
+$di->params['Aura\Http\Response'] = [
     'headers' => $di->lazyNew('Aura\Http\Headers'),
     'cookies' => $di->lazyNew('Aura\Http\Cookies'),
-);
+];
 
 /**
  * Dependency services.

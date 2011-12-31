@@ -37,36 +37,34 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAndGetAll()
     {
-        $this->cookies->setAll(array(
-            'login' => array(
+        $this->cookies->setAll([
+            'login' => [
                 'value' => '1234567890',
-            ),
-            'usrid' => array(
+            ],
+            'usrid' => [
                 'value' => '0987654321'
-            ),
-        ));
+            ],
+        ]);
         
         $actual = $this->cookies->getAll();
-        $expect = array (
-          'login' => 
-          array (
+        $expect = [
+          'login' => [
             'value' => '1234567890',
             'expire' => 0,
             'path' => NULL,
             'domain' => NULL,
             'secure' => false,
             'httponly' => true,
-          ),
-          'usrid' => 
-          array (
+          ],
+          'usrid' => [
             'value' => '0987654321',
             'expire' => 0,
             'path' => NULL,
             'domain' => NULL,
             'secure' => false,
             'httponly' => true,
-          ),
-        );
+          ],
+        ];
         
         $this->assertSame($expect, $actual);
     }
@@ -75,20 +73,19 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
      */
     public function testSend()
     {
-        $this->cookies->setAll(array(
-            'login' => array(
+        $this->cookies->setAll([
+            'login' => [
                 'value' => '1234567890',
-            ),
-            'usrid' => array(
+            ],
+            'usrid' => [
                 'value' => '0987654321'
-            ),
-        ));
+            ],
+        ]);
         
         $this->cookies->send();
         
-        $expect = array (
-          0 => 
-          array (
+        $expect = [
+          0 => [
             'name' => 'login',
             'value' => '1234567890',
             'expire' => 0,
@@ -96,9 +93,8 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
             'domain' => NULL,
             'secure' => false,
             'httponly' => true,
-          ),
-          1 => 
-          array (
+          ],
+          1 => [
             'name' => 'usrid',
             'value' => '0987654321',
             'expire' => 0,
@@ -106,8 +102,8 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
             'domain' => NULL,
             'secure' => false,
             'httponly' => true,
-          ),
-        );
+          ],
+        ];
 
         $this->assertSame($expect, MockHttp::$cookies);
     }

@@ -24,7 +24,7 @@ class Cookies
      * @var array
      * 
      */
-    protected $list = array();
+    protected $list = [];
     
     /**
      * 
@@ -35,14 +35,14 @@ class Cookies
      * @var array
      * 
      */
-    protected $base = array(
+    protected $base = [
         'value'    => null,
         'expire'   => null,
         'path'     => null,
         'domain'   => null,
         'secure'   => false,
         'httponly' => true,
-    );
+    ];
     
     /**
      * 
@@ -53,7 +53,7 @@ class Cookies
      * @param array $info The cookie info.
      * 
      */
-    public function set($name, array $info = array())
+    public function set($name, array $info = [])
     {
         $info = array_merge($this->base, $info);
         settype($info['expire'],   'int');
@@ -84,9 +84,9 @@ class Cookies
      * @return void
      * 
      */
-    public function setAll(array $cookies = array())
+    public function setAll(array $cookies = [])
     {
-        $this->list = array();
+        $this->list = [];
         foreach ($cookies as $name => $info) {
             $this->set($name, $info);
         }

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>{{ page.title }}</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="/css/reset.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/css/text.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/css/960.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/css/aura.css" />
+
+  <script src="/js/jquery-1.6.1.min.js"></script>
+  <script src="/js/github.js"></script>
+  <script src="/js/custom.js"></script>
+  <script>
+    $(document).ready(function()
+    {
+      $('#logo').hide();
+      $('#logo').delay(300).fadeIn(2000);
+    });
+  </script>
+</head>
+
+<body>
+<div id="top">
+  <div id="menu">
+    <a href="http://auraphp.github.com/">Home</a><a href="https://github.com/auraphp/docs/wiki">Documentation</a>
+  </div>
+  <div id="banner">
+    <a href="http://auraphp.github.com/" id="logo"></a>
+  </div>
+  <div id="content">
+    <div class="container_12">
+      <div class="grid_3" markdown="1" id="githubrepos">
+      </div>
+      <div class="grid_9" markdown="1">
+        {{ content }}
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div id="footer">
+    <p>
+      Copyright &copy; 2010 - 2011,
+      <a href="http://paul-m-jones.com/">Paul M. Jones</a> and other contributors.<br> Logo Design by
+      <a href="http://www.marcusk.co.uk/">Marcus Kielly</a>, Site Design by <a href="http://www.naenius.com/">Mike van Riel</a>.
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

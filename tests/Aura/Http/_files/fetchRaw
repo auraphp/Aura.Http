@@ -1,0 +1,12 @@
+HTTP/1.1 301 Moved
+Server: nginx
+Date: Thu, 12 May 2011 21:04:08 GMT
+Content-Type: text/html; charset=utf-8
+Location: http://example.com/moved
+Set-Cookie: name=foo;domain=.example.com;expires=Tue Nov 8 16:04:08 2011;path=/; HttpOnly
+HTTP/1.1 200 Ok
+Server: nginx
+Date: Thu, 12 May 2011 21:04:09 GMT
+Content-Type: text/text; charset=utf-8
+
+hello world

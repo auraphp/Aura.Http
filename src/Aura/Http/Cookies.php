@@ -8,14 +8,16 @@
  */
 namespace Aura\Http;
 
+use Aura\Http\Factory\Cookie as CookieFactory;
+
 /**
  * 
- * Collection of non-cookie HTTP headers.
+ * Collection of Cookie objects.
  * 
  * @package Aura.Http
  * 
  */
-class Cookies
+class Cookies implements \IteratorAggregate, \Countable
 {
     /**
      * 
@@ -25,24 +27,99 @@ class Cookies
      * 
      */
     protected $list = [];
+
+    /**
+     * 
+     * @var Aura\Http\Factory\Cookie
+     * 
+     */
+    protected $factory;
+
+    /**
+     *
+     * @param Aura\Http\Factory\Cookie $factory
+     *
+     */
+    public function __construct(CookieFactory $factory)
+    {
+        $this->factory = $factory;
+    }
+
+    /**
+     * 
+     * Reset the cookie list.
+     * 
+     */
+    public function __clone()
+    {
+        $this->list = [];
+    }
     
     /**
      * 
-     * Base values for a single cookie.
+     * Get a cookie.
      * 
-     * @todo Extract to a Cookie struct, and probably a CookieFactory.
+     * @param string $key 
      * 
-     * @var array
+     * @return array
      * 
      */
-    protected $base = [
-        'value'    => null,
-        'expire'   => null,
-        'path'     => null,
-        'domain'   => null,
-        'secure'   => false,
-        'httponly' => true,
-    ];
+    public function __get($key)
+    {
+        return $this->list[$key];
+    }
+    
+    /**
+     * 
+     * Does a cookie exist.
+     * 
+     * @param string $key 
+     * 
+     * @return boolean
+     * 
+     */
+    public function __isset($key)
+    {
+        return isset($this->list[$key]);
+    }
+    
+    /**
+     * 
+     * Unset a cookie.
+     * 
+     * @param string $key 
+     * 
+     * @return void
+     * 
+     */
+    public function __unset($key)
+    {
+        unset($this->list[$key]);
+    }
+    
+    /**
+     * 
+     * Count the number of cookies.
+     * 
+     * @return integer
+     * 
+     */
+    public function count()
+    {
+        return count($this->list);
+    }
+    
+    /** 
+     * 
+     * Gets all cookies as an iterator.
+     * 
+     * @return array
+     * 
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->list);
+    }
     
     /**
      * 
@@ -55,11 +132,30 @@ class Cookies
      */
     public function set($name, array $info = [])
     {
-        $info = array_merge($this->base, $info);
-        settype($info['expire'],   'int');
-        settype($info['secure'],   'bool');
-        settype($info['httponly'], 'bool');
-        $this->list[$name] = $info;
+        if ($name instanceof Cookie) {
+            $cookie = $name;
+        } else {
+            $cookie = $this->factory->newInstance($name, $info);
+        }
+
+        $this->list[$cookie->getName()] = $cookie;
+    }
+
+    /**
+     * 
+     * Parses the value of the "Set-Cookie" header and sets it.
+     * 
+     * @param string $text The Set-Cookie text string value.
+     * 
+     * @return void
+     * 
+     */
+    public function setFromString($str, $default_url = null)
+    {
+        $cookie = $this->factory->newInstance();
+        $cookie->setFromString($str, $default_url);
+
+        $this->list[$cookie->getName()] = $cookie;
     }
     
     /** 
@@ -76,7 +172,7 @@ class Cookies
     
     /**
      * 
-     * Sets all cookies at once.
+     * Sets all cookies at once removing all previous cookies.
      * 
      * @param array $cookies The array of all cookies where the key is the
      * name and the value is the array of cookie info.
@@ -101,15 +197,15 @@ class Cookies
      */
     public function send()
     {
-        foreach ($this->list as $name => $info) {
+        foreach ($this->list as $cookie) {
             setcookie(
-                $name,
-                $info['value'],
-                $info['expire'],
-                $info['path'],
-                $info['domain'],
-                $info['secure'],
-                $info['httponly']
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpire(),
+                $cookie->getPath(),
+                $cookie->getDomain(),
+                $cookie->getSecure(),
+                $cookie->getHttpOnly()
             );
         }
     }

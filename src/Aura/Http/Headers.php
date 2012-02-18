@@ -8,6 +8,8 @@
  */
 namespace Aura\Http;
 
+use Aura\Http\Factory\Header as HeaderFactory;
+
 /**
  * 
  * Collection of non-cookie HTTP headers.
@@ -15,7 +17,7 @@ namespace Aura\Http;
  * @package Aura.Http
  * 
  */
-class Headers
+class Headers implements \IteratorAggregate, \Countable
 {
     /**
      * 
@@ -28,37 +30,116 @@ class Headers
     
     /**
      * 
-     * Adds a header value to an existing header label; if there is more
-     * than one, it will append the new value.
-     * 
-     * @param string $label The header label.
-     * 
-     * @param string $value The header value.
-     * 
-     * @return void
+     * @var Aura\Http\Factory\Header
      * 
      */
-    public function add($label, $value)
+    protected $factory;
+
+    /**
+     *
+     * @param Aura\Http\Factory\Header $factory
+     *
+     */
+    public function __construct(HeaderFactory $factory)
     {
-        $label = $this->sanitizeLabel($label);
-        $this->list[$label][] = $value;
+        $this->factory = $factory;
+    }
+
+    /**
+     * 
+     * Reset the list of headers.
+     * 
+     */
+    public function __clone()
+    {
+        $this->list = [];
     }
     
     /**
      * 
-     * Sets a header value, overwriting previous values.
+     * Get a header. If a header has multiple values the first value is returned.
      * 
-     * @param string $label The header label.
+     * @param string $key 
      * 
-     * @param string $value The header value.
+     * @return mixed
+     * 
+     */
+    public function __get($key)
+    {
+        $header = $this->factory->newInstance($key, null);
+        $key    = $header->getLabel();
+
+        return $this->list[$key][0];
+    }
+    
+    /**
+     * 
+     * Does a header exist.
+     * 
+     * @param string $key 
+     * 
+     * @return bool
+     * 
+     */
+    public function __isset($key)
+    {
+        $header = $this->factory->newInstance($key, null);
+        $key    = $header->getLabel();
+
+        return isset($this->list[$key]);
+    }
+    
+    /**
+     * 
+     * Unset a header.
+     * 
+     * @param string $key 
      * 
      * @return void
      * 
      */
-    public function set($label, $value)
+    public function __unset($key)
     {
-        $label = $this->sanitizeLabel($label);
-        $this->list[$label] = [$value];
+        $header = $this->factory->newInstance($key, null);
+        $key    = $header->getLabel();
+
+        unset($this->list[$key]);
+    }
+    
+    /**
+     * 
+     * Count the number of headers.
+     * 
+     * @return integer
+     * 
+     */
+    public function count()
+    {
+        return count($this->list, COUNT_RECURSIVE) - count($this->list);
+    }
+    
+    /**
+     * 
+     * Returns a header.
+     * 
+     * @param string $label
+     * 
+     * @param boolean $list If true an array of `Aura\Http\Header` is returned 
+     * else a `Aura\Http\Header` is return with the first result.
+     * 
+     * @return Aura\Http\Header|array
+     * 
+     */
+    public function get($label, $list = true)
+    {
+        $header = $this->factory->newInstance($label, null);
+        $label  = $header->getLabel();
+
+        if ($list) {
+            return $this->list[$label];
+        }
+
+        return $this->list[$label][0];
     }
     
     /**
@@ -75,6 +156,63 @@ class Headers
     
     /**
      * 
+     * Returns all the headers as an iterator.
+     * 
+     * @return \ArrayIterator
+     * 
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->list);
+    }
+    
+    /**
+     * 
+     * Adds a header value to an existing header label; if there is more
+     * than one, it will append the new value.
+     * 
+     * @param string $label The header label.
+     * 
+     * @param string $value The header value.
+     * 
+     * @return void
+     * 
+     */
+    public function add($label, $value)
+    {
+        if ($label instanceof Header) {
+            $header = $label;
+        } else {
+            $header = $this->factory->newInstance($label, $value);
+        }
+
+        $this->list[$header->getLabel()][] = $header;
+    }
+    
+    /**
+     * 
+     * Sets a header value, overwriting previous values.
+     * 
+     * @param string $label The header label.
+     * 
+     * @param string $value The header value.
+     * 
+     * @return void
+     * 
+     */
+    public function set($label, $value)
+    {
+        if ($label instanceof Header) {
+            $header = $label;
+        } else {
+            $header = $this->factory->newInstance($label, $value);
+        }
+
+        $this->list[$header->getlabel()] = [$header];
+    }
+    
+    /**
+     * 
      * Sets all the headers at once; replaces all previously existing headers.
      * 
      * @param array $headers An array of headers where the key is the header
@@ -85,7 +223,6 @@ class Headers
      */
     public function setAll(array $headers = [])
     {
-        $this->list = [];
         foreach ($headers as $label => $values) {
             foreach ((array) $values as $value) {
                 $this->add($label, $value);
@@ -102,32 +239,10 @@ class Headers
      */
     public function send()
     {
-        foreach ($this->list as $label => $values) {
-            foreach ($values as $value) {
-                header("$label: $value");
+        foreach ($this->list as $values) {
+            foreach ($values as $header) {
+                header($header->toString());
             }
         }
-    }
-    
-    /**
-     * 
-     * Sanitizes header labels by removing all characters besides 
-     * `[a-zA-z0-9_-]`.
-     * 
-     * Underscores are converted to dashes, and word case is normalized.
-     * 
-     * Converts "foo \r bar_ baz-dib \n 9" to "Foobar-Baz-Dib9".
-     * 
-     * @param string $label The header label to sanitize.
-     * 
-     * @return string The sanitized header label.
-     * 
-     */
-    protected function sanitizeLabel($label)
-    {
-        $label = preg_replace('/[^a-zA-Z0-9_-]/', '', $label);
-        $label = ucwords(strtolower(str_replace(['-', '_'], ' ', $label)));
-        $label = str_replace(' ', '-', $label);
-        return $label;
     }
 }

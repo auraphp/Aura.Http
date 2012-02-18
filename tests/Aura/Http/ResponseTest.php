@@ -2,6 +2,9 @@
 
 namespace Aura\Http;
 
+use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Factory\Header as HeaderFactory;
+
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     public static $callback;
@@ -27,7 +30,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->header_expect[0] = ['HTTP/1.1 200 OK', true, 200];
         static::$headers_sent   = false;
         
-        return new Response(new Headers, new Cookies);
+        return new Response(new Headers(new HeaderFactory), new Cookies(new CookieFactory));
     }
     
     public function test__get()
@@ -127,7 +130,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetAndGetHeaders()
     {
         $response = $this->newResponse();
-        $headers = new Headers;
+        $headers = new Headers(new HeaderFactory);
         $response->setHeaders($headers);
         $actual = $response->getHeaders();
         $this->assertSame($headers, $actual);
@@ -155,7 +158,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetAndGetCookies()
     {
         $response = $this->newResponse();
-        $cookies = new Cookies;
+        $cookies = new Cookies(new CookieFactory);
         $response->setCookies($cookies);
         $actual = $response->getCookies();
         $this->assertSame($cookies, $actual);
@@ -165,7 +168,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->newResponse();
         
-        $headers = new Headers;
+        $headers = new Headers(new HeaderFactory);
         $headers->setAll([
             'Foo' => 'hello world',
             'Bar' => 'hello world 2',
@@ -191,7 +194,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response = $this->newResponse();
         $response->setCgi(true);
         
-        $headers = new Headers;
+        $headers = new Headers(new HeaderFactory);
         $headers->setAll([
             'Foo' => 'hello world',
             'Bar' => 'hello world 2',

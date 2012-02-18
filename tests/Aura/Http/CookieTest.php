@@ -65,6 +65,22 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cookie->httponly);
     }
 
+    public function testSetFromStringWithDefault()
+    {
+        $cookie = $this->newCookie();
+        $cookie->setFromString('cname=cvalue; expires=42; HttpOnly', 'https://example.com/path/');
+
+        $this->assertEquals('cname',        $cookie->name);
+        $this->assertEquals('cvalue',       $cookie->value);
+        $this->assertEquals(42,             $cookie->expire);
+        $this->assertEquals(42,             $cookie->expires);
+        $this->assertEquals('/path',        $cookie->path);
+        $this->assertEquals('example.com', $cookie->domain);
+
+        $this->assertTrue($cookie->secure);
+        $this->assertTrue($cookie->httponly);
+    }
+
     public function testGetName()
     {
         $cookie = $this->newCookie('cname');
@@ -136,6 +152,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cookie->isMatch('http', 'www.example2.com', '/path'));
         $this->assertFalse($cookie->isMatch('https', 'www.example.com', '/path'));
         $this->assertFalse($cookie->isMatch('http', 'www.example.com', '/newpath'));
+    }
+
+    public function testIsMatchWithoutDomainIsFalse()
+    {
+        $cookie = $this->newCookie('cname', 'cvalue', 42);
+
+        $this->assertFalse($cookie->isMatch('http', 'www.example.com', '/'));
     }
     
     public function testIsExpired()

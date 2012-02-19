@@ -52,7 +52,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     public function testSetFromString()
     {
         $cookie = $this->newCookie();
-        $cookie->setFromString('cname=cvalue; expires=42; path=/path; domain=.example.com; Secure; HttpOnly');
+        $cookie->setFromString('cname=cvalue; expires=42; path=/path; domain=.example.com; Secure; HttpOnly',
+                               'https://example.com/path/');
 
         $this->assertEquals('cname',        $cookie->name);
         $this->assertEquals('cvalue',       $cookie->value);
@@ -65,7 +66,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cookie->httponly);
     }
 
-    public function testSetFromStringWithDefault()
+    public function testSetFromStringUsingDefault()
     {
         $cookie = $this->newCookie();
         $cookie->setFromString('cname=cvalue; expires=42; HttpOnly', 'https://example.com/path/');
@@ -74,8 +75,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('cvalue',       $cookie->value);
         $this->assertEquals(42,             $cookie->expire);
         $this->assertEquals(42,             $cookie->expires);
-        $this->assertEquals('/path',        $cookie->path);
-        $this->assertEquals('example.com', $cookie->domain);
+        $this->assertEquals('/path/',       $cookie->path);
+        $this->assertEquals('example.com',  $cookie->domain);
 
         $this->assertTrue($cookie->secure);
         $this->assertTrue($cookie->httponly);

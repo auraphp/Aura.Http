@@ -79,12 +79,16 @@ class Cookie
     {
         $this->name     = $name;
         $this->value    = $value;
-        $this->expires  = $this->isValidTimeStamp($expire) ? 
-                                    $expire : strtotime($expire);
+        $this->expires  = 0;
         $this->path     = $path;
         $this->domain   = $domain;
         $this->secure   = $secure;
         $this->httponly = $httponly;
+        
+        if (! empty($expire)) {    
+            $this->expires = $this->isValidTimeStamp($expire) ? 
+                                    $expire : strtotime($expire);
+        }
     }
 
     /**
@@ -384,9 +388,10 @@ class Cookie
      */
     protected function isValidTimeStamp($timestamp)
     {
-        return ((string) (int) $timestamp === $timestamp) 
-            && ($timestamp <= PHP_INT_MAX)
-            && ($timestamp >= ~PHP_INT_MAX);
+        return (((int) $timestamp === $timestamp) || // Allow the timestamp to be a string or integer
+                ((string) (int) $timestamp === $timestamp)) &&
+               ($timestamp <= PHP_INT_MAX) &&
+               ($timestamp >= ~PHP_INT_MAX);
     }
 
     /**

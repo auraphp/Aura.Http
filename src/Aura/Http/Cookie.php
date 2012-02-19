@@ -79,7 +79,8 @@ class Cookie
     {
         $this->name     = $name;
         $this->value    = $value;
-        $this->expires  = $expire;
+        $this->expires  = $this->isValidTimeStamp($expire) ? 
+                                    $expire : strtotime($expire);
         $this->path     = $path;
         $this->domain   = $domain;
         $this->secure   = $secure;
@@ -154,6 +155,10 @@ class Cookie
             switch ($data[0]) {
             // string-literal values
             case 'expires':
+                $this->$data[0] = $this->isValidTimeStamp($data[1]) ?
+                                        $data[1] : strtotime($data[1]);
+                break;
+
             case 'path':
             case 'domain':
                 $this->$data[0] = $data[1];
@@ -369,5 +374,23 @@ class Cookie
         return ($cookie_domain == $host_domain ||
                 preg_match('/\.' . preg_quote($cookie_domain) . '$/', 
                            $host_domain));
+    }
+
+    /**
+     * 
+     * Check a siring to see if it could be a unix time stamp.
+     * 
+     * @param string $timestamp
+     * 
+     * @return boolean
+     * 
+     * @see http://stackoverflow.com/questions/2524680/check-whether-the-string-is-a-unix-timestamp
+     * 
+     */
+    protected function isValidTimeStamp($timestamp)
+    {
+        return ((string) (int) $timestamp === $timestamp) 
+            && ($timestamp <= PHP_INT_MAX)
+            && ($timestamp >= ~PHP_INT_MAX);
     }
 }

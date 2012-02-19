@@ -59,7 +59,7 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
     {
         $this->cookies->set('foo_bar', array());
 
-        $this->assertEquals( $this->newCookie('foo_bar'), $this->cookies->foo_bar);
+        $this->assertEquals($this->newCookie('foo_bar'), $this->cookies->foo_bar);
     }
     
     public function test__isset()

@@ -217,10 +217,7 @@ class Multipart
             $filename = basename($file);
             $info     = new \finfo;
             $type     = $info->file($file, FILEINFO_MIME_TYPE);
-
-            if (! $type) {
-                $type = 'application/octet-stream';
-            }
+            $type     = $type ?: 'application/octet-stream';
 
             $encoded  = "--{$this->getBoundary()}\r\n";
             $encoded .= "Content-Disposition: form-data; name=\"{$name}\"; ";

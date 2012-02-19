@@ -126,20 +126,10 @@ class Cookie
      * @return void
      * 
      */
-    public function setFromString($text, $default_url = null)
+    public function setFromString($text, $default_url)
     {
         // setup defaults
-        if ($default_url) {
-            $defaults = parse_url($default_url);
-            $this->secure = (isset($defaults['scheme']) && 
-                             'https' == $defaults['scheme']);
-            $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
-
-            if (isset($defaults['path'])) { 
-                $this->path = substr($defaults['path'], 0, 
-                                     strrpos($defaults['path'], '/'));
-            }
-        }
+        $this->setDefaults($default_url);
 
         // get the list of elements
         $list = explode(';', $text);
@@ -160,8 +150,12 @@ class Cookie
                 break;
 
             case 'path':
-            case 'domain':
                 $this->$data[0] = $data[1];
+                break;
+
+            case 'domain':
+                // prefix the domain with a dot to be consistent with Curl
+                $this->$data[0] = ('.' == $data[1][0]) ? $data[1] : ".{$data[1]}";
                 break;
             
             // true/false values
@@ -272,7 +266,8 @@ class Cookie
      */
     public function isMatch($scheme, $domain, $path)
     {
-        if ('https' == $scheme && ! $this->secure) {
+        if (('https' == $scheme && ! $this->secure) ||
+            ('http'  == $scheme &&   $this->secure)) {
             return false;
         }
 
@@ -393,4 +388,30 @@ class Cookie
             && ($timestamp <= PHP_INT_MAX)
             && ($timestamp >= ~PHP_INT_MAX);
     }
+
+    /**
+     *
+     *
+     * @param 
+     *
+     * @return 
+     *
+     */
+    protected function setDefaults($default_url)
+    {
+        $this->httponly = false;
+        $this->path     = '/';
+        $this->expires  = '0';
+
+        $defaults     = parse_url($default_url);
+        $this->secure = (isset($defaults['scheme']) && 
+                         'https' == $defaults['scheme']);
+        $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
+
+        if (isset($defaults['path'])) { 
+            $this->path = substr($defaults['path'], 0,
+                                strrpos($defaults['path'], '/') + 1);
+        }
+    }
+    
 }

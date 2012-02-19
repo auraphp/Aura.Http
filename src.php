@@ -17,6 +17,7 @@ require_once __DIR__ . '/src/Aura/Http/Request.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Adapter/AdapterInterface.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Adapter/Curl.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Adapter/Stream.php';
+require_once __DIR__ . '/src/Aura/Http/Request/CookieJar.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Multipart.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Response.php';
 require_once __DIR__ . '/src/Aura/Http/Request/ResponseStack.php';

@@ -11,6 +11,7 @@ namespace Aura\Http\Request\Adapter;
 use Aura\Http as Http;
 use Aura\Http\Request;
 use Aura\Http\Headers;
+use Aura\Http\Request\CookieJar;
 use Aura\Http\Request\ResponseBuilder;
 use Aura\Http\Request\Multipart;
 
@@ -54,10 +55,10 @@ class Stream implements AdapterInterface
 
     /**
      * 
-     * @var boolean
+     * @var Aura\Http\Request\CookieJar
      * 
      */
-    protected $is_new_session = true;
+    protected $cookiejar;
 
     
     /**
@@ -68,13 +69,16 @@ class Stream implements AdapterInterface
      */
     public function __construct(
         ResponseBuilder $builder, 
-        Multipart $multipart)
+        Multipart $multipart,
+        CookieJar $cookiejar
+    )
     {
         if (! ini_get('allow_url_fopen')) {
             $msg = 'The PHP ini setting `allow_url_fopen` is off';
             throw new Http\Exception($msg);
         }
 
+        $this->cookiejar = $cookiejar;
         $this->builder   = $builder;
         $this->multipart = $multipart;
     }
@@ -179,21 +183,17 @@ class Stream implements AdapterInterface
         }
 
         // Save the response cookies
-        if ($request->options->cookiejar) {
-            $cookiejar = [];
+        if (! empty($request->options->cookiejar)) {
 
             foreach ($stack as $response) {
-                $cookiejar += $response->getCookies()->getAll();
+                $cookies = $response->getCookies()->getAll();
+
+                foreach ($cookies as $cookie) {
+                    $this->cookiejar->add($cookie);
+                }
             }
 
-            // Add the existing cookies
-            if (file_exists($request->options->cookiejar)) {
-                $cookiejar += unserialize(
-                               file_get_contents($request->options->cookiejar));
-            }
-
-            $cookiejar = serialize($cookiejar);
-            file_put_contents($request->options->cookiejar, $cookiejar);
+            $this->cookiejar->save($request->options->cookiejar);
         }
         
         return $stack;
@@ -230,29 +230,28 @@ class Stream implements AdapterInterface
         }
 
         // Load the contents of the cookie jar
-        if ($request->options->cookiejar && 
+        if (! empty($request->options->cookiejar) && 
             file_exists($request->options->cookiejar)) {
 
-            $cookies = file_get_contents($request->options->cookiejar);
-            $cookies = unserialize($cookies);
-            $url     = parse_url($request->url);
-            $path    = isset($url['path']) ? $url['path'] : '/';
+            $this->cookiejar->open($request->options->cookiejar);
+
             $list    = [];
+            $cookies = $this->cookiejar->listAll($request->url);
 
-            foreach ($cookies as $cookie) {
-                if ($cookie->isMatch($url['scheme'], $url['host'], $path) &&
-                    ! $cookie->isExpired($this->is_new_session)) {
-
-                    $this->is_new_session = false;
-                    $list[] = "{$cookie->getName()}={$cookie->getValue()}";
+            // Add the cookies set through Request
+            if (isset($request->headers->Cookie)) {
+                $values = explode('; ', $request->headers->Cookie->getValue());
+                foreach ($values as $value) {
+                    $list[$value] = $value;
                 }
             }
+            // Add the stored cookies
+            foreach ($cookies as $cookie) {
+                $value        = "{$cookie->getName()}={$cookie->getValue()}";
+                $list[$value] = $value;
+            }
+            
             if ($list) {
-                // Add the cookies set through Request
-                if (isset($request->headers->Cookie)) {
-                    $list[] = $request->headers->Cookie;
-                }
-
                 $request->headers->set('Cookie', implode('; ', $list));
             }
         }

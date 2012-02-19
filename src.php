@@ -28,4 +28,5 @@ require_once __DIR__ . '/src/Aura/Http/Cookies.php';
 require_once __DIR__ . '/src/Aura/Http/Headers.php';
 require_once __DIR__ . '/src/Aura/Http/Factory/Cookie.php';
 require_once __DIR__ . '/src/Aura/Http/Factory/Header.php';
+require_once __DIR__ . '/src/Aura/Http/Factory/Request.php';
 require_once __DIR__ . '/src/Aura/Http/Factory/ResponseStack.php';

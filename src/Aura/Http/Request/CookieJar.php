@@ -9,7 +9,7 @@
 namespace Aura\Http\Request;
 
 use Aura\Http\Exception as Exception;
-use Aura\Http\Cookie as Cookie;
+use Aura\Http\Cookie;
 use Aura\Http\Factory\Cookie as CookieFactory;
 
 /**

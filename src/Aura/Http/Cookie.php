@@ -165,6 +165,7 @@ class Cookie
             // true/false values
             case 'secure':
             case 'httponly':
+            default:
                 $this->$data[0] = true;
                 break;
             }

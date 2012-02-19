@@ -131,23 +131,15 @@ Getting Started With Request
 Instantiation
 -------------
 
+The easiest way to manually create a `Request` instance is to use the `RequestFactory`. `RequestFactory` will setup the dependency's and choose an adapter. Defaults to using the Curl adapter if the Curl extension is installed.
+
     <?php
-    use Aura\Http as Http;
-    use Aura\Http\Request as Request;
-    use Aura\Http\Factory\Cookie as CookieFactory;
-    use Aura\Http\Factory\Header as HeaderFactory;
-    use Aura\Http\Factory\ResponseStack as StackFactory;
+    use Aura\Http\Factory\Request RequestFactory;
 
     require_once 'src.php';
 
-    $headers = new Http\Headers(new HeaderFactory);
-    $cookies = new Http\Cookies(new CookieFactory);
-
-    $response         = new Request\Response($headers, $cookies);
-    $response_builder = new Request\ResponseBuilder($response, new StackFactory);
-
-    $adapter = new Request\Adapter\Curl($response_builder);
-    $request = new Request($adapter, $headers, $cookies);
+    $request_factory = new RequestFactory;
+    $request         = $request_factory->newInstance();
 
 Available Adapters
 ------------------

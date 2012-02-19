@@ -10,7 +10,7 @@ namespace Aura\Http\Request;
 
 /**
  * 
- * 
+ * A stack of Request Responses.
  * 
  * @package Aura.Http
  * 

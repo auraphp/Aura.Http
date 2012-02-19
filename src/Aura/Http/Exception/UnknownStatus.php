@@ -10,7 +10,7 @@ namespace Aura\Http\Exception;
 
 /**
  * 
- * @package aura.http
+ * @package Aura.Http
  * 
  */
 class UnknownStatus extends \Aura\Http\Exception {}

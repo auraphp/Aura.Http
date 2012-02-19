@@ -10,14 +10,25 @@ namespace Aura\Http;
 
 /**
  * 
- * 
+ * A class representing a single header.
  * 
  * @package Aura.Header
  * 
  */
 class Header
 {
+    /**
+     * 
+     * @var string The header label.
+     * 
+     */
     protected $label;
+
+    /**
+     * 
+     * @var string The header value.
+     * 
+     */
     protected $value;
 
 
@@ -27,26 +38,61 @@ class Header
         $this->value = $value;
     }
 
+    /**
+     * 
+     * Magic __get
+     * 
+     * @return string
+     * 
+     */
     public function __get($key)
     {
         return $this->$key;
     }
 
+    /**
+     * 
+     * Get the header label.
+     * 
+     * @return string
+     * 
+     */
     public function getLabel()
     {
         return $this->label;
     }
 
+    /**
+     * 
+     * Get the header value.
+     * 
+     * @return string
+     * 
+     */
     public function getValue()
     {
         return $this->value;
     }
 
+    /**
+     * 
+     * Return the label and value in the HTTP header format:  `label: value`.
+     * 
+     * @return string
+     * 
+     */
     public function toString()
     {
         return sprintf('%s: %s', $this->label, $this->value);
     }
 
+    /**
+     * 
+     * Return the label and value in the HTTP header format:  `label: value`.
+     * 
+     * @return string
+     * 
+     */
     public function __toString()
     {
         return $this->toString();

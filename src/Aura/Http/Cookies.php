@@ -147,6 +147,9 @@ class Cookies implements \IteratorAggregate, \Countable
      * 
      * @param string $text The Set-Cookie text string value.
      * 
+     * @param string $default_url The URL to use when setting the secure,
+     * host and path property defaults.
+     * 
      * @return void
      * 
      */

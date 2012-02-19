@@ -52,6 +52,11 @@ class Stream implements AdapterInterface
      */
     protected $url;
 
+    /**
+     * 
+     * @var boolean
+     * 
+     */
     protected $is_new_session = true;
 
     
@@ -170,7 +175,7 @@ class Stream implements AdapterInterface
             throw new Http\Exception\EmptyResponse(
                 sprintf('The server did not return a response. : (%s) %s', 
                     'err num', 
-                    'err msg')); // todo + time out?
+                    'err msg')); // todo 
         }
 
         // Save the response cookies
@@ -334,7 +339,7 @@ class Stream implements AdapterInterface
 
     /**
      *
-     * Retrieves the headers.
+     * Retrieve the headers.
      * 
      * @param resource $stream
      *

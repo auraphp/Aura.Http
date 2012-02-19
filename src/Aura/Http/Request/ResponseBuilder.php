@@ -12,7 +12,7 @@ use Aura\Http\Factory\ResponseStack as ResponseStackFactory;
 
 /**
  * 
- * 
+ * Build the received Responses.
  * 
  * @package Aura.Http
  * 
@@ -27,11 +27,6 @@ class ResponseBuilder
     protected $request_url;
 
 
-    /**
-     *
-     * @param 
-     *
-     */
     public function __construct(
         Response $response, 
         ResponseStackFactory $factory
@@ -44,10 +39,9 @@ class ResponseBuilder
 
     /**
      *
-     *
-     * @param 
-     *
-     * @return 
+     * Set the URL used in the request.
+     * 
+     * @param string $url 
      *
      */
     public function setRequestUrl($url)

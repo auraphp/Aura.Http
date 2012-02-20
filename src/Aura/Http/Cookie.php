@@ -106,19 +106,6 @@ class Cookie
     }
 
     /**
-     *
-     * The properties to save when serializing this object.
-     *
-     * @return array
-     *
-     */
-    public function __sleep()
-    {
-        return ['name',   'value',  'expires', 'path', 
-                'domain', 'secure', 'httponly'];
-    }
-
-    /**
      * 
      * Parses the value of the "Set-Cookie" header and sets it.
      * 

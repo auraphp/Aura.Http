@@ -32,8 +32,7 @@ class Request
     {
         $headers          = new Http\Headers(new Header);
         $cookiefactory    = new Cookie;
-        $cookies          = new Http\Cookies($cookiefactory
-            );
+        $cookies          = new Http\Cookies($cookiefactory);
         $response         = new HttpRequest\Response($headers, $cookies);
         $response_builder = new HttpRequest\ResponseBuilder(
                                     $response, new ResponseStack);

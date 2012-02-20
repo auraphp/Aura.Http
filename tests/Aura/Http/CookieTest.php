@@ -31,24 +31,6 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cookie->httponly);
     }
 
-    public function test__sleep()
-    {
-        $org_cookie = $this->newCookie('cname', 'cvalue', 42, '/path', '.example.com', false, true);
-        
-        $cookie = serialize($org_cookie);
-        $cookie = unserialize($cookie);
-
-        $this->assertEquals('cname',        $cookie->name);
-        $this->assertEquals('cvalue',       $cookie->value);
-        $this->assertEquals(42,             $cookie->expire);
-        $this->assertEquals(42,             $cookie->expires);
-        $this->assertEquals('/path',        $cookie->path);
-        $this->assertEquals('.example.com', $cookie->domain);
-
-        $this->assertFalse($cookie->secure);
-        $this->assertTrue($cookie->httponly);
-    }
-
     public function testSetFromString()
     {
         $cookie = $this->newCookie();

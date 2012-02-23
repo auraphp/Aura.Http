@@ -9,6 +9,7 @@
 namespace Aura\Http\Request\Adapter;
 
 use Aura\Http as Http;
+use Aura\Http\Exception as Exception;
 use Aura\Http\Request;
 use Aura\Http\Headers;
 use Aura\Http\Request\CookieJar;
@@ -151,6 +152,7 @@ class Stream implements AdapterInterface
 
                 $request->headers->set('Authorization', $auth);
 
+                // Resend the request with the HTTP digest header.
                 return $this->exec($request);
 
             }
@@ -177,9 +179,7 @@ class Stream implements AdapterInterface
 
         if ($stack->isEmpty()) {
             throw new Http\Exception\EmptyResponse(
-                sprintf('The server did not return a response. : (%s) %s', 
-                    'err num', 
-                    'err msg')); // todo 
+                'The server did not return a response.'); // todo more detail as to why
         }
 
         // Save the response cookies
@@ -220,7 +220,7 @@ class Stream implements AdapterInterface
         $http['protocol_version'] = $request->version;
 
         // HTTP Basic Authorization
-        if (!empty($request->options->http_auth)) {
+        if (! empty($request->options->http_auth)) {
             list($type, $usrpass) = $request->options->http_auth;
                     
             if (Request::BASIC == $type) {
@@ -260,7 +260,7 @@ class Stream implements AdapterInterface
             $http['timeout'] = $request->options->timeout;
         }
 
-        if ($request->options->max_redirects) {
+        if (isset($request->options->max_redirects)) {
             $http['max_redirects'] = $request->options->max_redirects;
         }
         

@@ -12,57 +12,65 @@ Instantiation
 
 The easiest way to get started is to use the `scripts/instance.php` script to get a new `Response` object.
 
-    <?php
-    $response = include '/path/to/Aura.Http/scripts/instance.php';
+```php
+<?php
+$response = include '/path/to/Aura.Http/scripts/instance.php';
+```
 
 Alternatively, you can add `'/path/to/Aura.Http/src'` to your autoloader and build a `Response` object manually:
 
-    <?php
-    use Aura\Http\Response;
-    use Aura\Http\Headers;
-    use Aura\Http\Cookies;
-    use Aura\Http\Factory\Cookie as CookieFactory;
-    use Aura\Http\Factory\Header as HeaderFactory;
+```php
+<?php
+use Aura\Http\Response;
+use Aura\Http\Headers;
+use Aura\Http\Cookies;
+use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Factory\Header as HeaderFactory;
 
-    require_once 'src.php';
+require_once 'src.php';
 
-    $headers  = new Http\Headers(new HeaderFactory);
-    $cookies  = new Http\Cookies(new CookieFactory);
-    $response = new Response($headers, $cookies);
-
+$headers  = new Http\Headers(new HeaderFactory);
+$cookies  = new Http\Cookies(new CookieFactory);
+$response = new Response($headers, $cookies);
+```
 
 Setting Content
 ---------------
 
 To set the content of the `Response`, use the `setContent()` method.
 
-    <?php
-    $html = '<html>'
-          . '<head><title>Test</title></head>'
-          . '<body>Hello World!</body>
-          . </html>';
-    $response->setContent($html);
-
+```php
+<?php
+$html = '<html>'
+      . '<head><title>Test</title></head>'
+      . '<body>Hello World!</body>
+      . </html>';
+$response->setContent($html);
+```
 
 Setting Headers
 ---------------
 
 To set headers, access the `$headers` property (which itself is a `Headers` collection object).
 
-    <?php
-    $response->headers->set('Header-Label', 'header value');
+```php
+<?php
+$response->headers->set('Header-Label', 'header value');
+```
 
 You can also set all the headers at once by passing an array of key-value pairs where the key is the header label and the value is one or more header values.
 
-    <?php
-    $response->headers->setAll([
-        'Header-One' => 'header one value',
-        'Header-Two' => [
-            'header two value A',
-            'header two value B',
-            'header two value C',
-        ],
-    ]);
+```php
+<?php
+$response->headers->setAll([
+    'Header-One' => 'header one value',
+    'Header-Two' => [
+        'header two value A',
+        'header two value B',
+        'header two value C',
+    ],
+]);
+```
 
 Note that header labels are sanitized and normalized, so if you enter a label `header_foo` it will be retained as `Header-Foo`.
 
@@ -72,41 +80,47 @@ Setting Cookies
 
 To set cookies, access the `$cookies` property (which itself is a `Cookies` collection object).  Pass the cookie name, and an array of information about the cookie (including its value).
 
-    <?php
-    $response->cookies->set('cookie_name', [
-        'value'    => 'cookie value', // cookie value
-        'expire'   => time() + 3600,  // expiration time in unix epoch seconds
-        'path'     => '/path',        // server path for the cookie
-        'domain'   => 'example.com',  // domain for the cookie
-        'secure'   => false,          // send by ssl only?
-        'httponly' => true,           // send by http/https only?
-    ]);
+```php
+<?php
+$response->cookies->set('cookie_name', [
+    'value'    => 'cookie value', // cookie value
+    'expire'   => time() + 3600,  // expiration time in unix epoch seconds
+    'path'     => '/path',        // server path for the cookie
+    'domain'   => 'example.com',  // domain for the cookie
+    'secure'   => false,          // send by ssl only?
+    'httponly' => true,           // send by http/https only?
+]);
+```
 
 The information array mimics the [setcookies()](http://php.net/setcookies) parameter names.  You only need to provide the parts of the array that you need; the remainder will be filled in with `null` defaults for you.
 
 You can also set all the cookies at once by passing an array of key-value pairs, where the key is the cookie name and the value is a cookie information array.
 
-    <?php
-    $response->cookies->setAll([
-        'cookie_foo' => [
-            'value' => 'value for cookie foo',
-        ],
-        'cookie_bar' => [
-            'value' => 'value for cookie bar',
-        ],
-    ]);
+```php
+<?php
+$response->cookies->setAll([
+    'cookie_foo' => [
+        'value' => 'value for cookie foo',
+    ],
+    'cookie_bar' => [
+        'value' => 'value for cookie bar',
+    ],
+]);
+```
 
 Setting the Status
 ------------------
 
 To set the HTTP response status, use `setStatusCode()` and `setStatusText()`. The `setStatusCode()` method automatically sets the text for known codes.
 
-    <?php
-    // automatically sets the status text to 'Not Modified'
-    $response->setStatusCode(304);
-    
-    // change the status text to something else
-    $response->setStatusText('Same As It Ever Was');
+```php
+<?php
+// automatically sets the status text to 'Not Modified'
+$response->setStatusCode(304);
+
+// change the status text to something else
+$response->setStatusText('Same As It Ever Was');
+```
 
 By default, a new `Response` starts with a status of `'200 OK'`.
 
@@ -116,8 +130,10 @@ Sending the Response
 
 Once you have set the content, headers, cookies, and status, you can send the response to the client using the `send()` method.
 
-    <?php
-    $response->send();
+```php
+<?php
+$response->send();
+```
 
 This will send all the headers using [header()](http://php.net/header), all the cookies using [setcookie()](http://php.net/setcookie), and then `echo` the content.
 
@@ -134,13 +150,13 @@ Instantiation
 The easiest way to manually create a `Request` instance is to use the `RequestFactory`. `RequestFactory` will setup the dependency's and choose an adapter. Defaults to using the Curl adapter if the Curl extension is installed.
 
 ```php
-    <?php
-    use Aura\Http\Factory\Request RequestFactory;
+<?php
+use Aura\Http\Factory\Request RequestFactory;
 
-    require_once 'src.php';
+require_once 'src.php';
 
-    $request_factory = new RequestFactory;
-    $request         = $request_factory->newInstance();
+$request_factory = new RequestFactory;
+$request         = $request_factory->newInstance();
 ```
 
 Available Adapters
@@ -158,67 +174,85 @@ Making a Request
 
 Making a GET request to Github to list Auras repositories in JSON format:
 
-    <?php
-    $response = $request->get('http://github.com/api/v2/json/repos/show/auraphp');
+```php
+<?php
+$response = $request->get('http://github.com/api/v2/json/repos/show/auraphp');
+```
 
 The `$response` is a `Aura\Http\Request\ResponseStack` containing all the responses including redirects, the stack order is last in first out. Each item in the stack is a `\Aura\Http\RequestResponse` object.
 
 Listing the repositories as an array:
 
-    <?php
-    $repos = json_decode($response[0]->getContent());
-    
+```php
+<?php
+$repos = json_decode($response[0]->getContent());
+```
 
 Submitting a Request
 --------------------
 
-    <?php    
-    $response = $request->setContent(['name' => 'value', 'foo' => ['bar']])
-                        ->post('http://localhost/submit.php');
+```php
+<?php    
+$response = $request->setContent(['name' => 'value', 'foo' => ['bar']])
+                    ->post('http://localhost/submit.php');
+```
  
 Downloading a File
 ------------------    
 
-    <?php
-    $response = $request->get('http://localhost/download.ext');
+```php
+<?php
+$response = $request->get('http://localhost/download.ext');
+```
 
 In the example above the download is stored in memory. For larger files you will probably want to save the download to disk as it is received. This is done using the `saveTo()` method and a full path to a file or directory that is writeable by PHP as an argument.
 
-    <?php
-    $response = $request->saveTo('/a/path')
-                        ->get('http://localhost/download.ext');
+````php
+<?php
+$response = $request->saveTo('/a/path')
+                    ->get('http://localhost/download.ext');
+````
 
 When you save a file to disk `$response[0]->getContent()` will return a file resource.
 
 Uploading a File
 ----------------
 
-    <?php
-    $response = $request->setContent(['name' => 'value', 'file' => ['@/a/path/file.ext', '@/a/path/file2.ext']])
-                        ->post('http://localhost/submit.php');
+```php
+<?php
+$response = $request->setContent(['name' => 'value', 'file' => ['@/a/path/file.ext', '@/a/path/file2.ext']])
+                    ->post('http://localhost/submit.php');
+```
 
 Submitting Custom Content
 -------------------------
 
-    <?php
-    $json     = json_encode(array('hello' => 'world'));
-    $response = $request->setContent($json)
-                        ->setHeader('Content-Type', 'application/json')
-                        ->post('http://localhost/submit.php');
+```php
+<?php
+$json     = json_encode(array('hello' => 'world'));
+$response = $request->setContent($json)
+                    ->setHeader('Content-Type', 'application/json')
+                    ->post('http://localhost/submit.php');
+```
 
 HTTP Authorization
 ------------------
 
 HTTP Basic:
 
+```php
     <?php
     $response = $request->setHttpAuth('usr', 'pass') // defaults to Request::BASIC
                         ->get('http://localhost/private/index.php');
+```
 
 HTTP Digest:
 
-    $response = $request->setHttpAuth('usr', 'pass', Request::DIGEST)
-                        ->get('http://localhost/private/index.php');
+```php
+<?php
+$response = $request->setHttpAuth('usr', 'pass', Request::DIGEST)
+                    ->get('http://localhost/private/index.php');
+```
 
 Cookies and cookie authorization
 --------------------------------
@@ -227,12 +261,13 @@ Cookies and cookie authorization
 
  Logging into a site using cookies (Although if the site has CSRF protection in place this won't work):
 
-    <?php
-    $request->setCookieJar('/path/to/cookiejar')
-            ->setContent(['usr_name' => 'name', 'usr_pass' => 'pass'])
-            ->post('http://www.example.com/login');
+```php
+<?php
+$request->setCookieJar('/path/to/cookiejar')
+        ->setContent(['usr_name' => 'name', 'usr_pass' => 'pass'])
+        ->post('http://www.example.com/login');
 
 
-    $response = $request->setCookieJar('/path/to/cookiejar')
-                        ->get('http://www.example.com/');
- 
+$response = $request->setCookieJar('/path/to/cookiejar')
+                    ->get('http://www.example.com/');
+```

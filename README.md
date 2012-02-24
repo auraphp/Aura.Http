@@ -207,11 +207,11 @@ $response = $request->get('http://localhost/download.ext');
 
 In the example above the download is stored in memory. For larger files you will probably want to save the download to disk as it is received. This is done using the `saveTo()` method and a full path to a file or directory that is writeable by PHP as an argument.
 
-````php
+```php
 <?php
 $response = $request->saveTo('/a/path')
                     ->get('http://localhost/download.ext');
-````
+```
 
 When you save a file to disk `$response[0]->getContent()` will return a file resource.
 

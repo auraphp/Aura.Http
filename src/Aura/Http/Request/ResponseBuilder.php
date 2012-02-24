@@ -96,20 +96,21 @@ class ResponseBuilder
             // file_handle is not a resource, extract a filename from the
             // headers else generate a name, then open the file.
             if (! $is_resource) {
-                
+
+                $filename = 'content.' . microtime() . '.out';
+
                 if (isset($this->response->headers->{'Content-Disposition'})) {
                     
-                    $filename = $this->response->headers->{'Content-Disposition'};
-                    preg_match('/filename=[\'|"]([^\'"]*)/', $filename, $m);
+                    $header = $this->response->headers->{'Content-Disposition'};
+                    preg_match('/filename=[\'|"]([^\'"]*)/', $header, $m);
                     
-                    if (empty($m[1])) {
-                        $filename = 'content.' . microtime() . '.out';
-                    } else {
+                    if (! empty($m[1])) {
                         $filename = basename($m[1]);// found a filename in the content disposition header
                     }
                 }
                 
-                $this->file        = $save_to_folder . DIRECTORY_SEPARATOR . $filename;
+                $this->file        = $save_to_folder . 
+                                        DIRECTORY_SEPARATOR . $filename;
                 $this->file_handle = fopen($this->file, 'w');
             }
             
@@ -141,7 +142,7 @@ class ResponseBuilder
         // remove line endings
         $header = trim($header);
         
-        // blank header (double line endings)
+        // blank header or double line ending
         if (! $header) {
             return $length;
         }

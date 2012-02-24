@@ -205,7 +205,7 @@ class Response
      * 
      * Return the cookies from the response.
      *
-     * @return Aura\Http\ResponseCookies
+     * @return Aura\Http\Cookies
      *
      */
     public function getCookies()

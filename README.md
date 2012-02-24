@@ -133,6 +133,7 @@ Instantiation
 
 The easiest way to manually create a `Request` instance is to use the `RequestFactory`. `RequestFactory` will setup the dependency's and choose an adapter. Defaults to using the Curl adapter if the Curl extension is installed.
 
+```php
     <?php
     use Aura\Http\Factory\Request RequestFactory;
 
@@ -140,6 +141,7 @@ The easiest way to manually create a `Request` instance is to use the `RequestFa
 
     $request_factory = new RequestFactory;
     $request         = $request_factory->newInstance();
+```
 
 Available Adapters
 ------------------

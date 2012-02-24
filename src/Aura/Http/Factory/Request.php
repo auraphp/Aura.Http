@@ -29,13 +29,18 @@ class Request
 {
     /**
      *
-     * Convenience method for creating a Request object. If Curl is installed
-     * the Curl adapter is used else the Stream adapter is used.
+     * Convenience method for creating a Request object. 
+     * 
+     * @param string $adapter Use this adapter. Defaults to `auto` if Curl is 
+     * installed the Curl adapter is used else the Stream adapter is used.
+     * 
+     * @param array $options Adapter specific options and defaults. Currently 
+     * only used by Curl.
      * 
      * @return Aura\Http\Request
      *
      */
-    public function newInstance()
+    public function newInstance($adapter = 'auto', array $options = [])
     {
         $headers          = new Headers(new Header);
         $cookiefactory    = new Cookie;
@@ -43,8 +48,10 @@ class Request
         $response         = new RequestResponse($headers, $cookies);
         $response_builder = new ResponseBuilder($response, new ResponseStack);
 
-        if (extension_loaded('curl')) {
-            $adapter   = new Curl($response_builder);
+        if ('curl' == $adapter ||
+            ('auto' == $adapter && extension_loaded('curl'))) {
+            
+            $adapter   = new Curl($response_builder, $options);
         } else {
             $cookiejar = new CookieJar($cookiefactory);
             $adapter   = new Stream(

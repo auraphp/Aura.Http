@@ -67,6 +67,8 @@ class ResponseBuilder
         $stack       = $this->stack;
         $this->stack = $this->factory->newInstance();
 
+        $stack->rewind();
+        
         return $stack;
     }
 

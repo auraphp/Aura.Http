@@ -178,8 +178,10 @@ class Stream implements AdapterInterface
         $stack = $this->builder->getStack();
 
         if ($stack->isEmpty()) {
+            $error = error_get_last();
             throw new Http\Exception\EmptyResponse(
-                'The server did not return a response.'); // todo more detail as to why
+                sprintf('The server did not return a response. : (%s) %s', 
+                    $error['type'], $error['message']));
         }
 
         // Save the response cookies

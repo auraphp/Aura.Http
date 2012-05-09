@@ -17,7 +17,7 @@ use Aura\Http\Request\Adapter as Adapter;
  * @package Aura.Http
  * 
  */
-class Request
+class Request extends Message
 {
     /**
      * HTTP method constants.
@@ -118,33 +118,6 @@ class Request
     
     /**
      * 
-     * HTTP version to use.
-     * 
-     * @var string
-     *
-     */
-    protected $version;
-    
-    /**
-     * 
-     * The headers to use.
-     * 
-     * @var Aura\Http\Headers
-     *
-     */
-    protected $headers;
-    
-    /**
-     * 
-     * The cookies to use.
-     * 
-     * @var Aura\Http\Cookies
-     *
-     */
-    protected $cookies;
-    
-    /**
-     * 
      * Request options to use. i.e. max_redirects, ssl_verify_peer, etc.
      * 
      * @var \ArrayObject
@@ -174,15 +147,6 @@ class Request
     
     /**
      * 
-     * The content to use for the request.
-     * 
-     * @var string
-     *
-     */
-    protected $content;
-    
-    /**
-     * 
      * Content type to use for the request.
      * 
      * @var string
@@ -208,7 +172,6 @@ class Request
      */
     protected $adapter;
 
-
     /**
      * 
      * @param \Aura\Http\Adapter\AdapterInterface $adapter
@@ -222,14 +185,14 @@ class Request
      * 
      */
     public function __construct(
-        Adapter\AdapterInterface $adapter, 
         Headers $headers,
         Cookies $cookies,
+        Adapter\AdapterInterface $adapter, 
         array $options = [])
     {
-        $this->adapter = $adapter;
-        $this->cookies = $cookies;
         $this->headers = $headers;
+        $this->cookies = $cookies;
+        $this->adapter = $adapter;
         
         // Use reset to setup the default options.
         $this->reset();
@@ -576,44 +539,6 @@ class Request
     public function setContentType($val)
     {
         $this->content_type = $val;
-        return $this;
-    }
-    
-    /**
-     * 
-     * Sets the body content.
-     * 
-     * If you pass an array, the prepare() method will automatically call
-     * http_build_query() on the array and set the content-type for you.
-     * 
-     * @param string|array|resource $val The body content.
-     * 
-     * @return Aura\Http\Request This object.
-     * 
-     */
-    public function setContent($val)
-    {
-        $this->content = $val;
-        return $this;
-    }
-
-    /**
-     * 
-     * Sets the HTTP protocol version for the request (1.0 or 1.1).
-     * 
-     * @param string $version The version number (1.0 or 1.1).
-     * 
-     * @return Aura\Http\Request This object.
-     * 
-     * @throws Aura\Http\Exception\UnknownVersion
-     * 
-     */
-    public function setVersion($version)
-    {
-        if ($version != '1.0' && $version != '1.1') {
-            throw new Exception\UnknownVersion($version);
-        }
-        $this->version = $version;
         return $this;
     }
     

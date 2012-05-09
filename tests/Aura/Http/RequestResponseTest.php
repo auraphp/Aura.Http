@@ -140,7 +140,6 @@ class RequestResponseTest extends \PHPUnit_Framework_TestCase
 
         $rr->setStatusCode(200);
         $this->assertSame(200, $rr->getStatusCode());
-        $this->assertSame('OK', $rr->getStatusText());
 
         $this->setExpectedException('\Aura\Http\Exception\UnknownStatus');
         $rr->setStatusCode(4200);

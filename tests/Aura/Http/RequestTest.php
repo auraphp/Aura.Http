@@ -15,9 +15,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $adapter  = new Mock();
         $request  = new Request(
-                            $adapter, 
                             new Headers(new HeaderFactory),
                             new Cookies(new CookieFactory),
+                            $adapter, 
                             $opts);
 
         if ($seturl) {

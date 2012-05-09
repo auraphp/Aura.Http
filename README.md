@@ -1,7 +1,8 @@
 Aura HTTP
 =========
 
-The Aura HTTP package provides objects to build and send HTTP requests and responses.
+The Aura HTTP package provides objects to build and send HTTP requests and
+responses.
 
 
 Getting Started With Response
@@ -255,7 +256,7 @@ Submitting Custom Content
 
 ```php
 <?php
-$json     = json_encode(array('hello' => 'world'));
+$json     = json_encode(['hello' => 'world']);
 $response = $request->setContent($json)
                     ->setHeader('Content-Type', 'application/json')
                     ->post('http://localhost/submit.php');
@@ -280,11 +281,11 @@ $response = $request->setHttpAuth('usr', 'pass', Request::DIGEST)
                     ->get('http://localhost/private/index.php');
 ```
 
-Cookies and cookie authorization
+Cookies and Cookie Authorization
 --------------------------------
 
-Note: Currently the CookieJar file that Curl creates is incompatible with the
-Streams CookieJar file and vis versa.
+Note: Currently the `CookieJar` file that `Curl` creates is incompatible with
+the `Streams` `CookieJar` file and vis versa.
 
 Logging into a site using cookies (although if the site has CSRF protection
 in place this won't work):

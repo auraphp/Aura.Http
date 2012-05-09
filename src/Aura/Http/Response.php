@@ -10,58 +10,13 @@ namespace Aura\Http;
 
 /**
  * 
- * The Aura Response class
+ * The Aura Response class.
  * 
  * @package Aura.Http
  * 
  */
-class Response
+class Response extends Message
 {
-    /**
-     * 
-     * The cookies for this response.
-     * 
-     * @var Cookies
-     * 
-     */
-    protected $cookies;
-    
-    /**
-     * 
-     * The content of this response.
-     * 
-     * @var string
-     * 
-     */
-    protected $content;
-    
-    /**
-     * 
-     * The headers for this response.
-     * 
-     * @var Headers
-     * 
-     */
-    protected $headers;
-    
-    /**
-     * 
-     * The HTTP status code of the response.
-     * 
-     * @var int
-     * 
-     */
-    protected $status_code;
-    
-    /**
-     * 
-     * The HTTP status message of the response.
-     * 
-     * @var string
-     * 
-     */
-    protected $status_text;
-    
     /**
      * 
      * List of default HTTP status messages.
@@ -116,14 +71,7 @@ class Response
         '505' => 'HTTP Version Not Supported',
     ];
     
-    /** 
-     * 
-     * The HTTP version for this response.
-     * 
-     * @var string
-     * 
-     */
-    protected $version = '1.1';
+    protected $is_cgi;
     
     /**
      * 
@@ -136,33 +84,10 @@ class Response
      */
     public function __construct(Headers $headers, Cookies $cookies)
     {
-        $this->headers = $headers;
-        $this->cookies = $cookies;
+        parent::__construct($headers, $cookies);
         $this->setStatusCode(200);
         $is_cgi = (strpos(php_sapi_name(), 'cgi') !== false);
         $this->setCgi($is_cgi);
-    }
-    
-    /**
-     * 
-     * Read-only access to $headers and $cookies objects.
-     * 
-     * @param string $key The property to retrieve.
-     * 
-     * @return mixed
-     * 
-     */
-    public function __get($key)
-    {
-        if ($key == 'headers') {
-            return $this->headers;
-        }
-        
-        if ($key == 'cookies') {
-            return $this->cookies;
-        }
-        
-        throw new Exception("No such property '$key'");
     }
     
     /**
@@ -262,85 +187,6 @@ class Response
         }
     }
     
-    /** 
-     * 
-     * Sets the cookies for the response.
-     * 
-     * @param Cookies $cookies The cookies object.
-     * 
-     * @return void
-     * 
-     */
-    public function setCookies(Cookies $cookies)
-    {
-        $this->cookies = $cookies;
-    }
-    
-    /** 
-     * 
-     * Returns the $cookies object.
-     * 
-     * @return Cookies
-     * 
-     */
-    public function getCookies()
-    {
-        return $this->cookies;
-    }
-    
-    /**
-     * 
-     * Sets the content of the response.
-     * 
-     * @param mixed $content The body content of the response. Note that this
-     * may be a resource, in which case it will be streamed out when sending.
-     * 
-     * @return void
-     * 
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
-    
-    /**
-     * 
-     * Gets the content of the response.
-     * 
-     * @return mixed The body content of the response.
-     * 
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-    
-    /**
-     * 
-     * Sets the headers for the response (not including cookies).
-     * 
-     * @param Headers $headers A Headers object.
-     * 
-     * @return void
-     * 
-     */
-    public function setHeaders(Headers $headers)
-    {
-        $this->headers = $headers;
-    }
-    
-    /**
-     * 
-     * Returns the headers for the response (not including cookies).
-     * 
-     * @return Headers
-     * 
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-    
     /**
      * 
      * Sets the HTTP status code to for the response. Automatically resets the
@@ -351,87 +197,14 @@ class Response
      */
     public function setStatusCode($code)
     {
-        $code = (int) $code;
-        if ($code < 100 || $code > 599) {
-            throw new Exception("Status code $code not recognized.");
-        }
-        
-        $this->status_code = $code;
+        parent::setStatusCode($code);
         
         if (isset($this->status_text_default[$code])) {
             $this->setStatusText($this->status_text_default[$code]);
         } else {
             $this->setStatusText(null);
         }
-    }
-    
-    /**
-     * 
-     * Returns the HTTP status code for the response.
-     * 
-     * @return int
-     * 
-     */
-    public function getStatusCode()
-    {
-        return $this->status_code;
-    }
-    
-    /**
-     * 
-     * Sets the HTTP status text for the response.
-     * 
-     * @param string $text The status text.
-     * 
-     * @return void
-     * 
-     */
-    public function setStatusText($text)
-    {
-        $text = trim(str_replace(["\r", "\n"], '', $text));
-        $this->status_text = $text;
-    }
-    
-    /**
-     * 
-     * Returns the HTTP status text for the response.
-     * 
-     * @return string
-     * 
-     */
-    public function getStatusText()
-    {
-        return $this->status_text;
-    }
-    
-    /**
-     * 
-     * Sets the HTTP version for the response to '1.0' or '1.1'.
-     * 
-     * @param string $version The HTTP version to use for this response.
-     * 
-     * @return void
-     * 
-     */
-    public function setVersion($version)
-    {
-        $version = trim($version);
-        if ($version != '1.0' && $version != '1.1') {
-            throw new Exception("HTTP version '$version' not recognized.");
-        } else {
-            $this->version = $version;
-        }
-    }
-    
-    /**
-     * 
-     * Returns the HTTP version for the response.
-     * 
-     * @return string
-     * 
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        
+        return $this;
     }
 }

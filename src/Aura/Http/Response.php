@@ -8,6 +8,8 @@
  */
 namespace Aura\Http;
 
+use Aura\Http\Cookie\Collection as Cookies;
+
 /**
  * 
  * The Aura Response class.

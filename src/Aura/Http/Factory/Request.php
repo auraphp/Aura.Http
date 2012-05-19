@@ -9,7 +9,7 @@
 namespace Aura\Http\Factory;
 
 use Aura\Http\Headers;
-use Aura\Http\Cookies;
+use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Request as HttpRequest;
 use Aura\Http\Request\Response as RequestResponse;
 use Aura\Http\Request\CookieJar;

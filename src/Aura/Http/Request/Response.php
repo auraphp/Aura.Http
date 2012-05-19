@@ -10,7 +10,7 @@ namespace Aura\Http\Request;
 
 use Aura\Http as Http;
 use Aura\Http\Headers;
-use Aura\Http\Cookies;
+use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Message;
 
 /**

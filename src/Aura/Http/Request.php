@@ -9,6 +9,7 @@
 namespace Aura\Http;
 
 use Aura\Http\Request\Adapter as Adapter;
+use Aura\Http\Cookie\Collection as Cookies;
 
 /**
  * 
@@ -178,7 +179,7 @@ class Request extends Message
      * 
      * @param \Aura\Http\Headers $headers
      * 
-     * @param \Aura\Http\Cookies $cookies
+     * @param \Aura\Http\Cookie\Collection $cookies
      * 
      * @param array $options Default options, these options survive cloning and
      * reset().

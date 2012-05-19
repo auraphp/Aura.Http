@@ -2,18 +2,18 @@
 
 namespace Aura\Http\Request;
 
-use Aura\Http as Http;
-
 use Aura\Http\Factory\Header as HeaderFactory;
 use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Collection as Cookies;
+use Aura\Http\Headers;
 
 class RequestResponseTest extends \PHPUnit_Framework_TestCase
 {
     protected function newRequestResponse()
     {
         return new Response(
-            new Http\Headers(new HeaderFactory),
-            new Http\Cookies(new CookieFactory)
+            new Headers(new HeaderFactory),
+            new Cookies(new CookieFactory)
         );
     }
 
@@ -43,7 +43,7 @@ class RequestResponseTest extends \PHPUnit_Framework_TestCase
         $rr = $this->newRequestResponse();
 
         $this->assertInstanceOf('\Aura\Http\Headers', $rr->headers);
-        $this->assertInstanceOf('\Aura\Http\Cookies', $rr->cookies);
+        $this->assertInstanceOf('\Aura\Http\Cookie\Collection', $rr->cookies);
 
         $this->setExpectedException('\Aura\Http\Exception');
         $rr->invalid;
@@ -119,7 +119,7 @@ class RequestResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetCookies()
     {
         $rr      = $this->newRequestResponse();
-        $cookies = new Http\Cookies(new CookieFactory);
+        $cookies = new Cookies(new CookieFactory);
 
         $rr->setCookies($cookies);
         $this->assertSame($cookies, $rr->getCookies());
@@ -128,7 +128,7 @@ class RequestResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetHeaders()
     {
         $rr      = $this->newRequestResponse();
-        $headers = new Http\Headers(new HeaderFactory);
+        $headers = new Headers(new HeaderFactory);
 
         $rr->SetHeaders($headers);
         $this->assertSame($headers, $rr->getHeaders());

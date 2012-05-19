@@ -8,6 +8,8 @@
  */
 namespace Aura\Http;
 
+use Aura\Http\Cookie\Collection as Cookies;
+
 /**
  * 
  * An HTTP message (either a request or a response).

@@ -2,6 +2,7 @@
 namespace Aura\Http;
 
 use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Collection as Cookies;
 
 /**
  * Test class for Cookies.

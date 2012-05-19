@@ -5,7 +5,7 @@ $loader->add('Aura\Http\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
 /**
  * Constructor params.
  */
-$di->params['Aura\Http\Cookies'] = [
+$di->params['Aura\Http\Cookie\Collection'] = [
     'factory' => $di->lazyNew('Aura\Http\Factory\Cookie'),
 ];
 $di->params['Aura\Http\Headers'] = [
@@ -14,11 +14,11 @@ $di->params['Aura\Http\Headers'] = [
 ];
 $di->params['Aura\Http\Response'] = [
     'headers' => $di->lazyNew('Aura\Http\Headers'),
-    'cookies' => $di->lazyNew('Aura\Http\Cookies'),
+    'cookies' => $di->lazyNew('Aura\Http\Cookie\Collection'),
 ];
 $di->params['Aura\Http\Request\Response'] = [
     'headers' => $di->lazyNew('Aura\Http\Headers'),
-    'cookies' => $di->lazyNew('Aura\Http\Cookies'),
+    'cookies' => $di->lazyNew('Aura\Http\Cookie\Collection'),
 ];
 $di->params['Aura\Http\Request\ResponseBuilder'] = [
     'response' => $di->lazyNew('Aura\Http\RequestResponse'),
@@ -38,7 +38,7 @@ $adapter = extension_loaded('curl') ? 'Aura\Http\Request\Adapter\Curl' : 'Aura\H
 $di->params['Aura\Http\Request'] = [
     'adapter' => $di->lazyNew($adapter),
     'headers' => $di->lazyNew('Aura\Http\Headers'),
-    'cookies' => $di->lazyNew('Aura\Http\Cookies'),
+    'cookies' => $di->lazyNew('Aura\Http\Cookie\Collection'),
     'options' => [],
 ];
 

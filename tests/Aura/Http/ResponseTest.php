@@ -4,6 +4,8 @@ namespace Aura\Http;
 
 use Aura\Http\Factory\Cookie as CookieFactory;
 use Aura\Http\Factory\Header as HeaderFactory;
+use Aura\Http\Cookie\Collection as Cookies;
+use Aura\Http\Headers;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +39,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->newResponse();
         $this->assertInstanceOf('Aura\Http\Headers', $response->headers);
-        $this->assertInstanceOf('Aura\Http\Cookies', $response->cookies);
+        $this->assertInstanceOf('Aura\Http\Cookie\Collection', $response->cookies);
     }
     
     public function test__getNoSuchProperty()

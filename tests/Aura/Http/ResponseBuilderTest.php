@@ -5,7 +5,7 @@ namespace Aura\Http\Request;
 use Aura\Http\Factory\ResponseStack as ResponseStackFactory;
 use Aura\Http\Headers;
 use Aura\Http\Factory\Header as HeaderFactory;
-use Aura\Http\Cookies;
+use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Factory\Cookie as CookieFactory;
 
 require_once 'ResponseBuilderExtended.php';

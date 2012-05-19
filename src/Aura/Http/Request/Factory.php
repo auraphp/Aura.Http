@@ -13,7 +13,7 @@ use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Request as HttpRequest;
 use Aura\Http\Request\Response as RequestResponse;
 use Aura\Http\Cookie\Jar as CookieJar;
-use Aura\Http\Request\Multipart;
+use Aura\Http\Transport\Multipart;
 use Aura\Http\Request\ResponseBuilder;
 use Aura\Http\Request\Adapter\Curl;
 use Aura\Http\Request\Adapter\Stream;

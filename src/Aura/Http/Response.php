@@ -78,6 +78,24 @@ class Response extends Message
     
     /**
      * 
+     * The HTTP status code of the message.
+     * 
+     * @var int
+     * 
+     */
+    protected $status_code;
+    
+    /**
+     * 
+     * The HTTP status message of the message.
+     * 
+     * @var string
+     * 
+     */
+    protected $status_text;
+    
+    /**
+     * 
      * Constructor.
      * 
      * @param Headers $headers A Headers object.
@@ -91,6 +109,29 @@ class Response extends Message
         $this->setStatusCode(200);
         $is_cgi = (strpos(php_sapi_name(), 'cgi') !== false);
         $this->setCgi($is_cgi);
+    }
+    
+    /**
+     * 
+     * Read-only access to $headers and $cookies objects.
+     * 
+     * @param string $key The property to retrieve.
+     * 
+     * @return mixed
+     * 
+     */
+    public function __get($key)
+    {
+        $keys = [
+            'status_code',
+            'status_text',
+        ];
+        
+        if (in_array($key, $keys)) {
+            return $this->$key;
+        } else {
+            return parent::__get($key);
+        }
     }
     
     /**
@@ -122,76 +163,6 @@ class Response extends Message
     
     /**
      * 
-     * Sends the full HTTP response.
-     * 
-     * @return void
-     * 
-     */
-    public function send()
-    {
-        $this->sendHeaders();
-        $this->sendContent();
-    }
-    
-    /**
-     * 
-     * Sends the HTTP status code, status test, headers, and cookies.
-     * 
-     * @return void
-     * 
-     */
-    public function sendHeaders()
-    {
-        if (headers_sent($file, $line)) {
-            throw new Exception\HeadersSent($file, $line);
-        }
-        
-        // determine status header type
-        // cf. <http://www.php.net/manual/en/function.header.php>
-        if ($this->isCgi()) {
-            $status = "Status: {$this->status_code}";
-        } else {
-            $status = "HTTP/{$this->version} {$this->status_code}";
-        }
-        
-        // add status text
-        if ($this->status_text) {
-            $status .= " {$this->status_text}";
-        }
-        
-        // send the status header
-        header($status, true, $this->status_code);
-        
-        // send the non-cookie headers
-        $this->headers->send();
-        
-        // send the cookie headers
-        $this->cookies->send();
-    }
-    
-    /**
-     * 
-     * Sends the HTTP content; if the content is a resource, it streams out
-     * the resource 8192 bytes at a time.
-     * 
-     * @return void
-     * 
-     */
-    public function sendContent()
-    {
-        $content = $this->getContent();
-        if (is_resource($content)) {
-            while (! feof($content)) {
-                echo fread($content, 8192);
-            }
-            fclose($content);
-        } else {
-            echo $content;
-        }
-    }
-    
-    /**
-     * 
      * Sets the HTTP status code to for the response. Automatically resets the
      * status text to the default for that code, if any.
      * 
@@ -200,7 +171,11 @@ class Response extends Message
      */
     public function setStatusCode($code)
     {
-        parent::setStatusCode($code);
+        $code = (int) $code;
+        if ($code < 100 || $code > 599) {
+            throw new Exception\UnknownStatus("Status code $code not recognized.");
+        }
+        $this->status_code = $code;
         
         if (isset($this->status_text_default[$code])) {
             $this->setStatusText($this->status_text_default[$code]);
@@ -210,4 +185,45 @@ class Response extends Message
         
         return $this;
     }
+    
+    /**
+     * 
+     * Returns the HTTP status code for the message.
+     * 
+     * @return int
+     * 
+     */
+    public function getStatusCode()
+    {
+        return $this->status_code;
+    }
+    
+    /**
+     * 
+     * Sets the HTTP status text for the message.
+     * 
+     * @param string $text The status text.
+     * 
+     * @return void
+     * 
+     */
+    public function setStatusText($text)
+    {
+        $text = trim(str_replace(["\r", "\n"], '', $text));
+        $this->status_text = $text;
+        return $this;
+    }
+    
+    /**
+     * 
+     * Returns the HTTP status text for the message.
+     * 
+     * @return string
+     * 
+     */
+    public function getStatusText()
+    {
+        return $this->status_text;
+    }
+    
 }

@@ -11,7 +11,7 @@ namespace Aura\Http\Request;
 use Aura\Http as Http;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Cookie\Collection as Cookies;
-use Aura\Http\Message;
+use Aura\Http\Response as HttpResponse;
 
 /**
  * 
@@ -20,7 +20,7 @@ use Aura\Http\Message;
  * @package Aura.Http
  * 
  */
-class Response extends Message
+class Response extends HttpResponse
 {
     /**
      * 

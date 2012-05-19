@@ -47,24 +47,6 @@ class Message
      */
     protected $headers;
     
-    /**
-     * 
-     * The HTTP status code of the message.
-     * 
-     * @var int
-     * 
-     */
-    protected $status_code;
-    
-    /**
-     * 
-     * The HTTP status message of the message.
-     * 
-     * @var string
-     * 
-     */
-    protected $status_text;
-    
     /** 
      * 
      * The HTTP version for this message.
@@ -100,12 +82,17 @@ class Message
      */
     public function __get($key)
     {
-        if ($key == 'headers') {
-            return $this->headers;
-        }
+        $keys = [
+            'content',
+            'cookies',
+            'headers',
+            'status_code',
+            'status_text',
+            'version',
+        ];
         
-        if ($key == 'cookies') {
-            return $this->cookies;
+        if (in_array($key, $keys)) {
+            return $this->$key;
         }
         
         throw new Exception("No such property '$key'");
@@ -191,63 +178,6 @@ class Message
     public function getHeaders()
     {
         return $this->headers;
-    }
-    
-    /**
-     * 
-     * Sets the HTTP status code to for the message.
-     * 
-     * @param int $code An HTTP status code, such as 200, 302, 404, etc.
-     * 
-     */
-    public function setStatusCode($code)
-    {
-        $code = (int) $code;
-        if ($code < 100 || $code > 599) {
-            throw new Exception\UnknownStatus("Status code $code not recognized.");
-        }
-        $this->status_code = $code;
-        return $this;
-    }
-    
-    /**
-     * 
-     * Returns the HTTP status code for the message.
-     * 
-     * @return int
-     * 
-     */
-    public function getStatusCode()
-    {
-        return $this->status_code;
-    }
-    
-    /**
-     * 
-     * Sets the HTTP status text for the message.
-     * 
-     * @param string $text The status text.
-     * 
-     * @return void
-     * 
-     */
-    public function setStatusText($text)
-    {
-        $text = trim(str_replace(["\r", "\n"], '', $text));
-        $this->status_text = $text;
-        return $this;
-    }
-    
-    /**
-     * 
-     * Returns the HTTP status text for the message.
-     * 
-     * @return string
-     * 
-     */
-    public function getStatusText()
-    {
-        return $this->status_text;
     }
     
     /**

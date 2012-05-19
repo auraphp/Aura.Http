@@ -167,17 +167,6 @@ class Request extends Message
     
     /**
      * 
-     * Request adapter.
-     * 
-     * @var \Aura\Http\Adapter\AdapterInterface
-     * 
-     */
-    protected $adapter;
-
-    /**
-     * 
-     * @param \Aura\Http\Adapter\AdapterInterface $adapter
-     * 
      * @param \Aura\Http\Header\Collection $headers
      * 
      * @param \Aura\Http\Cookie\Collection $cookies
@@ -189,12 +178,10 @@ class Request extends Message
     public function __construct(
         Headers $headers,
         Cookies $cookies,
-        Adapter\AdapterInterface $adapter, 
         array $options = [])
     {
         $this->headers = $headers;
         $this->cookies = $cookies;
-        $this->adapter = $adapter;
         
         // Use reset to setup the default options.
         $this->reset();
@@ -217,53 +204,24 @@ class Request extends Message
      */
     public function __get($key)
     {
-        $valid = [
-            'url', 'content', 'headers', 'options', 'proxy', 
-            'method', 'version', 'ssl'];
+        $keys = [
+            'charset',
+            'content_type',
+            'method',
+            'options',
+            'proxy', 
+            'ssl',
+            'url',
+            'version',
+        ];
 
-        if (in_array($key, $valid)) {
+        if (in_array($key, $keys)) {
             return $this->$key;
+        } else {
+            return parent::__get($key);
         }
-
-        throw new Exception("Property `$key` does not exist.");
     }
 
-    /**
-     *
-     *
-     * @param 
-     *
-     * @return 
-     *
-     */
-    public function __call($method, $args)
-    {
-        switch ($method) {
-        
-        case 'get':
-            $request_method = self::GET;
-            break;
-
-        case 'post':
-            $request_method = self::POST;
-            break;
-
-        case 'put':
-            $request_method = self::PUT;
-            break;
-
-        case 'delete':
-            $request_method = self::DELETE;
-            break;
-
-        default:
-            throw new Exception("Method `$method` does not exist.");
-        }
-
-        $url = empty($args) ? null : $args[0];
-        return $this->setMethod($request_method)->send($url);
-    }
-    
     /**
      * 
      * Reset to the constructor defaults.
@@ -296,56 +254,6 @@ class Request extends Message
         $this->setDefaults();
         
         return $this;
-    }
-    
-    /**
-     * 
-     * Send the HTTP request.
-     *
-     * @param string $url Alias for setUrl. It will overwrite the 
-     * previous (if set) URL.
-     * 
-     * @return Aura\Http\Request\ResponseStack Ordered by last in first out.
-     * 
-     */
-    public function send($url = null) 
-    {
-        if ($url) {
-            $this->setUrl($url);
-        }
-
-        if (! $this->url) {
-            throw new Exception('This request has no URL.');
-        }
-
-        // turn off encoding if we are saving the content to a file.
-        if (isset($this->options->save_to_folder) && 
-            $this->options->save_to_folder) {
-            $this->setEncoding(false);
-        }
-
-        $this->prepareContent();
-        
-        // force the content-type header if needed
-        if ($this->content_type) { 
-            if ($this->charset) {
-                $this->content_type .= "; charset={$this->charset}";
-            }
-            $this->headers->set('Content-Type', $this->content_type);
-        }
-        
-        // bake cookies
-        if (count($this->cookies)) {
-            $list = [];
-
-            foreach ($this->cookies as $cookie) {
-                $list[] = "{$cookie->getName()}={$cookie->getValue()}";
-            }
-
-            $this->headers->add('Cookie', implode('; ', $list));
-        }
-        
-        return $this->adapter->exec($this);
     }
     
     /**
@@ -868,7 +776,7 @@ class Request extends Message
      * @return void
      * 
      */
-    protected function prepareContent()
+    public function prepareContent()
     {
         // what kind of request is this?
         $is_get  = ($this->method == self::GET);

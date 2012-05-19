@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Request\Adapter;
+namespace Aura\Http\Transport;
 
 use Aura\Http as Http;
 use Aura\Http\Exception as Exception;
@@ -14,7 +14,7 @@ use Aura\Http\Request;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Cookie\Jar as CookieJar;
 use Aura\Http\Request\ResponseBuilder;
-use Aura\Http\Request\Multipart;
+use Aura\Http\Transport\Multipart;
 
 /**
  * 
@@ -35,7 +35,7 @@ class Stream implements AdapterInterface
     
     /**
      * 
-     * @var Aura\Http\Request\Multipart
+     * @var Aura\Http\Transport\Multipart
      * 
      */
     protected $multipart;

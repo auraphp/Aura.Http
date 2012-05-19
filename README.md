@@ -28,7 +28,7 @@ use Aura\Http\Response;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
-use Aura\Http\Factory\Header as HeaderFactory;
+use Aura\Http\Header\Factory as HeaderFactory;
 
 $headers  = new Headers(new HeaderFactory);
 $cookies  = new Cookies(new CookieFactory);

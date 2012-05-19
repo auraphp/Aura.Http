@@ -6,7 +6,9 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Factory;
+namespace Aura\Http\Header;
+
+use Aura\Http\Header;
 
 /**
  * 
@@ -15,7 +17,7 @@ namespace Aura\Http\Factory;
  * @package Aura.Http
  * 
  */
-class Header
+class Factory
 {
     
     /**
@@ -31,6 +33,6 @@ class Header
      */
     public function newInstance($label, $value)
     {
-        return new \Aura\Http\Header($label, $value);
+        return new Header($label, $value);
     }
 }

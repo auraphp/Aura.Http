@@ -8,7 +8,7 @@
  */
 namespace Aura\Http\Header;
 
-use Aura\Http\Factory\Header as HeaderFactory;
+use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Header;
 
 /**
@@ -31,14 +31,14 @@ class Collection implements \IteratorAggregate, \Countable
     
     /**
      * 
-     * @var Aura\Http\Factory\Header
+     * @var Aura\Http\Header\Factory
      * 
      */
     protected $factory;
 
     /**
      *
-     * @param Aura\Http\Factory\Header $factory
+     * @param Aura\Http\Header\Factory $factory
      *
      */
     public function __construct(HeaderFactory $factory)

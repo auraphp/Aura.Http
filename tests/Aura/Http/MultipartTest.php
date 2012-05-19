@@ -4,7 +4,7 @@ namespace Aura\Http\Request;
 
 use Aura\Http as Http;
 
-use Aura\Http\Factory\Header as HeaderFactory;
+use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Cookie\Factory as CookieFactory;
 
 class MultipartTest extends \PHPUnit_Framework_TestCase

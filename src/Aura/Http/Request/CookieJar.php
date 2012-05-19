@@ -10,7 +10,7 @@ namespace Aura\Http\Request;
 
 use Aura\Http\Exception as Exception;
 use Aura\Http\Cookie;
-use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Factory as CookieFactory;
 
 /**
  * 
@@ -32,7 +32,7 @@ class CookieJar
 
     /**
      * 
-     * @var Aura\Http\Factory\Cookie
+     * @var Aura\Http\Cookie\Factory
      * 
      */
     protected $factory;

@@ -4,7 +4,7 @@ namespace Aura\Http;
 
 use Aura\Http\Request\Adapter\MockAdapter as Mock;
 use Aura\Http\Factory\Header as HeaderFactory;
-use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
 

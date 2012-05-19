@@ -6,7 +6,7 @@ $loader->add('Aura\Http\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
  * Constructor params.
  */
 $di->params['Aura\Http\Cookie\Collection'] = [
-    'factory' => $di->lazyNew('Aura\Http\Factory\Cookie'),
+    'factory' => $di->lazyNew('Aura\Http\Cookie\Factory'),
 ];
 $di->params['Aura\Http\Header\Collection'] = [
     'factory' => $di->lazyNew('Aura\Http\Factory\Header'),

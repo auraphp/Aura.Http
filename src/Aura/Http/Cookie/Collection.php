@@ -8,7 +8,7 @@
  */
 namespace Aura\Http\Cookie;
 
-use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie;
 
 /**
@@ -31,14 +31,14 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * 
-     * @var Aura\Http\Factory\Cookie
+     * @var Aura\Http\Cookie\Factory
      * 
      */
     protected $factory;
 
     /**
      *
-     * @param Aura\Http\Factory\Cookie $factory
+     * @param Aura\Http\Cookie\Factory $factory
      *
      */
     public function __construct(CookieFactory $factory)

@@ -6,7 +6,7 @@ use Aura\Http\Factory\ResponseStack as ResponseStackFactory;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Factory\Header as HeaderFactory;
 use Aura\Http\Cookie\Collection as Cookies;
-use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Factory as CookieFactory;
 
 require_once 'ResponseBuilderExtended.php';
 

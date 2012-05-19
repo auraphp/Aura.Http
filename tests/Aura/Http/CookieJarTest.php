@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Request;
 
-use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Factory as CookieFactory;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,7 @@
 namespace Aura\Http\Request;
 
 use Aura\Http\Factory\Header as HeaderFactory;
-use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
 

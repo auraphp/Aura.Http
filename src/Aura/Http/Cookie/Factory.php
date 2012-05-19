@@ -6,7 +6,9 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Factory;
+namespace Aura\Http\Cookie;
+
+use Aura\Http\Cookie;
 
 /**
  * 
@@ -15,7 +17,7 @@ namespace Aura\Http\Factory;
  * @package Aura.Http
  * 
  */
-class Cookie
+class Factory
 {
     /**
      * 
@@ -48,7 +50,7 @@ class Cookie
     public function newInstance($name = null, array $params = array())
     {
         $params = array_merge($this->params, $params);
-        return new \Aura\Http\Cookie(
+        return new Cookie(
             $name,
             $params['value'],
             $params['expire'],

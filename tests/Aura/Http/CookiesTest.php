@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http;
 
-use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 
 /**

@@ -171,7 +171,7 @@ installed.
 
 ```php
 <?php
-use Aura\Http\Factory\Request RequestFactory;
+use Aura\Http\Request\Factory as RequestFactory;
 
 $request_factory = new RequestFactory;
 $request         = $request_factory->newInstance();

@@ -6,7 +6,7 @@ use Aura\Http\Request\Adapter\MockAdapter as Mock;
 use Aura\Http\Factory\Header as HeaderFactory;
 use Aura\Http\Factory\Cookie as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
-use Aura\Http\Headers;
+use Aura\Http\Header\Collection as Headers;
 
 require_once 'MockAdapter.php';
 require_once 'MockFunctions.php';

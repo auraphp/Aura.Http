@@ -6,9 +6,10 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http;
+namespace Aura\Http\Header;
 
 use Aura\Http\Factory\Header as HeaderFactory;
+use Aura\Http\Header;
 
 /**
  * 
@@ -17,7 +18,7 @@ use Aura\Http\Factory\Header as HeaderFactory;
  * @package Aura.Http
  * 
  */
-class Headers implements \IteratorAggregate, \Countable
+class Collection implements \IteratorAggregate, \Countable
 {
     /**
      * 

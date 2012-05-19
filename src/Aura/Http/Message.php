@@ -9,6 +9,7 @@
 namespace Aura\Http;
 
 use Aura\Http\Cookie\Collection as Cookies;
+use Aura\Http\Header\Collection as Headers;
 
 /**
  * 

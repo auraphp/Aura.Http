@@ -11,7 +11,7 @@ namespace Aura\Http\Request\Adapter;
 use Aura\Http as Http;
 use Aura\Http\Exception as Exception;
 use Aura\Http\Request;
-use Aura\Http\Headers;
+use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Request\CookieJar;
 use Aura\Http\Request\ResponseBuilder;
 use Aura\Http\Request\Multipart;

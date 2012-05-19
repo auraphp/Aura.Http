@@ -5,7 +5,7 @@ namespace Aura\Http;
 use Aura\Http\Factory\Cookie as CookieFactory;
 use Aura\Http\Factory\Header as HeaderFactory;
 use Aura\Http\Cookie\Collection as Cookies;
-use Aura\Http\Headers;
+use Aura\Http\Header\Collection as Headers;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function test__get()
     {
         $response = $this->newResponse();
-        $this->assertInstanceOf('Aura\Http\Headers', $response->headers);
+        $this->assertInstanceOf('Aura\Http\Header\Collection', $response->headers);
         $this->assertInstanceOf('Aura\Http\Cookie\Collection', $response->cookies);
     }
     

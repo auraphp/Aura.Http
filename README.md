@@ -25,7 +25,7 @@ build a `Response` object manually:
 ```php
 <?php
 use Aura\Http\Response;
-use Aura\Http\Headers;
+use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Factory\Cookie as CookieFactory;
 use Aura\Http\Factory\Header as HeaderFactory;

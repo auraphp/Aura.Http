@@ -5,7 +5,7 @@ namespace Aura\Http\Request;
 use Aura\Http\Factory\Header as HeaderFactory;
 use Aura\Http\Factory\Cookie as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
-use Aura\Http\Headers;
+use Aura\Http\Header\Collection as Headers;
 
 class RequestResponseTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +42,7 @@ class RequestResponseTest extends \PHPUnit_Framework_TestCase
     {
         $rr = $this->newRequestResponse();
 
-        $this->assertInstanceOf('\Aura\Http\Headers', $rr->headers);
+        $this->assertInstanceOf('\Aura\Http\Header\Collection', $rr->headers);
         $this->assertInstanceOf('\Aura\Http\Cookie\Collection', $rr->cookies);
 
         $this->setExpectedException('\Aura\Http\Exception');

@@ -3,6 +3,7 @@ namespace Aura\Http;
 
 use Aura\Http\Factory\Header as HeaderFactory;
 use Aura\Http\Header as Header;
+use Aura\Http\Header\Collection as Headers;
 
 /**
  * Test class for Headers.

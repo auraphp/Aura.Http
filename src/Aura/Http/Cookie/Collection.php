@@ -9,6 +9,7 @@
 namespace Aura\Http\Cookie;
 
 use Aura\Http\Factory\Cookie as CookieFactory;
+use Aura\Http\Cookie;
 
 /**
  * 

@@ -10,6 +10,7 @@ namespace Aura\Http;
 
 use Aura\Http\Request\Adapter as Adapter;
 use Aura\Http\Cookie\Collection as Cookies;
+use Aura\Http\Header\Collection as Headers;
 
 /**
  * 
@@ -177,7 +178,7 @@ class Request extends Message
      * 
      * @param \Aura\Http\Adapter\AdapterInterface $adapter
      * 
-     * @param \Aura\Http\Headers $headers
+     * @param \Aura\Http\Header\Collection $headers
      * 
      * @param \Aura\Http\Cookie\Collection $cookies
      * 

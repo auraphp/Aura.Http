@@ -19,7 +19,7 @@ class MultipartTest extends \PHPUnit_Framework_TestCase
 
     public function test__cloneCallsReset()
     {
-        $multi = $this->getMock('\Aura\Http\Request\Multipart', ['reset']);
+        $multi = $this->getMock('\Aura\Http\Transport\Multipart', ['reset']);
         
         $multi->expects($this->once())
               ->method('reset');
@@ -29,7 +29,7 @@ class MultipartTest extends \PHPUnit_Framework_TestCase
 
     public function test__toStringCallsToString()
     {
-        $multi = $this->getMock('\Aura\Http\Request\Multipart', ['toString']);
+        $multi = $this->getMock('\Aura\Http\Transport\Multipart', ['toString']);
         
         $multi->expects($this->once())
               ->method('toString');

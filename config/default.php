@@ -22,7 +22,7 @@ $di->params['Aura\Http\Request\Response'] = [
 ];
 $di->params['Aura\Http\Request\ResponseBuilder'] = [
     'response' => $di->lazyNew('Aura\Http\RequestResponse'),
-    'factory'  => $di->lazyNew('Aura\Http\Factory\ResponseStack'),
+    'factory'  => $di->lazyNew('Aura\Http\Request\ResponseStackFactory'),
 ];
 $di->params['Aura\Http\Request\Adapter\Curl'] = [
     'builder' => $di->lazyNew('Aura\Http\Request\ResponseBuilder'),

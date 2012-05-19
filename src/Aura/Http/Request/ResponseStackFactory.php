@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Factory;
+namespace Aura\Http\Request;
 
 /**
  * 
@@ -15,7 +15,7 @@ namespace Aura\Http\Factory;
  * @package Aura.Http
  * 
  */
-class ResponseStack
+class ResponseStackFactory
 {
     /**
      * 
@@ -26,6 +26,6 @@ class ResponseStack
      */
     public function newInstance()
     {
-        return new \Aura\Http\Request\ResponseStack;
+        return new ResponseStack;
     }
 }

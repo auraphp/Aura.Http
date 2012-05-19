@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Request;
 
-use Aura\Http\Factory\ResponseStack as ResponseStackFactory;
+use Aura\Http\Request\ResponseStackFactory as ResponseStackFactory;
 
 class ResponseBuilderExtended extends ResponseBuilder
 {

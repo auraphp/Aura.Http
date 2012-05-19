@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Request;
+namespace Aura\Http\Cookie;
 
 use Aura\Http\Exception as Exception;
 use Aura\Http\Cookie;
@@ -21,7 +21,7 @@ use Aura\Http\Cookie\Factory as CookieFactory;
  * @package Aura.Http
  * 
  */
-class CookieJar
+class Jar
 {
     /**
      * 

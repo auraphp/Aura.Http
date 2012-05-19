@@ -12,7 +12,7 @@ use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Request as HttpRequest;
 use Aura\Http\Request\Response as RequestResponse;
-use Aura\Http\Request\CookieJar;
+use Aura\Http\Cookie\Jar as CookieJar;
 use Aura\Http\Request\Multipart;
 use Aura\Http\Request\ResponseBuilder;
 use Aura\Http\Request\Adapter\Curl;

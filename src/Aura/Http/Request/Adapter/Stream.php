@@ -12,7 +12,7 @@ use Aura\Http as Http;
 use Aura\Http\Exception as Exception;
 use Aura\Http\Request;
 use Aura\Http\Header\Collection as Headers;
-use Aura\Http\Request\CookieJar;
+use Aura\Http\Cookie\Jar as CookieJar;
 use Aura\Http\Request\ResponseBuilder;
 use Aura\Http\Request\Multipart;
 
@@ -56,7 +56,7 @@ class Stream implements AdapterInterface
 
     /**
      * 
-     * @var Aura\Http\Request\CookieJar
+     * @var Aura\Http\Cookie\Jar
      * 
      */
     protected $cookiejar;

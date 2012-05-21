@@ -23,7 +23,6 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->cookies = new Cookies(new CookieFactory);
-        MockHttp::reset();
     }
 
     protected function newCookie(
@@ -148,44 +147,5 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
         ];
         
         $this->assertEquals($expect, $actual);
-    }
-    /**
-     * @todo Implement testSend().
-     */
-    public function testSend()
-    {
-        $this->cookies->setAll([
-            'login' => [
-                'value' => '1234567890',
-            ],
-            'usrid' => [
-                'value' => '0987654321'
-            ],
-        ]);
-        
-        $this->cookies->send();
-        
-        $expect = [
-          0 => [
-            'name' => 'login',
-            'value' => '1234567890',
-            'expire' => 0,
-            'path' => NULL,
-            'domain' => NULL,
-            'secure' => false,
-            'httponly' => true,
-          ],
-          1 => [
-            'name' => 'usrid',
-            'value' => '0987654321',
-            'expire' => 0,
-            'path' => NULL,
-            'domain' => NULL,
-            'secure' => false,
-            'httponly' => true,
-          ],
-        ];
-
-        $this->assertSame($expect, MockHttp::$cookies);
     }
 }

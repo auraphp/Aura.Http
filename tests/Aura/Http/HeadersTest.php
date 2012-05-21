@@ -24,7 +24,6 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->headers = new Headers(new HeaderFactory);
-        MockHttp::reset();
     }
 
     protected function newHeader($label, $value)
@@ -145,23 +144,5 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         ];
         
         $this->assertEquals($expect, $actual);
-    }
-    
-    /**
-     * @todo Implement testSend().
-     */
-    public function testSend()
-    {
-        $this->headers->set('Foo', 'bar');
-        $this->headers->set('Baz', 'dib');
-        $this->headers->add('Baz', 'zim');
-        $this->headers->send();
-        $expect = [
-          0 => 'Foo: bar',
-          1 => 'Baz: dib',
-          2 => 'Baz: zim',
-        ];
-        
-        $this->assertSame(MockHttp::$headers, $expect);
     }
 }

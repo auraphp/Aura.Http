@@ -20,7 +20,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         static::$callback = $this;
-        MockHttp::reset();
         // for setting cookies
         date_default_timezone_set('GMT');
     }

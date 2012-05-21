@@ -1,6 +1,6 @@
 <?php
 
-namespace Aura\Http\Request;
+namespace Aura\Http\Transport;
 
 use Aura\Http as Http;
 

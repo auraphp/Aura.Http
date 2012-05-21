@@ -191,26 +191,4 @@ class Collection implements \IteratorAggregate, \Countable
             $this->set($name, $info);
         }
     }
-    
-    /**
-     * 
-     * Sends the cookies using `setcookie()`.
-     * 
-     * @return void
-     * 
-     */
-    public function send()
-    {
-        foreach ($this->list as $cookie) {
-            setcookie(
-                $cookie->getName(),
-                $cookie->getValue(),
-                $cookie->getExpire(),
-                $cookie->getPath(),
-                $cookie->getDomain(),
-                $cookie->getSecure(),
-                $cookie->getHttpOnly()
-            );
-        }
-    }
 }

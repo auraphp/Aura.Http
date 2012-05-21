@@ -230,20 +230,4 @@ class Collection implements \IteratorAggregate, \Countable
             }
         }
     }
-    
-    /**
-     * 
-     * Sends all the headers using `header()`.
-     * 
-     * @return void
-     * 
-     */
-    public function send()
-    {
-        foreach ($this->list as $values) {
-            foreach ($values as $header) {
-                header($header->toString());
-            }
-        }
-    }
 }

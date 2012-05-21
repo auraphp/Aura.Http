@@ -88,7 +88,9 @@ class Transport
         // force the content-type header if needed
         if ($request->content_type) { 
             if ($request->charset) {
-                $request->content_type .= "; charset={$request->charset}";
+                $content_type = $request->content_type
+                              . "; charset={$request->charset}";
+                $request->setContentType($content_type);
             }
             $request->headers->set('Content-Type', $request->content_type);
         }

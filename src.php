@@ -36,13 +36,5 @@ require_once __DIR__ . '/src/Aura/Http/Response/StackBuilder.php';
 require_once __DIR__ . '/src/Aura/Http/Request.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Factory.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Options.php';
-require_once __DIR__ . '/src/Aura/Http/Request/Response.php';
-require_once __DIR__ . '/src/Aura/Http/Request/ResponseBuilder.php';
-require_once __DIR__ . '/src/Aura/Http/Request/ResponseStack.php';
-require_once __DIR__ . '/src/Aura/Http/Request/ResponseStackFactory.php';
 
 require_once __DIR__ . '/src/Aura/Http/Transport.php';
-require_once __DIR__ . '/src/Aura/Http/Transport/AdapterInterface.php';
-require_once __DIR__ . '/src/Aura/Http/Transport/Curl.php';
-require_once __DIR__ . '/src/Aura/Http/Transport/Multipart.php';
-require_once __DIR__ . '/src/Aura/Http/Transport/Stream.php';

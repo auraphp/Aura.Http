@@ -83,10 +83,6 @@ class Header
      */
     public function __set($key, $val)
     {
-        if ($key == 'label') {
-            return $this->setLabel($val);
-        }
-        
         if ($key == 'value') {
             return $this->setValue($val);
         }
@@ -115,7 +111,7 @@ class Header
      * @return void
      * 
      */
-    public function setLabel($label)
+    protected function setLabel($label)
     {
         // sanitize
         $label = preg_replace('/[^a-zA-Z0-9_-]/', '', $label);

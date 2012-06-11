@@ -107,8 +107,6 @@ class Response extends Message
     {
         parent::__construct($headers, $cookies);
         $this->setStatusCode(200);
-        $is_cgi = (strpos(php_sapi_name(), 'cgi') !== false);
-        $this->setCgi($is_cgi);
     }
     
     /**
@@ -132,33 +130,6 @@ class Response extends Message
         } else {
             return parent::__get($key);
         }
-    }
-    
-    /**
-     * 
-     * Optionally force the response to act as if it is in CGI mode. (This
-     * changes how the status header is sent.)
-     * 
-     * @param bool $is_cgi True to force into CGI mode, false to not do so.
-     * 
-     * @return void
-     * 
-     */
-    public function setCgi($is_cgi)
-    {
-        $this->is_cgi = (bool) $is_cgi;
-    }
-    
-    /**
-     * 
-     * Is the response currently acting in CGI mode?
-     * 
-     * @return bool
-     * 
-     */
-    public function isCgi()
-    {
-        return (bool) $this->is_cgi;
     }
     
     /**

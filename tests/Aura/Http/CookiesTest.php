@@ -46,15 +46,6 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test__clone()
-    {
-        $this->cookies->set('Foo', array());
-
-        $cloned = clone $this->cookies;
-
-        $this->assertSame([], $cloned->getAll());
-    }
-    
     public function test__get()
     {
         $this->cookies->set('foo_bar', array());

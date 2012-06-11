@@ -411,8 +411,10 @@ class Curl implements AdapterInterface
      * 
      */
     protected function flattenContent(
-        array $array, array $return = [], $prefix = '')
-    {
+        array $array,
+        array $return = [],
+        $prefix = ''
+    ) {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $_prefix = $prefix ? $prefix . '[' . $key . ']' : $key;

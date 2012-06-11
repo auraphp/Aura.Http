@@ -6,58 +6,58 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Message;
+namespace Aura\Http\Response;
 
-use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Response\Factory as ResponseFactory;
 
 /**
  * 
- * Builds a message stack from headers and content.
+ * Builds a response stack from headers and content.
  * 
  * @package Aura.Http
  * 
  */
 class StackBuilder
 {
-    public function __construct(MessageFactory $message_factory)
+    public function __construct(ResponseFactory $response_factory)
     {
-        $this->message_factory = $message_factory;
+        $this->response_factory = $response_factory;
     }
     
     /**
      * 
-     * Creates and returns a new Stack object with messages in it.
+     * Creates and returns a new Stack object with responses in it.
      * 
      * @return \Aura\Http\Request\ResponseStack
      * 
      */
     public function newInstance(array $headers, $content = null)
     {
-        // a message stack
+        // a response stack
         $stack = new Stack;
         
-        // have a new message available regardless
-        $message = $this->message_factory->newInstance();
+        // have a new response available regardless
+        $response = $this->response_factory->newInstance();
         
         // add headers
         foreach ($headers as $header) {
             
-            // split on the first colon.
+            // split on the first colon
             $pos = strpos($header, ':');
             $is_http = strtoupper(substr($header, 0, 5)) == 'HTTP/';
             
-            // look for an HTTP header to start a new message
+            // look for an HTTP header to start a new response
             if ($pos === false && $is_http) {
                 
-                // start a new message and add it to the stack
-                $message = $this->message_factory->newInstance();
-                $stack->push($message);
+                // start a new response and add it to the stack
+                $response = $this->response_factory->newInstance();
+                $stack->push($response);
                 
                 // set the version, status code, and status text in the response
                 preg_match('/HTTP\/(.+?) ([0-9]+)(.*)/i', $header, $matches);
-                $message->setVersion($matches[1]);
-                $message->setStatusCode($matches[2]);
-                $message->setStatusText($matches[3]);
+                $response->setVersion($matches[1]);
+                $response->setStatusCode($matches[2]);
+                $response->setStatusText($matches[3]);
                 
                 // go to the next header line
                 continue;
@@ -73,15 +73,15 @@ class StackBuilder
             // is this a set-cookie header?
             if (strtolower($label) == 'set-cookie') {
                 // add the cookie
-                $cookie = $message->cookies->addFromString($value, $default_uri);
+                $cookie = $response->cookies->addFromString($value, $default_uri);
             } else {
                 // add the header
-                $message->headers->add($label, $value, false);
+                $response->headers->add($label, $value, false);
             }
         }
         
-        // set the content on the current (last) message in the stack
-        $message->content = $content;
+        // set the content on the current (last) response in the stack
+        $response->setContent($content);
         
         // done!
         return $stack;

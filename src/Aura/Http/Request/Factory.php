@@ -12,6 +12,7 @@ use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Request\Options as Options;
 use Aura\Http\Request as Request;
 
 /**
@@ -33,10 +34,11 @@ class Factory
      * @return Aura\Http\Request
      *
      */
-    public function newInstance(array $options = [])
+    public function newInstance()
     {
         $headers = new Headers(new HeaderFactory);
         $cookies = new Cookies(new CookieFactory);
+        $options = new Options;
         return new Request($headers, $cookies, $options);
     }
 }

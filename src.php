@@ -1,4 +1,7 @@
 <?php
+require_once __dir__ . '/src/Aura/Http/Adapter/AdapterInterface.php';
+require_once __dir__ . '/src/Aura/Http/Adapter/Curl.php';
+
 require_once __DIR__ . '/src/Aura/Http/Cookie.php';
 require_once __DIR__ . '/src/Aura/Http/Cookie/Collection.php';
 require_once __DIR__ . '/src/Aura/Http/Cookie/Factory.php';
@@ -22,16 +25,17 @@ require_once __DIR__ . '/src/Aura/Http/Header/Collection.php';
 require_once __DIR__ . '/src/Aura/Http/Header/Factory.php';
 
 require_once __DIR__ . '/src/Aura/Http/Message.php';
-require_once __DIR__ . '/src/Aura/Http/Message/Factory.php';
-require_once __DIR__ . '/src/Aura/Http/Message/Stack.php';
-require_once __DIR__ . '/src/Aura/Http/Message/StackBuilder.php';
 
 require_once __DIR__ . '/src/Aura/Http/PhpFunc.php';
 
 require_once __DIR__ . '/src/Aura/Http/Response.php';
+require_once __DIR__ . '/src/Aura/Http/Response/Factory.php';
+require_once __DIR__ . '/src/Aura/Http/Response/Stack.php';
+require_once __DIR__ . '/src/Aura/Http/Response/StackBuilder.php';
 
 require_once __DIR__ . '/src/Aura/Http/Request.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Factory.php';
+require_once __DIR__ . '/src/Aura/Http/Request/Options.php';
 require_once __DIR__ . '/src/Aura/Http/Request/Response.php';
 require_once __DIR__ . '/src/Aura/Http/Request/ResponseBuilder.php';
 require_once __DIR__ . '/src/Aura/Http/Request/ResponseStack.php';

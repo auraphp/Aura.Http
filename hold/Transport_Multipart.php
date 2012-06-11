@@ -53,18 +53,6 @@ class Multipart
 
     /**
      * 
-     * Clone the object.
-     * 
-     * @see reset()
-     * 
-     */
-    public function __clone()
-    {
-        $this->reset();
-    }
-    
-    /**
-     * 
      * Build the multipart content and return as a string.
      * 
      * @return string

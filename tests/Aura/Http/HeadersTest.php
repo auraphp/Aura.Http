@@ -31,15 +31,6 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         return new Header($label, $value);
     }
 
-    public function test__clone()
-    {
-        $this->headers->add('Foo', 'Bar');
-
-        $cloned = clone $this->headers;
-
-        $this->assertSame([], $cloned->getAll());
-    }
-    
     public function test__get()
     {
         $this->headers->add('foo_bar', 'hi');

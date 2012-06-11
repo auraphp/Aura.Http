@@ -48,16 +48,6 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * 
-     * Reset the cookie list.
-     * 
-     */
-    public function __clone()
-    {
-        $this->list = [];
-    }
-    
-    /**
-     * 
      * Get a cookie.
      * 
      * @param string $key 
@@ -96,6 +86,24 @@ class Collection implements \IteratorAggregate, \Countable
     public function __unset($key)
     {
         unset($this->list[$key]);
+    }
+    
+    /**
+     * 
+     * Returns the cookie collection as a string of `name=value` pairs.
+     * 
+     * @return string
+     * 
+     */
+    public function __toString()
+    {
+        $list = array();
+        foreach ($this->list as $cookie) {
+            $name = $cookie->getName();
+            $value = $cookie->getValue();
+            $list[] = "{$name}={$value}";
+        }
+        return implode('; ', $list);
     }
     
     /**

@@ -54,7 +54,7 @@ class Message
      * @var string
      * 
      */
-    protected $version = '1.1';
+    protected $version;
     
     /**
      * 
@@ -170,7 +170,7 @@ class Message
     
     /**
      * 
-     * Returns the headers for the message (not including cookies).
+     * Returns the $headers object (not including cookies).
      * 
      * @return Headers
      * 

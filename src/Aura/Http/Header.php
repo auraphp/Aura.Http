@@ -12,7 +12,7 @@ namespace Aura\Http;
  * 
  * A class representing a single header.
  * 
- * @package Aura.Header
+ * @package Aura.Http
  * 
  */
 class Header
@@ -154,7 +154,7 @@ class Header
         $this->value = str_replace(["\r", "\n"], "", $value);
     }
     
-   /**
+    /**
      * 
      * Gets the header value.
      * 

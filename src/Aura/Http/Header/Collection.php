@@ -48,16 +48,6 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * 
-     * Reset the list of headers.
-     * 
-     */
-    public function __clone()
-    {
-        $this->list = [];
-    }
-    
-    /**
-     * 
      * Get a header. If a header has multiple values the first value is returned.
      * 
      * @param string $key 

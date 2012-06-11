@@ -17,16 +17,6 @@ class MultipartTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($multi->getLength());
     }
 
-    public function test__cloneCallsReset()
-    {
-        $multi = $this->getMock('\Aura\Http\Transport\Multipart', ['reset']);
-        
-        $multi->expects($this->once())
-              ->method('reset');
-
-        clone $multi;
-    }
-
     public function test__toStringCallsToString()
     {
         $multi = $this->getMock('\Aura\Http\Transport\Multipart', ['toString']);

@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http;
 
-use Aura\Http\Transport\AdapterInterface;
+use Aura\Http\Adapter\AdapterInterface;
 
 class Transport
 {
@@ -9,10 +9,41 @@ class Transport
     
     protected $adapter;
     
+    protected $is_cgi;
+    
     public function __construct(PhpFunc $phpfunc, AdapterInterface $adapter)
     {
         $this->phpfunc = $phpfunc;
         $this->adapter = $adapter;
+        $is_cgi = (strpos(php_sapi_name(), 'cgi') !== false);
+        $this->setCgi($is_cgi);
+    }
+    
+    /**
+     * 
+     * Optionally send responses as if in CGI mode. (This
+     * changes how the status header is sent.)
+     * 
+     * @param bool $is_cgi True to force into CGI mode, false to not do so.
+     * 
+     * @return void
+     * 
+     */
+    public function setCgi($is_cgi)
+    {
+        $this->is_cgi = (bool) $is_cgi;
+    }
+    
+    /**
+     * 
+     * Is the transport sending responses in CGI mode?
+     * 
+     * @return bool
+     * 
+     */
+    public function isCgi()
+    {
+        return (bool) $this->is_cgi;
     }
     
     // @todo Replace echo, is_resource, feof, et. al with phpfunc calls
@@ -24,7 +55,7 @@ class Transport
         
         // determine status header type
         // cf. <http://www.php.net/manual/en/function.header.php>
-        if ($response->isCgi()) {
+        if ($this->isCgi()) {
             $status = "Status: {$response->status_code}";
         } else {
             $status = "HTTP/{$response->version} {$response->status_code}";
@@ -73,39 +104,6 @@ class Transport
     
     public function sendRequest(Request $request)
     {
-        if (! $request->url) {
-            throw new Exception('The request has no URL.');
-        }
-
-        // turn off encoding if we are saving the content to a file.
-        if (isset($request->options->save_to_folder) && 
-            $request->options->save_to_folder) {
-            $request->setEncoding(false);
-        }
-
-        $request->prepareContent();
-        
-        // force the content-type header if needed
-        if ($request->content_type) { 
-            if ($request->charset) {
-                $content_type = $request->content_type
-                              . "; charset={$request->charset}";
-                $request->setContentType($content_type);
-            }
-            $request->headers->set('Content-Type', $request->content_type);
-        }
-        
-        // bake cookies
-        if (count($request->cookies)) {
-            $list = [];
-
-            foreach ($request->cookies as $cookie) {
-                $list[] = "{$cookie->getName()}={$cookie->getValue()}";
-            }
-
-            $request->headers->add('Cookie', implode('; ', $list));
-        }
-        
         return $this->adapter->exec($request);
     }
 }

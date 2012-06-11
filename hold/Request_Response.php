@@ -32,17 +32,6 @@ class Response extends HttpResponse
      */
     protected $is_saved_to_file;
 
-    public function __clone()
-    {
-        $this->content          = null;
-        $this->headers          = clone $this->headers;
-        $this->cookies          = clone $this->cookies;
-        $this->status_code      = 200;
-        $this->status_text      = null;
-        $this->version          = '1.1';
-        $this->is_saved_to_file = false;
-    }
-    
     /**
      * 
      * Set the response content.

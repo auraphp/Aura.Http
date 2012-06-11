@@ -23,9 +23,9 @@ interface AdapterInterface
      * 
      * Execute the request.
      * 
-     * @param Aura\Http\Request $request
+     * @param Aura\Http\Request $request The request.
      * 
-     * @return Aura\Http\Request\ResponseStack
+     * @return Aura\Http\Response\Stack A stack of responses.
      * 
      */
     public function exec(Request $request);

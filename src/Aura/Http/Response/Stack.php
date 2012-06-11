@@ -19,5 +19,4 @@ use \SplStack;
  */
 class Stack extends SplStack
 {
-    
 }

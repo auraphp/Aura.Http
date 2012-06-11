@@ -5,6 +5,7 @@ use Aura\Http\Adapter\AdapterInterface;
 
 class Transport
 {
+    // used so we can intercept native php function calls for testing
     protected $phpfunc;
     
     protected $adapter;
@@ -21,8 +22,8 @@ class Transport
     
     /**
      * 
-     * Optionally send responses as if in CGI mode. (This
-     * changes how the status header is sent.)
+     * Optionally send responses as if in CGI mode. (This changes how the 
+     * status header is sent.)
      * 
      * @param bool $is_cgi True to force into CGI mode, false to not do so.
      * 
@@ -46,7 +47,6 @@ class Transport
         return (bool) $this->is_cgi;
     }
     
-    // @todo Replace echo, is_resource, feof, et. al with phpfunc calls
     public function sendResponse(Response $response)
     {
         if ($this->phpfunc->headers_sent($file, $line)) {
@@ -92,13 +92,14 @@ class Transport
         
         // send the content
         $content = $response->getContent();
-        if (is_resource($content)) {
-            while (! feof($content)) {
-                echo fread($content, 8192);
+        if ($this->phpfunc->is_resource($content)) {
+            while (! $this->phpfunc->feof($content)) {
+                $text = $this->phpfunc->fread($content, 8192);
+                $this->phpfunc->output($text);
             }
-            fclose($content);
+            $this->phpfunc->fclose($content);
         } else {
-            echo $content;
+            $this->phpfunc->output($content);
         }
     }
     

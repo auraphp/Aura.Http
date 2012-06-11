@@ -13,4 +13,9 @@ class PhpFunc
     {
         call_user_func_array($func, $args);
     }
+    
+    public function output($text)
+    {
+        echo $text;
+    }
 }

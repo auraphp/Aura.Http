@@ -28,7 +28,7 @@ class StackBuilder
      * 
      * Creates and returns a new Stack object with responses in it.
      * 
-     * @return \Aura\Http\Request\ResponseStack
+     * @return \Aura\Http\Response\Stack
      * 
      */
     public function newInstance(array $headers, $content = null)

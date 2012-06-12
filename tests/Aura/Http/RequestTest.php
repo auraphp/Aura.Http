@@ -150,7 +150,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $req->setHttpAuth('usr', 'pass');
         $this->transport->sendRequest($req);
     
-        $this->assertEquals(array(0 => Request::BASIC, 1 => 'usr:pass', ), 
+        $this->assertEquals(array(0 => Request::AUTH_BASIC, 1 => 'usr:pass', ), 
                           Mock::$request->options->http_auth);
     }
     
@@ -221,20 +221,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testSetMethod()
     {
         $allowed = array(
-            Request::GET,
-            Request::POST,
-            Request::PUT,
-            Request::DELETE,
-            Request::TRACE,
-            Request::OPTIONS,
-            Request::TRACE,
-            Request::COPY,
-            Request::LOCK,
-            Request::MKCOL,
-            Request::MOVE,
-            Request::PROPFIND,
-            Request::PROPPATCH,
-            Request::UNLOCK
+            Request::METHOD_GET,
+            Request::METHOD_POST,
+            Request::METHOD_PUT,
+            Request::METHOD_DELETE,
+            Request::METHOD_TRACE,
+            Request::METHOD_OPTIONS,
+            Request::METHOD_TRACE,
+            Request::METHOD_COPY,
+            Request::METHOD_LOCK,
+            Request::METHOD_MKCOL,
+            Request::METHOD_MOVE,
+            Request::METHOD_PROPFIND,
+            Request::METHOD_PROPPATCH,
+            Request::METHOD_UNLOCK
         );
     
         foreach ($allowed as $method) {
@@ -256,7 +256,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testSetMethodReturnRequest()
     {
         $req    = $this->newRequest();
-        $return = $req->setMethod(Request::GET);
+        $return = $req->setMethod(Request::METHOD_GET);
     
         $this->assertInstanceOf('\Aura\Http\Request', $return);
     }
@@ -266,7 +266,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $req = $this->newRequest();
         $req->setContentType('text/text')
             ->setContent('hello')
-            ->setMethod(Request::POST);
+            ->setMethod(Request::METHOD_POST);
         
         $this->transport->sendRequest($req);
         
@@ -282,7 +282,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $req->setContentType('text/text')
             ->setCharset('utf-7')
             ->setContent('hello')
-            ->setMethod(Request::POST);
+            ->setMethod(Request::METHOD_POST);
         
         $this->transport->sendRequest($req);
         
@@ -335,7 +335,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $data = array('var' => '123', 'var2' => 'abc');
         $req->setContent($data)
             ->setContentType('text/text')
-            ->setMethod(Request::POST);
+            ->setMethod(Request::METHOD_POST);
         
         $this->transport->sendRequest($req);
         
@@ -351,7 +351,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $data = array('file' => '@/path/to/file.ext');
         $req->setContent($data)
             ->setContentType('text/text')
-            ->setMethod(Request::POST);
+            ->setMethod(Request::METHOD_POST);
         
         $this->transport->sendRequest($req);
         

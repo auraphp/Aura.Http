@@ -11,7 +11,6 @@ namespace Aura\Http;
 use Aura\Http\Request\Adapter as Adapter;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
-use Aura\Http\Request\Options as Options;
 
 /**
  * 
@@ -25,30 +24,30 @@ class Request extends Message
     /**
      * HTTP method constants.
      */
-    const DELETE     = 'DELETE';
-    const GET        = 'GET';
-    const HEAD       = 'HEAD';
-    const OPTIONS    = 'OPTIONS';
-    const POST       = 'POST';
-    const PUT        = 'PUT';
-    const TRACE      = 'TRACE';
+    const METHOD_DELETE     = 'DELETE';
+    const METHOD_GET        = 'GET';
+    const METHOD_HEAD       = 'HEAD';
+    const METHOD_OPTIONS    = 'OPTIONS';
+    const METHOD_POST       = 'POST';
+    const METHOD_PUT        = 'PUT';
+    const METHOD_TRACE      = 'TRACE';
     
     /**
      * WebDAV method constants.
      */
-    const COPY       = 'COPY';
-    const LOCK       = 'LOCK';
-    const MKCOL      = 'MKCOL';
-    const MOVE       = 'MOVE';
-    const PROPFIND   = 'PROPFIND';
-    const PROPPATCH  = 'PROPPATCH';
-    const UNLOCK     = 'UNLOCK';
+    const METHOD_COPY       = 'COPY';
+    const METHOD_LOCK       = 'LOCK';
+    const METHOD_MKCOL      = 'MKCOL';
+    const METHOD_MOVE       = 'MOVE';
+    const METHOD_PROPFIND   = 'PROPFIND';
+    const METHOD_PROPPATCH  = 'PROPPATCH';
+    const METHOD_UNLOCK     = 'UNLOCK';
     
     /**
      * Auth constants
      */
-    const BASIC      = 'BASIC';
-    const DIGEST     = 'DIGEST';
+    const AUTH_BASIC      = 'BASIC';
+    const AUTH_DIGEST     = 'DIGEST';
     
     /**
      * 
@@ -57,18 +56,7 @@ class Request extends Message
      * @var string
      *
      */
-    protected $method = self::GET;
-    
-    /**
-     * 
-     * Request options to use. i.e. max_redirects, ssl_verify_peer, etc.
-     * 
-     * @var \ArrayObject
-     * 
-     * @todo list options
-     *
-     */
-    protected $options;
+    protected $method = self::METHOD_GET;
     
     /**
      *
@@ -79,51 +67,12 @@ class Request extends Message
      */
     protected $uri;
     
-    /**
-     * 
-     * @param \Aura\Http\Header\Collection $headers
-     * 
-     * @param \Aura\Http\Cookie\Collection $cookies
-     * 
-     * @param array $options Options for content type, character set, etc.
-     * 
-     */
-    public function __construct(
-        Headers $headers,
-        Cookies $cookies,
-        Options $options
-    ) {
-        $this->headers = $headers;
-        $this->cookies = $cookies;
-        $this->options = $options;
-    }
+    protected $auth;
     
-    /**
-     * 
-     * Read only access to certain properties.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     * 
-     * @throws Aura\Http\Exception If property does not exist.
-     *
-     */
-    public function __get($key)
-    {
-        $keys = [
-            'method',
-            'options',
-            'uri',
-        ];
-
-        if (in_array($key, $keys)) {
-            return $this->$key;
-        } else {
-            return parent::__get($key);
-        }
-    }
-
+    protected $username;
+    
+    protected $password;
+    
     /**
      * 
      * Sets the URI for the request.
@@ -156,24 +105,24 @@ class Request extends Message
      */
     public function setMethod($method)
     {
-        $allowed = [
-            self::GET,
-            self::POST,
-            self::PUT,
-            self::DELETE,
-            self::TRACE,
-            self::OPTIONS,
-            self::TRACE,
-            self::COPY,
-            self::LOCK,
-            self::MKCOL,
-            self::MOVE,
-            self::PROPFIND,
-            self::PROPPATCH,
-            self::UNLOCK
+        $known = [
+            self::METHOD_GET,
+            self::METHOD_POST,
+            self::METHOD_PUT,
+            self::METHOD_DELETE,
+            self::METHOD_TRACE,
+            self::METHOD_OPTIONS,
+            self::METHOD_TRACE,
+            self::METHOD_COPY,
+            self::METHOD_LOCK,
+            self::METHOD_MKCOL,
+            self::METHOD_MOVE,
+            self::METHOD_PROPFIND,
+            self::METHOD_PROPPATCH,
+            self::METHOD_UNLOCK
         ];
         
-        if (! in_array($method, $allowed)) {
+        if (! in_array($method, $known)) {
             throw new Exception\UnknownMethod("Method '{$method}' is unknown");
         }
         
@@ -182,4 +131,33 @@ class Request extends Message
         return $this;
     }
     
+    public function setAuth($auth)
+    {
+        $known = [
+            null,
+            self::AUTH_BASIC,
+            self::AUTH_DIGEST
+        ];
+        
+        if (! in_array($auth, $known)) {
+            throw new Exception\UnknownAuthType("Unknown auth type '$auth'");
+        }
+        
+        $this->auth = $auth;
+    }
+    
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+    
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+    
+    public function getCredentials()
+    {
+        return $this->username . ':' . $this->password;
+    }
 }

@@ -8,7 +8,7 @@
  */
 namespace Aura\Http\Response;
 
-use Aura\Http\Response\Factory as ResponseFactory;
+use Aura\Http\Message\Factory as MessageFactory;
 
 /**
  * 
@@ -19,9 +19,9 @@ use Aura\Http\Response\Factory as ResponseFactory;
  */
 class StackBuilder
 {
-    public function __construct(ResponseFactory $response_factory)
+    public function __construct(MessageFactory $message_factory)
     {
-        $this->response_factory = $response_factory;
+        $this->message_factory = $message_factory;
     }
     
     /**
@@ -37,7 +37,7 @@ class StackBuilder
         $stack = new Stack;
         
         // have a new response available regardless
-        $response = $this->response_factory->newInstance();
+        $response = $this->message_factory->newInstance('response');
         
         // add headers
         foreach ($headers as $header) {
@@ -50,7 +50,7 @@ class StackBuilder
             if ($pos === false && $is_http) {
                 
                 // start a new response and add it to the stack
-                $response = $this->response_factory->newInstance();
+                $response = $this->message_factory->newInstance('response');
                 $stack->push($response);
                 
                 // set the version, status code, and status text in the response

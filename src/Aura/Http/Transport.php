@@ -2,6 +2,7 @@
 namespace Aura\Http;
 
 use Aura\Http\Adapter\AdapterInterface;
+use Aura\Http\Transport\Options;
 
 class Transport
 {
@@ -10,14 +11,26 @@ class Transport
     
     protected $adapter;
     
-    protected $is_cgi;
+    protected $options;
     
-    public function __construct(PhpFunc $phpfunc, AdapterInterface $adapter)
-    {
+    protected $cgi;
+    
+    public function __construct(
+        PhpFunc             $phpfunc,
+        Options             $options,
+        AdapterInterface    $adapter
+    ) {
         $this->phpfunc = $phpfunc;
+        $this->options = $options;
         $this->adapter = $adapter;
-        $is_cgi = (strpos(php_sapi_name(), 'cgi') !== false);
-        $this->setCgi($is_cgi);
+        
+        $cgi = (strpos(php_sapi_name(), 'cgi') !== false);
+        $this->setCgi($cgi);
+    }
+    
+    public function __get($key)
+    {
+        return $this->$key;
     }
     
     /**
@@ -25,14 +38,14 @@ class Transport
      * Optionally send responses as if in CGI mode. (This changes how the 
      * status header is sent.)
      * 
-     * @param bool $is_cgi True to force into CGI mode, false to not do so.
+     * @param bool $cgi True to force into CGI mode, false to not do so.
      * 
      * @return void
      * 
      */
-    public function setCgi($is_cgi)
+    public function setCgi($cgi)
     {
-        $this->is_cgi = (bool) $is_cgi;
+        $this->cgi = (bool) $cgi;
     }
     
     /**
@@ -44,7 +57,7 @@ class Transport
      */
     public function isCgi()
     {
-        return (bool) $this->is_cgi;
+        return (bool) $this->cgi;
     }
     
     public function sendResponse(Response $response)
@@ -105,6 +118,6 @@ class Transport
     
     public function sendRequest(Request $request)
     {
-        return $this->adapter->exec($request);
+        return $this->adapter->exec($request, $this->options);
     }
 }

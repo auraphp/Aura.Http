@@ -136,7 +136,7 @@ class Stream implements AdapterInterface
             array_map($callback, [null], $stream);
             
             $digest_auth = ! empty($request->options->http_auth) &&
-                           Request::DIGEST == $request->options->http_auth[0];
+                           Request::AUTH_DIGEST == $request->options->http_auth[0];
 
             if ($digest_auth) {
                 $challenge = $this->getHttpDigestChallenge($stream);
@@ -225,7 +225,7 @@ class Stream implements AdapterInterface
         if (! empty($request->options->http_auth)) {
             list($type, $usrpass) = $request->options->http_auth;
                     
-            if (Request::BASIC == $type) {
+            if (Request::AUTH_BASIC == $type) {
                 $value = 'Basic ' . base64_encode("$usrpass");
                 $this->request->headers->set('Authorization',  $value);
             } 
@@ -405,8 +405,8 @@ class Stream implements AdapterInterface
     protected function setContent($content, $method, $has_files)
     {
         // only send content if we're POST or PUT
-        if (! $method == Request::POST && 
-            ! $method == Request::PUT) {
+        if (! $method == Request::METHOD_POST && 
+            ! $method == Request::METHOD_PUT) {
             return;
         }
 

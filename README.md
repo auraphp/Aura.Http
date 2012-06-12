@@ -286,7 +286,7 @@ HTTP Basic:
 
 ```php
 <?php
-$response = $request->setHttpAuth('usr', 'pass') // defaults to Request::BASIC
+$response = $request->setHttpAuth('usr', 'pass') // defaults to Request::AUTH_BASIC
                     ->setUrl('http://localhost/private/index.php');
 
 $stack = $transport->sendRequest($request);
@@ -296,7 +296,7 @@ HTTP Digest:
 
 ```php
 <?php
-$response = $request->setHttpAuth('usr', 'pass', Request::DIGEST)
+$response = $request->setHttpAuth('usr', 'pass', Request::AUTH_DIGEST)
                     ->setUrl('http://localhost/private/index.php');
 
 $stack = $transport->sendRequest($request);

@@ -1,6 +1,33 @@
 <?php
 namespace Aura\Http;
-use Aura\Http\Cookie\Factory as CookieFactory;
-use Aura\Http\Header\Factory as HeaderFactory;
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src.php';
-return new Response(new Headers(new HeaderFactory), new Cookies(new CookieFactory));
+
+if (extension_loaded('curl')) {
+    // use curl adapter for transport
+    return new Manager(
+        new Message\Factory,
+        new Transport(
+            new PhpFunc,
+            new Transport\Options,
+            new Adapter\Curl(
+                new Response\StackBuilder(
+                    new Message\Factory
+                )
+            )
+        )
+    );
+} else {
+    // use stream adapter for transport
+    return new Manager(
+        new Message\Factory,
+        new Transport(
+            new PhpFunc,
+            new Transport\Options,
+            new Adapter\Stream(
+                new Response\StackBuilder(
+                    new Message\Factory
+                )
+            )
+        )
+    );
+}

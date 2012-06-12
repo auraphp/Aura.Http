@@ -4,10 +4,17 @@ namespace Aura\Http\Adapter;
 use Aura\Http\Response\StackBuilder;
 use Aura\Http\Exception;
 use Aura\Http\Request;
+use Aura\Http\Transport\Options;
 
 class Curl implements AdapterInterface
 {
     protected $stack_builder;
+    
+    protected $request;
+    
+    protected $options;
+    
+    protected $ch;
     
     public function __construct(StackBuilder $stack_builder)
     {
@@ -29,17 +36,19 @@ class Curl implements AdapterInterface
      * @todo Implement an exception for timeouts.
      * 
      */
-    public function exec(Request $request)
+    public function exec(Request $request, Options $options)
     {
         $this->request = $request;
+        $this->options = $options;
+        
         $this->ch = curl_init($this->request->uri);
         
         $this->setBasicOptions();
         $this->setSecureOptions();
         $this->setProxyOptions();
-        $this->setAuthOptions();
         $this->setMethod();
         $this->setHttpVersion();
+        $this->setAuth();
         $this->setHeaders();
         $this->setContent();
         
@@ -106,15 +115,15 @@ class Curl implements AdapterInterface
         foreach ($var_opt as $var => $opt) {
             // use this comparison so boolean false and integer zero values
             // are honored
-            if ($this->request->options->$var !== null) {
-                curl_setopt($this->ch, $opt, $this->request->options->$var);
+            if ($this->options->$var !== null) {
+                curl_setopt($this->ch, $opt, $this->options->$var);
             }
         }
     }
     
     protected function setProxyOptions()
     {
-        if (! $this->request->options->proxy) {
+        if (! $this->options->proxy) {
             return;
         }
         
@@ -123,7 +132,7 @@ class Curl implements AdapterInterface
             'proxy'         => CURLOPT_PROXY,
             'proxy_port'    => CURLOPT_PROXYPORT,
         ]);
-        curl_setopt($this->ch, CURLOPT_PROXYUSERPWD, $this->request->options->getProxyUserPass());
+        curl_setopt($this->ch, CURLOPT_PROXYUSERPWD, $this->options->getProxyUserPass());
     }
     
     protected function setSecureOptions()
@@ -135,19 +144,6 @@ class Curl implements AdapterInterface
             'ssl_local_cert'  => CURLOPT_SSLCERT,
             'ssl_passphrase'  => CURLOPT_SSLCERTPASSWD,
         ]);
-    }
-    
-    protected function setAuthOptions()
-    {
-        $auth = $this->request->options->auth;
-        if (! $auth) {
-            return;
-        }
-        
-        curl_setopt($this->ch, CURLOPT_HTTPAUTH, $auth);
-        $user = $this->request->options->auth_user;
-        $pass = $this->request->options->auth_pass;
-        curl_setopt($this->ch, CURLOPT_USERPWD, "{$user}:{$pass}");
     }
     
     protected function setHttpVersion()
@@ -169,22 +165,34 @@ class Curl implements AdapterInterface
     protected function setMethod()
     {
         switch ($this->request->method) {
-            case Request::GET:
+            case Request::METHOD_GET:
                 curl_setopt($this->ch, CURLOPT_HTTPGET, true);
                 break;
-            case Request::POST:
+            case Request::METHOD_POST:
                 curl_setopt($this->ch, CURLOPT_POST, true);
                 break;
-            case Request::PUT:
+            case Request::METHOD_PUT:
                 curl_setopt($this->ch, CURLOPT_PUT, true);
                 break;
-            case Request::HEAD:
+            case Request::METHOD_HEAD:
                 curl_setopt($this->ch, CURLOPT_HEAD, true);
                 break;
             default:
                 curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->request->method);
                 break;
         }
+    }
+    
+    protected function setAuth()
+    {
+        $auth = $this->request->auth;
+        if (! $auth) {
+            return;
+        }
+        
+        curl_setopt($this->ch, CURLOPT_HTTPAUTH, $auth);
+        $credentials = $this->request->getCredentials();
+        curl_setopt($this->ch, CURLOPT_USERPWD, $credentials);
     }
     
     protected function setHeaders()
@@ -221,8 +229,8 @@ class Curl implements AdapterInterface
         $content = $this->request->content;
         
         // only send content if we're POST or PUT
-        $send_content = $method == Request::POST
-                     || $method == Request::PUT;
+        $send_content = $method == Request::METHOD_POST
+                     || $method == Request::METHOD_PUT;
         
         if ($send_content && ! empty($content)) {
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $content);

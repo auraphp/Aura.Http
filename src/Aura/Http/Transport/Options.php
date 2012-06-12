@@ -1,11 +1,8 @@
 <?php
-namespace Aura\Http\Request;
+namespace Aura\Http\Transport;
 
 class Options
 {
-    protected $auth             = null;
-    protected $auth_user        = null;
-    protected $auth_pass        = null;
     protected $max_redirects    = 10;
     protected $proxy            = null;
     protected $proxy_port       = null;
@@ -23,36 +20,13 @@ class Options
         return $this->$key;
     }
     
-    public function setAuth($auth)
-    {
-        if(! in_array($auth, [null, self::BASIC, self::DIGEST])) {
-            throw new Exception\UnknownAuthType("Unknown auth type '$auth'");
-        }
-        $this->auth = $auth;
-    }
-    
-    public function setAuthUser($auth_user)
-    {
-        $this->auth_user = $auth_user;
-    }
-    
-    public function setAuthPass($auth_pass)
-    {
-        $this->auth_pass = $auth_pass;
-    }
-    
-    public function getAuthUserPass()
-    {
-        return $this->auth_user . ':' . $this->auth_pass;
-    }
-    
     /**
      * 
      * Send all requests through this proxy server.
      * 
      * @param string $spec The URI for the proxy server.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setProxy($proxy)
@@ -91,7 +65,7 @@ class Options
      * @param int $max The max number of redirects to allow. If false the
      * default number of max_redirects is set.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setMaxRedirects($max_redirects)
@@ -107,7 +81,7 @@ class Options
      * @param float $time The timeout in seconds. If false the default timeout
      * is set.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setTimeout($timeout)
@@ -122,7 +96,7 @@ class Options
      * 
      * @param bool $flag True or false.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setSslVerifyPeer($flag)
@@ -139,7 +113,7 @@ class Options
      * 
      * @param string $val The CA file.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setSslCafile($val)
@@ -157,7 +131,7 @@ class Options
      * 
      * @param string $val The CA path.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setSslCapath($val)
@@ -174,7 +148,7 @@ class Options
      * 
      * @param string $val The local certificate file path.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setSslLocalCert($val)
@@ -189,7 +163,7 @@ class Options
      * 
      * @param string $val The passphrase.
      * 
-     * @return Aura\Http\Request\Options This object.
+     * @return Aura\Http\Transport\Options This object.
      * 
      */
     public function setSslPassphrase($val)

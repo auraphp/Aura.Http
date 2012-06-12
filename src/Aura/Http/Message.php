@@ -73,7 +73,7 @@ class Message
     
     /**
      * 
-     * Read-only access to $headers and $cookies objects.
+     * Read-only access to properties.
      * 
      * @param string $key The property to retrieve.
      * 
@@ -82,20 +82,7 @@ class Message
      */
     public function __get($key)
     {
-        $keys = [
-            'content',
-            'cookies',
-            'headers',
-            'status_code',
-            'status_text',
-            'version',
-        ];
-        
-        if (in_array($key, $keys)) {
-            return $this->$key;
-        }
-        
-        throw new Exception("No such property '$key'");
+        return $this->$key;
     }
     
     /** 

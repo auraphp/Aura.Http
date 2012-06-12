@@ -101,8 +101,8 @@ class Curl implements AdapterInterface
         }      
 
         // only send content if we're POST or PUT
-        $send_content = $request->method == Request::POST
-                     || $request->method == Request::PUT;
+        $send_content = $request->method == Request::METHOD_POST
+                     || $request->method == Request::METHOD_PUT;
         
         if ($send_content) {
             $has_files = false !== strpos($request->headers->{'Content-Type'}, 
@@ -239,8 +239,8 @@ class Curl implements AdapterInterface
         // http basic or digest auth
         if (! empty($options->http_auth)) {
             $auth_types = [
-                Request::BASIC  => CURLAUTH_BASIC,
-                Request::DIGEST => CURLAUTH_DIGEST
+                Request::AUTH_BASIC  => CURLAUTH_BASIC,
+                Request::AUTH_DIGEST => CURLAUTH_DIGEST
             ];
 
             $auth_type = $auth_types[$options->http_auth[0]];
@@ -377,7 +377,7 @@ class Curl implements AdapterInterface
             curl_setopt($this->ch, CURLOPT_HTTPGET, true);
             break;
             
-        case Request::POST:
+        case Request::METHOD_POST:
             curl_setopt($this->ch, CURLOPT_POST, true);
             break;
             

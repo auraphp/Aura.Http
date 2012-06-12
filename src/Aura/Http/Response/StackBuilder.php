@@ -19,6 +19,8 @@ use Aura\Http\Message\Factory as MessageFactory;
  */
 class StackBuilder
 {
+    protected $message_factory;
+    
     public function __construct(MessageFactory $message_factory)
     {
         $this->message_factory = $message_factory;

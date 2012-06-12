@@ -1,6 +1,7 @@
 <?php
 require_once __dir__ . '/src/Aura/Http/Adapter/AdapterInterface.php';
 require_once __dir__ . '/src/Aura/Http/Adapter/Curl.php';
+require_once __dir__ . '/src/Aura/Http/Adapter/Stream.php';
 
 require_once __DIR__ . '/src/Aura/Http/Cookie.php';
 require_once __DIR__ . '/src/Aura/Http/Cookie/Collection.php';

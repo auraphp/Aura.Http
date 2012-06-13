@@ -190,7 +190,18 @@ class Curl implements AdapterInterface
             return;
         }
         
-        curl_setopt($this->ch, CURLOPT_HTTPAUTH, $auth);
+        switch ($auth) {
+            case Request::AUTH_BASIC:
+                curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+                break;
+            case Request::AUTH_DIGEST:
+                curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+                break;
+            default:
+                throw new Exception("Unknown auth type '$auth'.");
+                break;
+        }
+        
         $credentials = $this->request->getCredentials();
         curl_setopt($this->ch, CURLOPT_USERPWD, $credentials);
     }

@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Transport;
+namespace Aura\Http\Request\Adapter;
 
 use Aura\Http as Http;
 use Aura\Http\Exception as Exception;
@@ -14,7 +14,7 @@ use Aura\Http\Request;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Cookie\Jar as CookieJar;
 use Aura\Http\Request\ResponseBuilder;
-use Aura\Http\Transport\Multipart;
+use Aura\Http\Request\Multipart;
 
 /**
  * 
@@ -35,7 +35,7 @@ class Stream implements AdapterInterface
     
     /**
      * 
-     * @var Aura\Http\Transport\Multipart
+     * @var Aura\Http\Request\Multipart
      * 
      */
     protected $multipart;
@@ -136,7 +136,7 @@ class Stream implements AdapterInterface
             array_map($callback, [null], $stream);
             
             $digest_auth = ! empty($request->options->http_auth) &&
-                           Request::AUTH_DIGEST == $request->options->http_auth[0];
+                           Request::DIGEST == $request->options->http_auth[0];
 
             if ($digest_auth) {
                 $challenge = $this->getHttpDigestChallenge($stream);
@@ -225,9 +225,9 @@ class Stream implements AdapterInterface
         if (! empty($request->options->http_auth)) {
             list($type, $usrpass) = $request->options->http_auth;
                     
-            if (Request::AUTH_BASIC == $type) {
+            if (Request::BASIC == $type) {
                 $value = 'Basic ' . base64_encode("$usrpass");
-                $this->request->headers->set('Authorization',  $value);
+                $request->headers->set('Authorization',  $value);
             } 
         }
 
@@ -405,8 +405,8 @@ class Stream implements AdapterInterface
     protected function setContent($content, $method, $has_files)
     {
         // only send content if we're POST or PUT
-        if (! $method == Request::METHOD_POST && 
-            ! $method == Request::METHOD_PUT) {
+        if (! $method == Request::POST && 
+            ! $method == Request::PUT) {
             return;
         }
 

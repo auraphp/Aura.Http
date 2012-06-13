@@ -227,7 +227,7 @@ class Stream implements AdapterInterface
                     
             if (Request::BASIC == $type) {
                 $value = 'Basic ' . base64_encode("$usrpass");
-                $this->request->headers->set('Authorization',  $value);
+                $request->headers->set('Authorization',  $value);
             } 
         }
 

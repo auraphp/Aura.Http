@@ -6,15 +6,17 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Http\Factory;
+namespace Aura\Http\Request;
 
+use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Request as HttpRequest;
 use Aura\Http\Request\Response as RequestResponse;
 use Aura\Http\Cookie\Jar as CookieJar;
 use Aura\Http\Request\Multipart;
-use Aura\Http\Request\ResponseBuilder;
+use Aura\Http\Request\ResponseStackFactory;
 use Aura\Http\Request\Adapter\Curl;
 use Aura\Http\Request\Adapter\Stream;
 
@@ -25,7 +27,7 @@ use Aura\Http\Request\Adapter\Stream;
  * @package Aura.Http
  * 
  */
-class Request
+class Factory
 {
     /**
      *
@@ -42,18 +44,17 @@ class Request
      */
     public function newInstance($adapter = 'auto', array $options = [])
     {
-        $headers          = new Headers(new Header);
-        $cookiefactory    = new Cookie;
-        $cookies          = new Cookies($cookiefactory);
+        $headers          = new Headers(new HeaderFactory);
+        $cookies          = new Cookies(new CookieFactory);
         $response         = new RequestResponse($headers, $cookies);
-        $response_builder = new ResponseBuilder($response, new ResponseStack);
+        $response_builder = new ResponseBuilder($response, new ResponseStackFactory);
 
         if ('curl' == $adapter ||
             ('auto' == $adapter && extension_loaded('curl'))) {
             
             $adapter   = new Curl($response_builder, $options);
         } else {
-            $cookiejar = new CookieJar($cookiefactory);
+            $cookiejar = new CookieJar(new CookieFactory);
             $adapter   = new Stream(
                                 $response_builder, 
                                 new Multipart, 
@@ -61,6 +62,6 @@ class Request
                             );
         }
 
-        return new HttpRequest($adapter, $headers, $cookies);
+        return new HttpRequest($headers, $cookies, $adapter);
     }
 }

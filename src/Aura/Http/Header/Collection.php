@@ -107,6 +107,17 @@ class Collection implements \IteratorAggregate, \Countable
         unset($this->list[$key]);
     }
     
+    public function __toString()
+    {
+        $list = [];
+        foreach ($this->list as $headers) {
+            foreach ($headers as $header) {
+                $list[] = $header->getLabel() . ': ' . $header->getValue();
+            }
+        }
+        return implode(PHP_EOL, $list);
+    }
+    
     /**
      * 
      * Count the number of headers.

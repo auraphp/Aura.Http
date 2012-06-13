@@ -81,6 +81,9 @@ class Stream implements AdapterInterface
     
     protected function openStream()
     {
+        $this->response_headers = [];
+        $this->response_content = null;
+        
         // set the context, including authentication
         $this->setContext();
         
@@ -103,7 +106,6 @@ class Stream implements AdapterInterface
             
             // server responded, but there's no content
             $this->response_headers = $http_response_header;
-            $this->response_content = null;
         }
     }
     
@@ -146,10 +148,14 @@ class Stream implements AdapterInterface
     
     protected function setHeaders()
     {
+        // reset headers
+        $this->headers = [];
+        
         // headers
         foreach ($this->request->headers as $header) {
             $this->headers[] = $header->__toString();
         }
+        $this->headers[] = 'Connection: close';
         
         // cookies
         $cookies = $this->request->cookies->__toString();
@@ -166,7 +172,7 @@ class Stream implements AdapterInterface
         } elseif ($auth == Request::AUTH_DIGEST && $this->challenge) {
             // digest auth, but only if a challenge was passed
             $credentials = $this->getDigestCredentials();
-            $this->headers[] = "Authorization: Digest $credentials";
+            $this->headers[] = "Authorization: $credentials";
         }
     }
     
@@ -218,8 +224,6 @@ class Stream implements AdapterInterface
         if ($send_content && ! empty($content)) {
             $this->http['content'] = $content;
         }
-        
-        var_dump($this->http);
     }
     
     protected function setHttps()
@@ -346,7 +350,7 @@ class Stream implements AdapterInterface
             );
         }
 
-        $template = 'username="%s", '
+        $template = 'Digest username="%s", '
                   . 'realm="%s", '
                   . 'nonce="%s", '
                   . 'uri="%s", '

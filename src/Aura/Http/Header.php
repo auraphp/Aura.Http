@@ -72,24 +72,6 @@ class Header
     
     /**
      * 
-     * Magic set for label and value.
-     * 
-     * @param string $key The property to set.
-     * 
-     * @param string $val Set the property to this value.
-     * 
-     * @return void
-     * 
-     */
-    public function __set($key, $val)
-    {
-        if ($key == 'value') {
-            return $this->setValue($val);
-        }
-    }
-
-    /**
-     * 
      * Returns this header object as a "label: value" string.
      * 
      * @return string

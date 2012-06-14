@@ -18,6 +18,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('Label', $header->label);
         $this->assertEquals('value', $header->value);
+        $this->assertNull($header->no_such_property);
     }
 
     public function testGetLabel()
@@ -32,13 +33,6 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $header = new Header("label", 'value');
 
         $this->assertEquals('value', $header->getValue());
-    }
-
-    public function testToString()
-    {
-        $header = new Header("label", 'value');
-
-        $this->assertEquals('Label: value', $header->toString());
     }
 
     public function test__toString()

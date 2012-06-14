@@ -126,22 +126,23 @@ class Collection implements \IteratorAggregate, \Countable
      * 
      * @param string $label
      * 
-     * @param boolean $list If true an array of `Aura\Http\Header` is returned 
-     * else a `Aura\Http\Header` is return with the first result.
-     * 
-     * @return Aura\Http\Header|array
+     * @return null|Aura\Http\Header|array
      * 
      */
-    public function get($label, $list = true)
+    public function get($label)
     {
+        // get a sanitized label
         $header = $this->factory->newInstance($label, null);
         $label  = $header->getLabel();
-
-        if ($list) {
+        
+        // return null, header, or array of headers
+        if (! isset($this->list[$label])) {
+            return null;
+        } elseif (count($this->list[$label]) == 1) {
+            return $this->list[$label][0];
+        } else {
             return $this->list[$label];
         }
-
-        return $this->list[$label][0];
     }
     
     /**

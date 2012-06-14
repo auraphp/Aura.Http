@@ -59,7 +59,7 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($this->headers->{'Foo-Bar'}));
     }
     
-    public function testcount()
+    public function testCount()
     {   
         $this->headers->set('foo_bar', 'hi');
         $this->headers->add('Foo', 'Bar');
@@ -70,6 +70,7 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIterator()
     {
+        $this->headers->set('foo', 'bar');
         $this->assertInstanceOf('\IteratorAggregate', $this->headers);
         $this->assertInstanceOf('\ArrayIterator', $this->headers->getIterator());
     }
@@ -99,12 +100,10 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->headers->add('Baz', 'zim');
         $actual = $this->headers->getAll();
         $expect = [
-          'Foo' => 
-          [
+          'Foo' => [
             0 => $this->newHeader('Foo', 'bar')
           ],
-          'Baz' => 
-          [
+          'Baz' => [
             0 => $this->newHeader('Baz', 'dib'),
             1 => $this->newHeader('Baz', 'zim'),
           ],
@@ -135,5 +134,38 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         ];
         
         $this->assertEquals($expect, $actual);
+    }
+    
+    public function testSetAndGet()
+    {
+        $actual = $this->headers->get('foo');
+        $this->assertNull($actual);
+        
+        $this->headers->add('foo', 'bar');
+        $actual = $this->headers->get('foo');
+        $this->assertSame($actual->label, 'Foo');
+        $this->assertSame($actual->value, 'bar');
+        
+        $this->headers->add('foo', 'zim');
+        $actual = $this->headers->get('foo');
+        $this->assertTrue(is_array($actual));
+        $this->assertSame($actual[0]->label, 'Foo');
+        $this->assertSame($actual[0]->value, 'bar');
+        $this->assertSame($actual[1]->label, 'Foo');
+        $this->assertSame($actual[1]->value, 'zim');
+    }
+    
+    public function test__toString()
+    {
+        $this->headers->set('foo_bar', 'hi');
+        $this->headers->add('Foo', 'Bar');
+        $this->headers->add('Foo', 'Powers');
+        
+        $actual = $this->headers->__toString();
+        $expect = "Foo-Bar: hi\r\n"
+                . "Foo: Bar\r\n"
+                . "Foo: Powers";
+        
+        $this->assertSame($actual, $expect);
     }
 }

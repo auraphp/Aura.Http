@@ -12,28 +12,14 @@ Instantiation
 -------------
 
 The easiest way to get started is to use the `scripts/instance.php` script to
-get a new `Response` object.
+get an HTTP `Manager` object, and use that to create a `Response` object.
 
 ```php
 <?php
-$response = include '/path/to/Aura.Http/scripts/instance.php';
+$http = include '/path/to/Aura.Http/scripts/instance.php';
+$response = $http->newResponse();
 ```
 
-Alternatively, you can add `'/path/to/Aura.Http/src'` to your autoloader and
-build a `Response` object manually:
-
-```php
-<?php
-use Aura\Http\Response;
-use Aura\Http\Header\Collection as Headers;
-use Aura\Http\Header\Factory as HeaderFactory;
-use Aura\Http\Cookie\Collection as Cookies;
-use Aura\Http\Cookie\Factory as CookieFactory;
-
-$headers  = new Headers(new HeaderFactory);
-$cookies  = new Cookies(new CookieFactory);
-$response = new Response($headers, $cookies);
-```
 
 Setting Content
 ---------------
@@ -139,13 +125,11 @@ Sending the Response
 --------------------
 
 Once you have set the content, headers, cookies, and status, you can send the
-response to the client using a `Transport` object.
+response to the client using the HTTP `Manager` object.
 
 ```php
 <?php
-$transport_factory = new Transport\Factory;
-$transport = $transport->newInstance();
-$transport->sendResponse($response);
+$http->send($response);
 ```
 
 This will send all the headers using [header()](http://php.net/header), all
@@ -165,21 +149,16 @@ Instantiation
 -------------
 
 It takes two steps to build and send a request. First, you create a `Request`
-object and manipulate it, then you send it via a `Transport` object.
+object and manipulate it, then you send it via the `Manager` (which itself
+uses a `Transport` and `Adapter` under-the-hood).
 
 
 ```php
 <?php
-use Aura\Http\Request\Factory as RequestFactory;
-use Aura\Http\Transport\Factory as TransportFactory;
 
-$request_factory = new RequestFactory;
-$request         = $request_factory->newInstance();
+$request = $http->newRequest();
 $request->setUrl('http://example.com');
-
-$transport_factory = new TransportFactory;
-$transport = $transport_factory->newInstance();
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 ```
 
 You can then read the stack of request responses.
@@ -196,7 +175,7 @@ Making a GET request to Github to list Auras repositories in JSON format:
 $request->setUrl('http://github.com/api/v2/json/repos/show/auraphp');
 
 // send the request and get back a stack of responses
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 
 // decode the most-recent response
 $repos = json_decode($stack[0]->getContent());
@@ -213,10 +192,10 @@ Submitting a Request
 ```php
 <?php    
 $stack = $request->setContent(['name' => 'value', 'foo' => ['bar']])
-                 ->setUrl('http://localhost/submit.php')
+                 ->setUrl('http://example.com/submit.php')
                  ->setMethod('post');
 
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 ```
  
 Downloading a File
@@ -224,8 +203,8 @@ Downloading a File
 
 ```php
 <?php
-$request->setUrl('http://localhost/download.ext');
-$stack = $transport->sendRequest($request);
+$request->setUrl('http://example.com/download.ext');
+$stack = $http->send($request);
 ```
 
 In the example above the download is stored in memory. For larger files you
@@ -236,10 +215,10 @@ is writeable by PHP as an argument.
 ```php
 <?php
 $request->saveTo('/a/path')
-        ->setUrl('http://localhost/download.ext');
+        ->setUrl('http://example.com/download.ext');
                     
 // send the request and get back a stack of responses
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 ```
 
 When you save a file to disk `$stack[0]->getContent()` will return a file
@@ -259,9 +238,9 @@ $content = [
 ];
             
 $response = $request->setContent($content)
-                    ->setUrl('http://localhost/submit.php');
+                    ->setUrl('http://example.com/submit.php');
 
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 ```
 
 Submitting Custom Content
@@ -273,10 +252,10 @@ $json     = json_encode(['hello' => 'world']);
 
 $response = $request->setContent($json)
                     ->setHeader('Content-Type', 'application/json')
-                    ->setUrl('http://localhost/submit.php')
+                    ->setUrl('http://example.com/submit.php')
                     ->setMethod('post');
 
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 ```
 
 HTTP Authorization
@@ -286,20 +265,24 @@ HTTP Basic:
 
 ```php
 <?php
-$response = $request->setHttpAuth('usr', 'pass') // defaults to Request::AUTH_BASIC
-                    ->setUrl('http://localhost/private/index.php');
+$request->setAuth(Request::AUTH_BASIC)
+        ->setUsername('username')
+        ->setPassword('password')
+        ->setUrl('http://example.com/private/index.php');
 
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 ```
 
 HTTP Digest:
 
 ```php
 <?php
-$response = $request->setHttpAuth('usr', 'pass', Request::AUTH_DIGEST)
-                    ->setUrl('http://localhost/private/index.php');
+$request->setAuth(Request::AUTH_DIGEST)
+        ->setUsername('username')
+        ->setPassword('password')
+        ->setUrl('http://example.com/private/index.php');
 
-$stack = $transport->sendRequest($request);
+$stack = $http->send($request);
 ```
 
 Cookies and Cookie Authorization
@@ -313,13 +296,15 @@ in place this won't work):
 
 ```php
 <?php
-$stack = $request->setCookieJar('/path/to/cookiejar')
+$request->setCookieJar('/path/to/cookiejar')
         ->setContent(['usr_name' => 'name', 'usr_pass' => 'pass'])
         ->setUrl('http://www.example.com/login')
         ->setMethod('post');
 
-$response = $request->setCookieJar('/path/to/cookiejar')
-                    ->get('http://www.example.com/');
+$stack = $http->send($request);
+
+$request->setCookieJar('/path/to/cookiejar')
+        ->setUrl('http://www.example.com/');
 ```
 
 

@@ -209,7 +209,7 @@ class Curl implements AdapterInterface
     protected function setHeaders()
     {
         $headers = [];
-        foreach ($this->request->getHeaders() as $$header) {
+        foreach ($this->request->getHeaders() as $header) {
             switch ($header->getLabel()) {
                 case 'User-Agent':
                     curl_setopt($this->ch, CURLOPT_USERAGENT, $header->getValue());

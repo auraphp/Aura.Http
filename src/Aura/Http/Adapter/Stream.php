@@ -304,6 +304,9 @@ class Stream implements AdapterInterface
         $user    = $this->request->username;
         $pass    = $this->request->password;
         $path    = parse_url($this->request->uri, PHP_URL_PATH);
+        if (! $path) {
+            $path = '/';
+        }
         $options = stream_context_get_options($this->context);
         $method  = $options['http']['method'];
         $a1      = sprintf('%s:%s:%s', $user, $this->challenge['realm'], $pass);

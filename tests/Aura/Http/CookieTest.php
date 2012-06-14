@@ -113,13 +113,6 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cookie->getHttpOnly());
     }
 
-    public function testToString()
-    {
-        $cookie = $this->newCookie('cname', 'cvalue', 42, '/path', '.example.com', true, true);
-
-        $this->assertEquals('cname=cvalue; expires=42; path=/path; domain=.example.com; secure; HttpOnly', $cookie->toString());
-    }
-
     public function test__toString()
     {
         $cookie = $this->newCookie('cname', 'cvalue');

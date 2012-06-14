@@ -139,4 +139,20 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals($expect, $actual);
     }
+    
+    public function test__toString()
+    {
+        $this->cookies->setAll([
+            'login' => [
+                'value' => '1234567890',
+            ],
+            'usrid' => [
+                'value' => '0987654321'
+            ],
+        ]);
+        
+        $actual = $this->cookies->__toString();
+        $expect = "login=1234567890;usrid=0987654321";
+        $this->assertSame($actual, $expect);
+    }
 }

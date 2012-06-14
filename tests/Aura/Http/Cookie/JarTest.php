@@ -7,8 +7,8 @@ use Aura\Http\Cookie\Jar as CookieJar;
 class CookieJarTest extends \PHPUnit_Framework_TestCase
 {
     protected $cookiejar;
-    protected $cookiefactory;
     
+    protected $cookiefactory;
 
     protected function setUp()
     {
@@ -16,10 +16,17 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $this->cookiejar     = new CookieJar(new CookieFactory);
         $this->cookiefactory = new CookieFactory;
     }
-
+    
+    protected function file($file)
+    {
+        return dirname(__DIR__)
+              . DIRECTORY_SEPARATOR . '_files'
+              . DIRECTORY_SEPARATOR . $file;
+    }
+    
     public function testOpening()
     {
-        $return = $this->cookiejar->open(__DIR__ . '/_files/cookiejar');
+        $return = $this->cookiejar->open($this->file('cookiejar'));
         
         $list   = $this->cookiejar->listAll();
         $expect = [
@@ -47,18 +54,18 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
 
     public function testOpeningMorethanOnceReturnFalse()
     {
-        $return = $this->cookiejar->open(__DIR__ . '/_files/cookiejar');
+        $return = $this->cookiejar->open($this->file('cookiejar'));
         
         $this->assertTrue($return);
 
-        $return = $this->cookiejar->open(__DIR__ . '/_files/cookiejar');
+        $return = $this->cookiejar->open($this->file('cookiejar'));
 
         $this->assertFalse($return);
     }
 
     public function testMalformedLineIsIgnored()
     {
-        $this->cookiejar->open(__DIR__ . '/_files/cookiejar_with_malformed_line');
+        $this->cookiejar->open($this->file('cookiejar_with_malformed_line'));
         
         $list   = $this->cookiejar->listAll();
         $expect = [
@@ -102,8 +109,8 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
                     'httponly' => true,
                 ]));
 
-        $test     = __DIR__ . '/_files/cookiejar_savetest';
-        $expected = __DIR__ . '/_files/cookiejar';
+        $test     = $this->file('cookiejar_savetest');
+        $expected = $this->file('cookiejar');
         $return   = $this->cookiejar->save($test);
 
         $this->assertTrue($return);
@@ -113,7 +120,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
 
     public function testSavingWithNoCookiesReturnFalse()
     {
-        $test     = __DIR__ . '/_files/cookiejar_savetest';
+        $test     = $this->file('cookiejar_savetest');
         $return   = $this->cookiejar->save($test);
 
         $this->assertFalse($return);
@@ -121,7 +128,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
 
     public function testListingAllThatMatch()
     {
-        $this->cookiejar->open(__DIR__ . '/_files/cookiejar');
+        $this->cookiejar->open($this->file('cookiejar'));
         
         $list   = $this->cookiejar->listAll('http://www.example.com/');
         $expect = [
@@ -141,17 +148,17 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
     public function testListingAllWithoutSchemeOnMatchingUrlException()
     {
         $this->setExpectedException('\Aura\Http\Exception');
-        $this->cookiejar->open(__DIR__ . '/_files/cookiejar');
+        $this->cookiejar->open($this->file('cookiejar'));
         
         $this->cookiejar->listAll('www.example.com');
     }
 
     public function testExpiredCookiesAreNotSaved()
     {
-        $this->cookiejar->open(__DIR__ . '/_files/cookiejar_with_expired_cookie');
+        $this->cookiejar->open($this->file('cookiejar_with_expired_cookie'));
 
-        $expected = __DIR__ . '/_files/cookiejar';
-        $test     = __DIR__ . '/_files/cookiejar_savetest2';
+        $expected = $this->file('cookiejar');
+        $test     = $this->file('cookiejar_savetest2');
         $list     = $this->cookiejar->save($test);
 
         $this->assertEquals(file_get_contents($expected), file_get_contents($test));
@@ -161,7 +168,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
     public function testExpiringSessionCookies()
     {
         $this->cookiejar->expireSessionCookies();
-        $this->cookiejar->open(__DIR__ . '/_files/cookiejar_with_session_cookie');
+        $this->cookiejar->open($this->file('cookiejar_with_session_cookie'));
 
         $list   = $this->cookiejar->listAll();
         $expect = [

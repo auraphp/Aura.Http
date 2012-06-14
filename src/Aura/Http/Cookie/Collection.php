@@ -99,11 +99,9 @@ class Collection implements \IteratorAggregate, \Countable
     {
         $list = array();
         foreach ($this->list as $cookie) {
-            $name = $cookie->getName();
-            $value = $cookie->getValue();
-            $list[] = "{$name}={$value}";
+            $list[] = $cookie->__toString();
         }
-        return implode('; ', $list);
+        return implode(';', $list);
     }
     
     /**

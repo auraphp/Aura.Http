@@ -105,7 +105,7 @@ class Collection implements \IteratorAggregate, \Countable
                 $list[] = $header->__toString();
             }
         }
-        return implode(PHP_EOL, $list);
+        return implode("\r\n", $list);
     }
     
     /**
@@ -165,7 +165,13 @@ class Collection implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->list);
+        $flat = [];
+        foreach ($this->list as $headers) {
+            foreach ($headers as $header) {
+                $flat[] = $header;
+            }
+        }
+        return new \ArrayIterator($flat);
     }
     
     /**

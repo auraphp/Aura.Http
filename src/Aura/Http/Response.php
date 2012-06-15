@@ -111,29 +111,6 @@ class Response extends Message
     
     /**
      * 
-     * Read-only access to $headers and $cookies objects.
-     * 
-     * @param string $key The property to retrieve.
-     * 
-     * @return mixed
-     * 
-     */
-    public function __get($key)
-    {
-        $keys = [
-            'status_code',
-            'status_text',
-        ];
-        
-        if (in_array($key, $keys)) {
-            return $this->$key;
-        } else {
-            return parent::__get($key);
-        }
-    }
-    
-    /**
-     * 
      * Sets the HTTP status code to for the response. Automatically resets the
      * status text to the default for that code, if any.
      * 

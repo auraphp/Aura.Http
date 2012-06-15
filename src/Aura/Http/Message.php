@@ -169,7 +169,7 @@ class Message
     
     /**
      * 
-     * Sets the HTTP version for the message to '1.0' or '1.1'.
+     * Sets the HTTP version for the message.
      * 
      * @param string $version The HTTP version to use for this message.
      * 
@@ -179,11 +179,7 @@ class Message
     public function setVersion($version)
     {
         $version = trim($version);
-        if ($version != '1.0' && $version != '1.1') {
-            throw new Exception\UnknownVersion("HTTP version '$version' not recognized.");
-        } else {
-            $this->version = $version;
-        }
+        $this->version = $version;
         return $this;
     }
     

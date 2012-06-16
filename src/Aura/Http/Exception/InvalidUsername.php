@@ -13,4 +13,4 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class InvalidHandle extends \Aura\Http\Exception {}
+class InvalidUsername extends \Aura\Http\Exception {}

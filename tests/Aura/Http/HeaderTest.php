@@ -41,4 +41,75 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('Label: value', $header->__toString());
     }
+
+    // public function testSetHeaderSanitizesLabel()
+    // {
+    //     $this->message->setHeader("key\r\n-=foo", 'value');
+    //     $this->transport->sendRequest($req);
+    //     $this->assertTrue(array_key_exists('Key-Foo', Mock::$request->headers->getAll()));;
+    // }
+    // 
+    // public function testSetHeaderDeleteHeaderWithNullOrFalseValue()
+    // {
+    //     $req     = $this->newRequest();
+    // 
+    //     // false
+    //     $this->message->setHeader("key", 'value');
+    //     
+    //     $this->transport->sendRequest($req);
+    // 
+    //     $this->assertTrue(isset(Mock::$request->headers->Key));
+    // 
+    //     $this->message->setHeader("key", false);
+    //     
+    //     $this->transport->sendRequest($req);
+    // 
+    //     $this->assertFalse(isset(Mock::$request->headers->Key));
+    // 
+    //     // null
+    //     $this->message->setHeader("key", 'value');
+    //     
+    //     $this->transport->sendRequest($req);
+    // 
+    //     $this->assertTrue(isset(Mock::$request->headers->Key));
+    // 
+    //     $this->message->setHeader("key", null);
+    //     
+    //     $this->transport->sendRequest($req);
+    // 
+    //     $this->assertFalse(isset(Mock::$request->headers->Key));
+    // }
+    // 
+    // public function testSetHeaderReplaceValue()
+    // {
+    //     $req     = $this->newRequest();
+    //     
+    //     $this->message->setHeader("key", 'value');
+    //     
+    //     $this->transport->sendRequest($req);
+    // 
+    //     $this->assertSame('value', Mock::$request->headers->Key->getValue());
+    // 
+    //     $this->message->setHeader("key", 'value2');
+    //     
+    //     $this->transport->sendRequest($req);
+    // 
+    //     $this->assertSame('value2', Mock::$request->headers->Key->getValue());
+    // }
+    // 
+    // public function testSetHeaderMultiValue()
+    // {
+    //     $req     = $this->newRequest();
+    //     
+    //     $this->message->setHeader("key", 'value', false);
+    //     $this->message->setHeader("key", 'value2', false);
+    //     $this->transport->sendRequest($req);
+    //     
+    //     $expected = ['value', 'value2'];
+    // 
+    //     foreach (Mock::$request->headers->get('Key') as $i => $value) {
+    //         $this->assertSame('Key', $value->getLabel());
+    //         $this->assertSame($expected[$i], $value->getValue());
+    //     }
+    // }
 }

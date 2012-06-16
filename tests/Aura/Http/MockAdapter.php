@@ -3,7 +3,7 @@
 namespace Aura\Http;
 
 use Aura\Http\Request;
-use Aura\Http\Transport\AdapterInterface;
+use Aura\Http\Adapter\AdapterInterface;
 
 class MockAdapter implements AdapterInterface
 {

@@ -133,8 +133,12 @@ class Request extends Message
     
     public function setAuth($auth)
     {
+        if (! $auth) {
+            $this->auth = null;
+            return;
+        }
+        
         $known = [
-            null,
             self::AUTH_BASIC,
             self::AUTH_DIGEST
         ];
@@ -148,6 +152,11 @@ class Request extends Message
     
     public function setUsername($username)
     {
+        if (strpos($username, ':') !== false) {
+            $text = 'The username may not contain a colon (:).';
+            throw new Exception\InvalidUsername($text);
+        }
+        
         $this->username = $username;
     }
     

@@ -1,5 +1,4 @@
 <?php
-
 namespace Aura\Http;
 
 use Aura\Http\Cookie\Factory as CookieFactory;

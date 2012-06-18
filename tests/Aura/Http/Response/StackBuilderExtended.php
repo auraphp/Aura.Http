@@ -1,9 +1,9 @@
 <?php
 namespace Aura\Http\Request;
 
-use Aura\Http\Request\ResponseStackFactory as ResponseStackFactory;
+use Aura\Http\Response\StackBuilder;
 
-class ResponseBuilderExtended extends ResponseBuilder
+class StackBuilderExtended extends StackBuilder
 {
     public function getResponse()
     {

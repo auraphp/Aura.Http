@@ -1,16 +1,18 @@
 <?php
-
 namespace Aura\Http;
 
-use Aura\Http\Request;
 use Aura\Http\Adapter\AdapterInterface;
+use Aura\Http\Request;
+use Aura\Http\Transport\Options;
 
 class MockAdapter implements AdapterInterface
 {
-    public static $request;
-
-    public function exec(Request $request)
+    public $request;
+    public $options;
+    
+    public function exec(Request $request, Options $options)
     {
-        self::$request = $request;
+        $this->request = $request;
+        $this->options = $options;
     }
 }

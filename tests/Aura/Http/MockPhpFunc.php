@@ -8,11 +8,13 @@ class MockPhpFunc extends PhpFunc
     public $headers_sent = false;
     public $file;
     public $line;
+    public $content = null;
     
     public function reset()
     {
         $this->headers      = [];
         $this->cookies      = [];
+        $this->content      = null;
         $this->headers_sent = false;
     }
     
@@ -24,7 +26,7 @@ class MockPhpFunc extends PhpFunc
     }
 
     // mock the function for this namespace
-    function headers_sent(&$file, &$line)
+    public function headers_sent(&$file, &$line)
     {
         if ($this->headers_sent) {
             $this->file = $file;
@@ -36,7 +38,7 @@ class MockPhpFunc extends PhpFunc
     }
 
     // mock the function for this namespace
-    function setcookie(
+    public function setcookie(
         $name,
         $value,
         $expire = 0,
@@ -54,5 +56,10 @@ class MockPhpFunc extends PhpFunc
             'secure'   => $secure,
             'httponly' => $httponly,
         ];
+    }
+    
+    public function output($text)
+    {
+        $this->content .= $text;
     }
 }

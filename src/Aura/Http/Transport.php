@@ -84,10 +84,8 @@ class Transport
         $this->phpfunc->header($status, true, $response->status_code);
         
         // send the non-cookie headers
-        foreach ($response->getHeaders() as $label => $values) {
-            foreach ($values as $header) {
-                $this->phpfunc->header($header->__toString());
-            }
+        foreach ($response->getHeaders() as $header) {
+            $this->phpfunc->header($header->__toString());
         }
         
         // send the cookie headers

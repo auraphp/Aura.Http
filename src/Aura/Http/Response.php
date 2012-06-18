@@ -74,8 +74,6 @@ class Response extends Message
         '505' => 'HTTP Version Not Supported',
     ];
     
-    protected $is_cgi;
-    
     /**
      * 
      * The HTTP status code of the message.
@@ -93,6 +91,15 @@ class Response extends Message
      * 
      */
     protected $status_text;
+    
+    /** 
+     * 
+     * The HTTP version for this message.
+     * 
+     * @var string
+     * 
+     */
+    protected $version = '1.1';
     
     /**
      * 

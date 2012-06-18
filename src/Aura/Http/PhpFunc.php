@@ -14,6 +14,7 @@ class PhpFunc
         call_user_func_array($func, $args);
     }
     
+    // not a php function; used in place of `echo` and `print`
     public function output($text)
     {
         echo $text;

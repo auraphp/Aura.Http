@@ -17,6 +17,7 @@ require_once __DIR__ . '/src/Aura/Http/Exception/HeadersSent.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnableToDecompressContent.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownAuthType.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMethod.php';
+require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMessageType.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownStatus.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownVersion.php';
 
@@ -37,5 +38,6 @@ require_once __DIR__ . '/src/Aura/Http/Response/StackBuilder.php';
 
 require_once __DIR__ . '/src/Aura/Http/Request.php';
 
+require_once __DIR__ . '/src/Aura/Http/Transport/TransportInterface.php';
 require_once __DIR__ . '/src/Aura/Http/Transport.php';
 require_once __DIR__ . '/src/Aura/Http/Transport/Options.php';

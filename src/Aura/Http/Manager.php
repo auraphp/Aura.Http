@@ -2,12 +2,17 @@
 namespace Aura\Http;
 
 use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Transport\TransportInterface;
 
 class Manager
 {
+    protected $message_factory;
+    
+    protected $transport;
+    
     public function __construct(
         MessageFactory $message_factory,
-        Transport $transport
+        TransportInterface $transport
     ) {
         $this->message_factory = $message_factory;
         $this->transport = $transport;
@@ -38,6 +43,6 @@ class Manager
             return $this->transport->sendResponse($message);
         }
         
-        throw new Exception('Unknown message type.');
+        throw new Exception\UnknownMessageType;
     }
 }

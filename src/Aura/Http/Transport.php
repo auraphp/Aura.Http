@@ -3,8 +3,9 @@ namespace Aura\Http;
 
 use Aura\Http\Adapter\AdapterInterface;
 use Aura\Http\Transport\Options;
+use Aura\Http\Transport\TransportInterface;
 
-class Transport
+class Transport implements TransportInterface
 {
     // used so we can intercept native php function calls for testing
     protected $phpfunc;
@@ -58,6 +59,11 @@ class Transport
     public function isCgi()
     {
         return (bool) $this->cgi;
+    }
+    
+    public function sendRequest(Request $request)
+    {
+        return $this->adapter->exec($request, $this->options);
     }
     
     public function sendResponse(Response $response)
@@ -117,10 +123,5 @@ class Transport
         } else {
             $this->phpfunc->output($content);
         }
-    }
-    
-    public function sendRequest(Request $request)
-    {
-        return $this->adapter->exec($request, $this->options);
     }
 }

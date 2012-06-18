@@ -9,6 +9,7 @@ use Aura\Http\Cookie\Factory as CookieFactory;
 class Factory
 {
     protected $map = array(
+        'message'  => 'Aura\Http\Message',
         'request'  => 'Aura\Http\Request',
         'response' => 'Aura\Http\Response',
     );

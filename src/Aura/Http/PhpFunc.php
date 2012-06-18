@@ -11,7 +11,7 @@ class PhpFunc
 {
     public function __call($func, $args)
     {
-        call_user_func_array($func, $args);
+        return call_user_func_array($func, $args);
     }
     
     // not a php function; used in place of `echo` and `print`

@@ -101,14 +101,19 @@ class Transport
             );
         }
         
-        // send the content
+        // get the content
         $content = $response->getContent();
-        if ($this->phpfunc->is_resource($content)) {
+        
+        // is the content a stream?
+        $is_stream = $this->phpfunc->is_resource($content)
+                  && $this->phpfunc->get_resource_type($content) == 'stream';
+        
+        // send the content
+        if ($is_stream) {
             while (! $this->phpfunc->feof($content)) {
                 $text = $this->phpfunc->fread($content, 8192);
                 $this->phpfunc->output($text);
             }
-            $this->phpfunc->fclose($content);
         } else {
             $this->phpfunc->output($content);
         }

@@ -43,6 +43,10 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             'Bar' => 'hello world 2',
         ]);
         
+        $response->cookies->set('foo', [
+            'value' => 'bar',
+        ]);
+        
         $response->setContent('Hola Mundo!');
         
         return $response;
@@ -56,6 +60,13 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         );
         
         return $request;
+    }
+    
+    public function test__get()
+    {
+        $this->assertSame($this->phpfunc, $this->transport->phpfunc);
+        $this->assertSame($this->options, $this->transport->options);
+        $this->assertSame($this->adapter, $this->transport->adapter);
     }
     
     public function testSendResponse()
@@ -74,6 +85,20 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             0 => 'HTTP/1.1 200 OK',
             1 => 'Foo: hello world',
             2 => 'Bar: hello world 2',
+        ];
+        $this->assertSame($expect, $actual);
+        
+        $actual = $this->phpfunc->cookies;
+        $expect = [
+           0 => [
+                'name' => 'foo',
+                'value' => 'bar',
+                'expire' => 0,
+                'path' => null,
+                'domain' => null,
+                'secure' => false,
+                'httponly' => true,
+            ],
         ];
         $this->assertSame($expect, $actual);
     }
@@ -96,6 +121,20 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             2 => 'Bar: hello world 2',
         ];
         $this->assertSame($expect, $actual);
+        
+        $actual = $this->phpfunc->cookies;
+        $expect = [
+           0 => [
+                'name' => 'foo',
+                'value' => 'bar',
+                'expire' => 0,
+                'path' => null,
+                'domain' => null,
+                'secure' => false,
+                'httponly' => true,
+            ],
+        ];
+        $this->assertSame($expect, $actual);
     }
     
     public function testSendResponse_headersAlreadySent()
@@ -107,32 +146,28 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         $this->transport->sendResponse($response);
     }
     
-    // public function testSendResponse_resource()
-    // {
-    //     $expect_content = 'hello resource';
-    //     
-    //     $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
-    //           . 'tmp' . DIRECTORY_SEPARATOR
-    //           . 'resource.txt';
-    //     
-    //     @mkdir(dirname($file));
-    //     file_put_contents($file, $expect_content);
-    //     
-    //     $fh = fopen($file, 'r');
-    //     
-    //     $response = $this->newResponse();
-    //     $response->setContent($fh);
-    //     
-    //     $actual_content = $this->sendResponse($response);
-    //     $this->assertSame($expect_content, $actual_content);
-    //     
-    //     unlink($file);
-    // }
+    public function testSendResponse_resource()
+    {
+        $response = $this->newResponse();
+        
+        $file = __DIR__ . DIRECTORY_SEPARATOR
+              . '_files' . DIRECTORY_SEPARATOR
+              . 'resource.txt';
+        
+        $fh = fopen($file, 'r');
+        $response->setContent($fh);
+        $this->transport->sendResponse($response);
+        fclose($fh);
+        
+        $expect = file_get_contents($file);
+        $actual = $this->phpfunc->content;
+        $this->assertSame($expect, $actual);
+    }
     
     public function testSendRequest()
     {
         $request = $this->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUri('http://example.com');
         $this->transport->sendRequest($request);
         
         $this->assertSame($request, $this->adapter->request);

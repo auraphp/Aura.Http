@@ -4,58 +4,22 @@ namespace Aura\Http\Transport;
 class Options
 {
     protected $max_redirects    = 10;
+    protected $timeout          = 10;
+    
     protected $proxy            = null;
     protected $proxy_port       = null;
-    protected $proxy_user       = null;
-    protected $proxy_pass       = null;
+    protected $proxy_username   = null;
+    protected $proxy_password   = null;
+    
     protected $ssl_cafile       = null;
     protected $ssl_capath       = null;
     protected $ssl_local_cert   = null;
     protected $ssl_passphrase   = null;
     protected $ssl_verify_peer  = null;
-    protected $timeout          = 10;
     
     public function __get($key)
     {
         return $this->$key;
-    }
-    
-    /**
-     * 
-     * Send all requests through this proxy server.
-     * 
-     * @param string $spec The URI for the proxy server.
-     * 
-     * @return Aura\Http\Transport\Options This object.
-     * 
-     */
-    public function setProxy($proxy)
-    {
-        $this->proxy  = $proxy;
-        return $this;
-    }
-    
-    public function setProxyPort($proxy_port)
-    {
-        $this->proxy_port = $proxy_port;
-        return $this;
-    }
-    
-    public function setProxyUser($proxy_user)
-    {
-        $this->proxy_user = $proxy_user;
-        return $this;
-    }
-    
-    public function setProxyPass($proxy_pass)
-    {
-        $this->proxy_pass = $proxy_pass;
-        return $this;
-    }
-    
-    public function getProxyUserPass()
-    {
-        return $this->proxy_user . ':' . $this->proxy_pass;
     }
     
     /**
@@ -88,6 +52,44 @@ class Options
     {
         $this->timeout = (float) $timeout;
         return $this;
+    }
+    
+    /**
+     * 
+     * Send all requests through this proxy server.
+     * 
+     * @param string $spec The URI for the proxy server.
+     * 
+     * @return Aura\Http\Transport\Options This object.
+     * 
+     */
+    public function setProxy($proxy)
+    {
+        $this->proxy  = $proxy;
+        return $this;
+    }
+    
+    public function setProxyPort($proxy_port)
+    {
+        $this->proxy_port = $proxy_port;
+        return $this;
+    }
+    
+    public function setProxyUsername($proxy_username)
+    {
+        $this->proxy_username = $proxy_username;
+        return $this;
+    }
+    
+    public function setProxyPassword($proxy_password)
+    {
+        $this->proxy_password = $proxy_password;
+        return $this;
+    }
+    
+    public function getProxyCredentials()
+    {
+        return $this->proxy_username . ':' . $this->proxy_password;
     }
     
     /**

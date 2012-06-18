@@ -14,6 +14,10 @@ class Curl implements AdapterInterface
     
     protected $options;
     
+    protected $headers;
+    
+    protected $content;
+    
     protected $curl;
     
     public function __construct(StackBuilder $stack_builder)
@@ -40,37 +44,15 @@ class Curl implements AdapterInterface
     {
         $this->request = $request;
         $this->options = $options;
+        
+        // create the handle and connect
         $this->setCurl();
-        
-        // send the request via curl and retain the response
-        $response = curl_exec($this->curl);
-        
-        // did we hit any errors?
-        if ($response === false || $response === null) {
-            $text = 'Connection failed: '
-                  . curl_errno($this->curl)
-                  . ' '
-                  . curl_error($this->curl);
-            throw new Exception($text);
-        }
-        
-        // get the metadata and close the connection
-        $meta = curl_getinfo($this->curl);
-        curl_close($this->curl);
-        
-        // get the header lines from the response
-        $headers = explode(
-            "\r\n",
-            substr($response, 0, $meta['header_size'])
-        );
-        
-        // get the content portion from the response
-        $content = substr($response, $meta['header_size']);
-        
+        $this->connect();
+                
         // build a stack
         $stack = $this->stack_builder->newInstance(
-            $headers,
-            $content,
+            $this->headers,
+            $this->content,
             $this->request->uri
         );
         
@@ -89,6 +71,34 @@ class Curl implements AdapterInterface
         $this->curlAuth();
         $this->curlHeaders();
         $this->curlContent();
+    }
+    
+    protected function connect()
+    {
+        // send the request via curl and retain the response
+        $response = curl_exec($this->curl);
+        
+        // did we hit any errors?
+        if ($response === false || $response === null) {
+            $text = 'Connection failed: '
+                  . curl_errno($this->curl)
+                  . ' '
+                  . curl_error($this->curl);
+            throw new Exception($text);
+        }
+        
+        // get the metadata and close the connection
+        $meta = curl_getinfo($this->curl);
+        curl_close($this->curl);
+        
+        // get the header lines from the response
+        $this->headers = explode(
+            "\r\n",
+            substr($response, 0, $meta['header_size'])
+        );
+        
+        // get the content portion from the response
+        $this->content = substr($response, $meta['header_size']);
     }
     
     protected function curlBasicOptions()
@@ -113,13 +123,13 @@ class Curl implements AdapterInterface
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
         
         // property-name => curlopt-constant
-        $this->curlOptions([
+        $this->curlSetopt([
             'max_redirects' => CURLOPT_MAXREDIRS,
             'timeout'       => CURLOPT_TIMEOUT,
         ]);
     }
     
-    protected function curlOptions($var_opt)
+    protected function curlSetopt($var_opt)
     {
         foreach ($var_opt as $var => $opt) {
             // use this comparison so boolean false and integer zero values
@@ -137,7 +147,7 @@ class Curl implements AdapterInterface
         }
         
         curl_setopt($this->curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
-        $this->curlOptions([
+        $this->curlSetopt([
             'proxy'         => CURLOPT_PROXY,
             'proxy_port'    => CURLOPT_PROXYPORT,
         ]);
@@ -146,7 +156,7 @@ class Curl implements AdapterInterface
     
     protected function curlSecureOptions()
     {
-        $this->curlOptions([
+        $this->curlSetopt([
             'ssl_verify_peer' => CURLOPT_SSL_VERIFYPEER,
             'ssl_cafile'      => CURLOPT_CAINFO,
             'ssl_capath'      => CURLOPT_CAPATH,

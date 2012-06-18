@@ -16,17 +16,17 @@ class Stream implements AdapterInterface
     
     protected $context;
     
-    protected $headers = [];
+    protected $context_headers = [];
     
-    protected $http = [];
+    protected $context_http = [];
     
-    protected $https = [];
+    protected $context_https = [];
     
     protected $challenge = [];
     
-    protected $response_headers;
+    protected $headers;
     
-    protected $response_content;
+    protected $content;
     
     public function __construct(StackBuilder $stack_builder)
     {
@@ -72,8 +72,8 @@ class Stream implements AdapterInterface
         
         // build a stack
         $stack = $this->stack_builder->newInstance(
-            $this->response_headers,
-            $this->response_content,
+            $this->headers,
+            $this->content,
             $this->request->uri
         );
         
@@ -83,8 +83,8 @@ class Stream implements AdapterInterface
     
     protected function openStream()
     {
-        $this->response_headers = [];
-        $this->response_content = null;
+        $this->headers = [];
+        $this->content = null;
         
         // set the context, including authentication
         $this->setContext();
@@ -107,14 +107,14 @@ class Stream implements AdapterInterface
             }
             
             // server responded, but there's no content
-            $this->response_headers = $http_response_header;
+            $this->headers = $http_response_header;
         }
     }
     
     protected function readStream()
     {
         // get the response content
-        $this->response_content = stream_get_contents($this->stream);
+        $this->content = stream_get_contents($this->stream);
         $meta = stream_get_meta_data($this->stream);
         fclose($this->stream);
         
@@ -131,38 +131,38 @@ class Stream implements AdapterInterface
                      
         // get the headers
         if ($with_curlwrappers) {
-            $this->response_headers = $meta['wrapper_data']['headers'];
+            $this->headers = $meta['wrapper_data']['headers'];
         } else {
-            $this->response_headers = $meta['wrapper_data'];
+            $this->headers = $meta['wrapper_data'];
         }
     }
     
     protected function setContext()
     {
-        $this->setHeaders();
-        $this->setHttp();
-        $this->setHttps();
+        $this->setContextHeaders();
+        $this->setContextHttp();
+        $this->setContextHttps();
         $this->context = stream_context_create([
-            'http'  => $this->http,
-            'https' => $this->https,
+            'http'  => $this->context_http,
+            'https' => $this->context_https,
         ]);
     }
     
-    protected function setHeaders()
+    protected function setContextHeaders()
     {
         // reset headers
-        $this->headers = [];
+        $this->context_headers = [];
         
         // headers
         foreach ($this->request->headers as $header) {
-            $this->headers[] = $header->__toString();
+            $this->context_headers[] = $header->__toString();
         }
-        $this->headers[] = 'Connection: close';
+        $this->context_headers[] = 'Connection: close';
         
         // cookies
         $cookies = $this->request->cookies->__toString();
         if ($cookies) {
-            $this->headers[] = $cookies;
+            $this->context_headers[] = $cookies;
         }
         
         // authentication
@@ -170,11 +170,11 @@ class Stream implements AdapterInterface
         if ($auth == Request::AUTH_BASIC) {
             // basic auth
             $credentials = base64_encode($this->request->getCredentials());
-            $this->headers[] = "Authorization: Basic $credentials";
+            $this->context_headers[] = "Authorization: Basic $credentials";
         } elseif ($auth == Request::AUTH_DIGEST && $this->challenge) {
             // digest auth, but only if a challenge was passed
             $credentials = $this->getDigestCredentials();
-            $this->headers[] = "Authorization: $credentials";
+            $this->context_headers[] = "Authorization: Digest $credentials";
         }
     }
     
@@ -192,15 +192,15 @@ class Stream implements AdapterInterface
      * @see <http://php.net/manual/en/wrappers.http.php>
      * 
      */
-    protected function setHttp()
+    protected function setContextHttp()
     {
-        $this->http = [
+        $this->context_http = [
             'ignore_errors'    => true,
             'protocol_version' => $this->request->version,
             'method'           => $this->request->method,
         ];
         
-        $this->setOptions($this->http, [
+        $this->setContextOptions($this->context_http, [
             'proxy'         => 'proxy',
             'max_redirects' => 'max_redirects',
             'timeout'       => 'timeout',
@@ -209,12 +209,12 @@ class Stream implements AdapterInterface
         
         // method
         if ($this->request->method != Request::METHOD_GET) {
-            $this->http['method'] = $this->request->method;
+            $this->context_http['method'] = $this->request->method;
         }
         
         // send headers and cookies?
-        if ($this->headers) {
-            $this->http['header'] = implode("\r\n", $this->headers);
+        if ($this->context_headers) {
+            $this->context_http['header'] = implode("\r\n", $this->context_headers);
         }
         
         // only send content if we're POST or PUT
@@ -224,14 +224,14 @@ class Stream implements AdapterInterface
                      || $method == Request::METHOD_PUT;
         
         if ($send_content && ! empty($content)) {
-            $this->http['content'] = $content;
+            $this->context_http['content'] = $content;
         }
     }
     
-    protected function setHttps()
+    protected function setContextHttps()
     {
-        $this->https = $this->http;
-        $this->setOptions($this->https, [
+        $this->context_https = $this->context_http;
+        $this->setContextOptions($this->context_https, [
             'ssl_verify_peer' => 'verify_peer',
             'ssl_cafile'      => 'cafile',
             'ssl_capath'      => 'capath',
@@ -240,7 +240,7 @@ class Stream implements AdapterInterface
         ]);
     }
     
-    protected function setOptions(&$arr, $var_key)
+    protected function setContextOptions(&$arr, $var_key)
     {
         foreach ($var_key as $var => $key) {
             if ($this->options->$var) {
@@ -251,7 +251,7 @@ class Stream implements AdapterInterface
     
     protected function mustAuthenticate()
     {
-        preg_match('/HTTP\/(.+?) ([0-9]+)(.*)/i', $this->response_headers[0], $matches);
+        preg_match('/HTTP\/(.+?) ([0-9]+)(.*)/i', $this->headers[0], $matches);
         return $matches[2] == 401;
     }
     
@@ -270,7 +270,7 @@ class Stream implements AdapterInterface
         $auth = false;
         
         // Look for a `WWW-Authenticate` header.
-        foreach ($this->response_headers as $header) {
+        foreach ($this->headers as $header) {
             if (false !== strpos($header, 'WWW-Authenticate')) {
                 // Get the auth value and remove the double quotes
                 $auth = str_replace('"', '', trim(substr($header,18)));
@@ -355,7 +355,7 @@ class Stream implements AdapterInterface
             );
         }
 
-        $template = 'Digest username="%s", '
+        $template = 'username="%s", '
                   . 'realm="%s", '
                   . 'nonce="%s", '
                   . 'uri="%s", '

@@ -129,11 +129,13 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     //     unlink($file);
     // }
     
-    // public function testSendRequest()
-    // {
-    //     $request = $this->newRequest();
-    //     $request->setUrl('http://example.com');
-    //     $stack = $this->transport->sendRequest($request);
-    //     $this->assertTrue(true);
-    // }
+    public function testSendRequest()
+    {
+        $request = $this->newRequest();
+        $request->setUrl('http://example.com');
+        $this->transport->sendRequest($request);
+        
+        $this->assertSame($request, $this->adapter->request);
+        $this->assertSame($this->options, $this->adapter->options);
+    }
 }

@@ -1,8 +1,8 @@
 <?php
 namespace Aura\Http\Transport;
 
-use Aura\Http\Request;
-use Aura\Http\Response;
+use Aura\Http\Message\Request;
+use Aura\Http\Message\Response;
 
 interface TransportInterface
 {

@@ -1,10 +1,11 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Message;
 
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
+use Aura\Http\MessageTest;
 
 class ResponseTest extends MessageTest
 {

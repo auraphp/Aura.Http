@@ -5,9 +5,10 @@ use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Message\Request;
+use Aura\Http\Message\Response;
 use Aura\Http\MockAdapter as MockAdapter;
 use Aura\Http\MockPhpFunc as MockPhpFunc;
-use Aura\Http\Response;
 use Aura\Http\Transport\Options;
 
 class TransportTest extends \PHPUnit_Framework_TestCase

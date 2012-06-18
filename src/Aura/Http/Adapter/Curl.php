@@ -1,9 +1,9 @@
 <?php
 namespace Aura\Http\Adapter;
 
-use Aura\Http\Response\StackBuilder;
 use Aura\Http\Exception;
-use Aura\Http\Request;
+use Aura\Http\Message\Request;
+use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Transport\Options;
 
 class Curl implements AdapterInterface

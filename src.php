@@ -28,14 +28,12 @@ require_once __DIR__ . '/src/Aura/Http/Manager.php';
 
 require_once __DIR__ . '/src/Aura/Http/Message.php';
 require_once __DIR__ . '/src/Aura/Http/Message/Factory.php';
+require_once __DIR__ . '/src/Aura/Http/Message/Request.php';
+require_once __DIR__ . '/src/Aura/Http/Message/Response.php';
+require_once __DIR__ . '/src/Aura/Http/Message/Response/Stack.php';
+require_once __DIR__ . '/src/Aura/Http/Message/Response/StackBuilder.php';
 
 require_once __DIR__ . '/src/Aura/Http/PhpFunc.php';
-
-require_once __DIR__ . '/src/Aura/Http/Response.php';
-require_once __DIR__ . '/src/Aura/Http/Response/Stack.php';
-require_once __DIR__ . '/src/Aura/Http/Response/StackBuilder.php';
-
-require_once __DIR__ . '/src/Aura/Http/Request.php';
 
 require_once __DIR__ . '/src/Aura/Http/Transport/TransportInterface.php';
 require_once __DIR__ . '/src/Aura/Http/Transport.php';

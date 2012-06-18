@@ -1,9 +1,9 @@
 <?php
 namespace Aura\Http\Adapter;
 
-use Aura\Http\Response\StackBuilder;
 use Aura\Http\Exception;
-use Aura\Http\Request;
+use Aura\Http\Message\Request;
+use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Transport\Options;
 
 class Stream implements AdapterInterface
@@ -114,8 +114,14 @@ class Stream implements AdapterInterface
     protected function readStream()
     {
         // get the response content
-        $this->content = stream_get_contents($this->stream);
+        while (! feof($this->stream)) {
+            $this->content .= fread($this->stream, 8192);
+        }
+        
+        // get the metadata
         $meta = stream_get_meta_data($this->stream);
+        
+        // close the stream
         fclose($this->stream);
         
         // did it time out?
@@ -128,7 +134,7 @@ class Stream implements AdapterInterface
         // with readbuf.  cf. <http://darkain.livejournal.com/492112.html>
         $with_curlwrappers = isset($meta['wrapper_type'])
                           && strtolower($meta['wrapper_type']) == 'curl';
-                     
+        
         // get the headers
         if ($with_curlwrappers) {
             $this->headers = $meta['wrapper_data']['headers'];

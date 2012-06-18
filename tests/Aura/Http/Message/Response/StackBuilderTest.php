@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Http\Response;
+namespace Aura\Http\Message\Response;
 
 use Aura\Http\Message\Factory as MessageFactory;
 

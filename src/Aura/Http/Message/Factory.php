@@ -10,8 +10,8 @@ class Factory
 {
     protected $map = array(
         'message'  => 'Aura\Http\Message',
-        'request'  => 'Aura\Http\Request',
-        'response' => 'Aura\Http\Response',
+        'request'  => 'Aura\Http\Message\Request',
+        'response' => 'Aura\Http\Message\Response',
     );
     
     public function newInstance($type)

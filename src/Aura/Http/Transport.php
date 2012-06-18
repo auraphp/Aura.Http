@@ -4,6 +4,8 @@ namespace Aura\Http;
 use Aura\Http\Adapter\AdapterInterface;
 use Aura\Http\Transport\Options;
 use Aura\Http\Transport\TransportInterface;
+use Aura\Http\Message\Request;
+use Aura\Http\Message\Response;
 
 class Transport implements TransportInterface
 {

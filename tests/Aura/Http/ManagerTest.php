@@ -25,7 +25,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function test_request()
     {
         $request = $this->http->newRequest();
-        $this->assertInstanceOf('Aura\Http\Request', $request);
+        $this->assertInstanceOf('Aura\Http\Message\Request', $request);
         $this->http->send($request);
         $transport = $this->http->transport;
         $this->assertSame($request, $transport->request);
@@ -34,7 +34,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function test_response()
     {
         $response = $this->http->newResponse();
-        $this->assertInstanceOf('Aura\Http\Response', $response);
+        $this->assertInstanceOf('Aura\Http\Message\Response', $response);
         $this->http->send($response);
         $transport = $this->http->transport;
         $this->assertSame($response, $transport->response);

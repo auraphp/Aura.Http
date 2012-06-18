@@ -8,7 +8,7 @@
  */
 namespace Aura\Http\Adapter;
 
-use Aura\Http\Request;
+use Aura\Http\Message\Request;
 use Aura\Http\Transport\Options;
 
 /**

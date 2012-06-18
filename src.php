@@ -14,7 +14,6 @@ require_once __DIR__ . '/src/Aura/Http/Exception/InvalidUsername.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/NotWriteable.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/FileDoesNotExist.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/HeadersSent.php';
-require_once __DIR__ . '/src/Aura/Http/Exception/UnableToDecompressContent.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownAuthType.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMethod.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMessageType.php';

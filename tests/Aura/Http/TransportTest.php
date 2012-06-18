@@ -5,8 +5,8 @@ use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Header\Factory as HeaderFactory;
-use Aura\Http\MockAdapter as Adapter;
-use Aura\Http\MockPhpFunc as PhpFunc;
+use Aura\Http\MockAdapter as MockAdapter;
+use Aura\Http\MockPhpFunc as MockPhpFunc;
 use Aura\Http\Response;
 use Aura\Http\Transport\Options;
 
@@ -20,9 +20,9 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->phpfunc   = new PhpFunc;
+        $this->phpfunc   = new MockPhpFunc;
         $this->options   = new Options;
-        $this->adapter   = new Adapter;
+        $this->adapter   = new MockAdapter;
         
         $this->transport = new Transport(
             $this->phpfunc,

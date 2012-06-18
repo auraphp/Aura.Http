@@ -33,7 +33,7 @@ class StackBuilder
      * @return \Aura\Http\Response\Stack
      * 
      */
-    public function newInstance(array $headers, $content = null)
+    public function newInstance(array $headers, $content = null, $uri = null)
     {
         // a response stack
         $stack = new Stack;
@@ -75,7 +75,7 @@ class StackBuilder
             // is this a set-cookie header?
             if (strtolower($label) == 'set-cookie') {
                 // add the cookie
-                $cookie = $response->cookies->addFromString($value, $default_uri);
+                $cookie = $response->cookies->setFromString($value, $uri);
             } else {
                 // add the header
                 $response->headers->add($label, $value, false);

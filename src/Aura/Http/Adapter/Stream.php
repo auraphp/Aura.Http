@@ -70,12 +70,14 @@ class Stream implements AdapterInterface
             }
         }
         
-        // done!
+        // build a stack
         $stack = $this->stack_builder->newInstance(
             $this->response_headers,
-            $this->response_content
+            $this->response_content,
+            $this->request->uri
         );
         
+        // done!
         return $stack;
     }
     

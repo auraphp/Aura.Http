@@ -94,15 +94,6 @@ class Response extends Message
      */
     protected $status_text;
     
-    /** 
-     * 
-     * The HTTP version for this message.
-     * 
-     * @var string
-     * 
-     */
-    protected $version = '1.1';
-    
     /**
      * 
      * Constructor.

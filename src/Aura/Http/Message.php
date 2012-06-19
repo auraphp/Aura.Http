@@ -47,14 +47,14 @@ class Message
      */
     protected $headers;
     
-    /** 
+    /**
      * 
      * The HTTP version for this message.
      * 
      * @var string
      * 
      */
-    protected $version;
+    protected $version = '1.1';
     
     /**
      * 

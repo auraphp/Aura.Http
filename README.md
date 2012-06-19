@@ -167,7 +167,7 @@ You can then read the stack of request responses.
 Making a Request
 ----------------
 
-Making a GET request to Github to list Auras repositories in JSON format:
+Making a GET request to Github to list Aura's repositories in JSON format:
 
 ```php
 <?php

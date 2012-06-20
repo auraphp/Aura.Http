@@ -24,7 +24,7 @@ $response = $http->newResponse();
 Setting Content
 ---------------
 
-To set the content of the `Response`, use the `setContent()` method.
+To set the content of the `Response`, access the `$content` property.
 
 ```php
 <?php
@@ -32,7 +32,7 @@ $html = '<html>'
       . '<head><title>Test</title></head>'
       . '<body>Hello World!</body>'
       . '</html>';
-$response->setContent($html);
+$response->content->set($html);
 ```
 
 Setting Headers
@@ -150,29 +150,29 @@ Instantiation
 
 It takes two steps to build and send a request. First, you create a `Request`
 object and manipulate it, then you send it via the `Manager` (which itself
-uses a `Transport` and `Adapter` under-the-hood).
+uses a `Transport` and `Adapter` under the hood).
 
 
 ```php
 <?php
 
 $request = $http->newRequest();
-$request->setUrl('http://example.com');
+$request->setUri('http://example.com');
 $stack = $http->send($request);
 ```
 
 You can then read the stack of request responses.
 
 
-Making a Request
-----------------
+Making a GET Request
+--------------------
 
 Making a GET request to Github to list Aura's repositories in JSON format:
 
 ```php
 <?php
 // build the request
-$request->setUrl('http://github.com/api/v2/json/repos/show/auraphp');
+$request->setUri('http://github.com/api/v2/json/repos/show/auraphp');
 
 // send the request and get back a stack of responses
 $stack = $http->send($request);
@@ -186,14 +186,14 @@ responses including redirects, the stack order is last in first out. Each item
 in the stack is a `\Aura\Http\Request\Response` object.
 
 
-Submitting a Request
---------------------
+Making a POST Request
+---------------------
 
 ```php
 <?php    
-$stack = $request->setContent(['name' => 'value', 'foo' => ['bar']])
-                 ->setUrl('http://example.com/submit.php')
-                 ->setMethod('post');
+$stack = $request->content->set(['foo' => 'bar', 'baz' => 'dib'])
+                 ->setUri('http://example.com/submit.php')
+                 ->setMethod(Request::METHOD_POST);
 
 $stack = $http->send($request);
 ```
@@ -203,7 +203,7 @@ Downloading a File
 
 ```php
 <?php
-$request->setUrl('http://example.com/download.ext');
+$request->setUri('http://example.com/download.ext');
 $stack = $http->send($request);
 ```
 
@@ -215,7 +215,7 @@ is writeable by PHP as an argument.
 ```php
 <?php
 $request->saveTo('/a/path')
-        ->setUrl('http://example.com/download.ext');
+        ->setUri('http://example.com/download.ext');
                     
 // send the request and get back a stack of responses
 $stack = $http->send($request);
@@ -238,7 +238,7 @@ $content = [
 ];
             
 $response = $request->setContent($content)
-                    ->setUrl('http://example.com/submit.php');
+                    ->setUri('http://example.com/submit.php');
 
 $stack = $http->send($request);
 ```
@@ -248,11 +248,11 @@ Submitting Custom Content
 
 ```php
 <?php
-$json     = json_encode(['hello' => 'world']);
+$json = json_encode(['hello' => 'world']);
 
 $response = $request->setContent($json)
                     ->setHeader('Content-Type', 'application/json')
-                    ->setUrl('http://example.com/submit.php')
+                    ->setUri('http://example.com/submit.php')
                     ->setMethod('post');
 
 $stack = $http->send($request);
@@ -268,7 +268,7 @@ HTTP Basic:
 $request->setAuth(Request::AUTH_BASIC)
         ->setUsername('username')
         ->setPassword('password')
-        ->setUrl('http://example.com/private/index.php');
+        ->setUri('http://example.com/private/index.php');
 
 $stack = $http->send($request);
 ```
@@ -280,7 +280,7 @@ HTTP Digest:
 $request->setAuth(Request::AUTH_DIGEST)
         ->setUsername('username')
         ->setPassword('password')
-        ->setUrl('http://example.com/private/index.php');
+        ->setUri('http://example.com/private/index.php');
 
 $stack = $http->send($request);
 ```
@@ -298,13 +298,13 @@ in place this won't work):
 <?php
 $request->setCookieJar('/path/to/cookiejar')
         ->setContent(['usr_name' => 'name', 'usr_pass' => 'pass'])
-        ->setUrl('http://www.example.com/login')
+        ->setUri('http://www.example.com/login')
         ->setMethod('post');
 
 $stack = $http->send($request);
 
 $request->setCookieJar('/path/to/cookiejar')
-        ->setUrl('http://www.example.com/');
+        ->setUri('http://www.example.com/');
 ```
 
 

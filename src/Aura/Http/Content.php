@@ -28,6 +28,7 @@ class Content implements StreamInterface
     public function __toString()
     {
         $text = null;
+        $this->rewind();
         while (! $this->eof()) {
             $text .= $this->read();
         }

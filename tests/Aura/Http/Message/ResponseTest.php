@@ -1,6 +1,7 @@
 <?php
 namespace Aura\Http\Message;
 
+use Aura\Http\Content;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Cookie\Collection as Cookies;
@@ -13,7 +14,8 @@ class ResponseTest extends MessageTest
     {
         $this->message = new Response(
             new Headers(new HeaderFactory),
-            new Cookies(new CookieFactory)
+            new Cookies(new CookieFactory),
+            new Content(new Headers(new HeaderFactory))
         );
     }
     

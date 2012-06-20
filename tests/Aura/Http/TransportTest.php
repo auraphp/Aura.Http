@@ -36,7 +36,8 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     {
         $response = new Response(
             new Headers(new HeaderFactory),
-            new Cookies(new CookieFactory)
+            new Cookies(new CookieFactory),
+            new Content(new Headers(new HeaderFactory))
         );
         
         $response->headers->setAll([
@@ -48,7 +49,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             'value' => 'bar',
         ]);
         
-        $response->setContent('Hola Mundo!');
+        $response->content->set('Hola Mundo!');
         
         return $response;
     }
@@ -57,7 +58,8 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request(
             new Headers(new HeaderFactory),
-            new Cookies(new CookieFactory)
+            new Cookies(new CookieFactory),
+            new Content(new Headers(new HeaderFactory))
         );
         
         return $request;
@@ -156,7 +158,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
               . 'resource.txt';
         
         $fh = fopen($file, 'r');
-        $response->setContent($fh);
+        $response->content->set($fh);
         $this->transport->sendResponse($response);
         fclose($fh);
         

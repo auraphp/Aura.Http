@@ -54,7 +54,7 @@ class StackBuilderTest extends \PHPUnit_Framework_TestCase
             $name = $actual->name;
             $this->assertSame($expect[$name], $actual->value);
         }
-        $this->assertSame($this->content, $response->content);
+        $this->assertSame($this->content, $response->content->__toString());
         
         // the least-recent response
         $response = $stack[1];
@@ -70,6 +70,6 @@ class StackBuilderTest extends \PHPUnit_Framework_TestCase
         foreach ($response->headers as $i => $actual) {
             $this->assertTrue(in_array($actual->__toString(), $expect));
         }
-        $this->assertNull($response->content);
+        $this->assertSame('', $response->content->__toString());
     }
 }

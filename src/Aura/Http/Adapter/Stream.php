@@ -223,13 +223,22 @@ class Stream implements AdapterInterface
             $this->context_http['header'] = implode("\r\n", $this->context_headers);
         }
         
-        // only send content if we're POST or PUT
-        $content = $this->request->content;
+        // get the method
         $method  = $this->request->method;
-        $send_content = $method == Request::METHOD_POST
-                     || $method == Request::METHOD_PUT;
         
-        if ($send_content && ! empty($content)) {
+        // get the content.
+        // @todo Make this a curl callback so we can stream it out.
+        $content = null;
+        $this->request->content->rewind();
+        while (! $this->request->content->eof()) {
+            $content .= $this->request->content->read();
+        };
+        
+        // only send content if we're POST or PUT
+        $post_or_put = $method == Request::METHOD_POST
+                    || $method == Request::METHOD_PUT;
+        
+        if ($post_or_put && ! empty($content)) {
             $this->context_http['content'] = $content;
         }
     }

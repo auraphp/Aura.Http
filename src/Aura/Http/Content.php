@@ -1,22 +1,23 @@
 <?php
 namespace Aura\Http;
 
-use Aura\Http\Content\ContentInterface;
+use Aura\Http\Content\StreamInterface;
+use Aura\Http\Header\Collection as Headers;
 
-class Content implements ContentInterface
+class Content implements StreamInterface
 {
     protected $headers;
     
-    protected $content;
+    protected $storage;
     
     protected $eof = false;
     
     public function __construct(
-        HeaderCollection $headers,
-        $content = null
+        Headers $headers,
+        $storage = null
     ) {
         $this->headers = $headers;
-        $this->content = $content;
+        $this->storage = $storage;
     }
     
     public function __get($key)
@@ -24,49 +25,44 @@ class Content implements ContentInterface
         return $this->$key;
     }
     
-    public function getHeaders()
+    public function __toString()
     {
-        return $this->headers;
+        $text = null;
+        while (! $this->eof()) {
+            $text .= $this->read();
+        }
+        return $text;
     }
     
-    public function add($data)
+    public function setHeaders(Headers $headers)
     {
-        if (is_resource($this->content)) {
-            fwrite($this->content, $data);
-            return;
-        }
-        
-        if (is_scalar($this->content)) {
-            $this->content .= $data;
-            return;
-        }
-        
-        if (is_array($this->content)) {
-            $this->content = array_merge($this->content, $data);
-            return;
-        }
+        $this->headers = $headers;
+    }
+    
+    public function set($storage)
+    {
+        $this->storage = $storage;
     }
     
     public function get()
     {
-        return $this->content;
+        return $this->storage;
     }
     
     public function read()
     {
-        if (is_resource($this->content)) {
-            $data = fread($this->content, 8192);
-            $this->eof = feof($this->content);
-        }
-        
-        if (is_scalar($data)) {
-            $data = (string) $this->content;
+        if (is_resource($this->storage)) {
+            $data = fread($this->storage, 8192);
+            $this->eof = feof($this->storage);
+        } elseif (is_array($this->storage)) {
+            $data = http_build_query($this->storage);
             $this->eof = true;
-        }
-        
-        if (is_array($data)) {
-            $data = http_build_query($this->content);
-            $this->eof = feof($this->content);
+        } elseif ($this->storage instanceof StreamInterface) {
+            $data = $this->storage->read();
+            $this->eof = $this->storage->eof();
+        } else {
+            $data = (string) $this->storage;
+            $this->eof = true;
         }
         
         return $data;
@@ -79,9 +75,17 @@ class Content implements ContentInterface
     
     public function rewind()
     {
-        $this->eof = false;
-        if (is_resource($this->content)) {
-            rewind($this->content);
+        if (is_resource($this->storage)) {
+            rewind($this->storage);
+            $this->eof = false;
+        } elseif (is_array($this->storage)) {
+            reset($this->storage);
+            $this->eof = false;
+        } elseif ($this->storage instanceof StreamInterface) {
+            $this->storage->rewind();
+            $this->eof = $this->storage->eof();
+        } else {
+            $this->eof = false;
         }
     }
 }

@@ -1,10 +1,11 @@
 <?php
 namespace Aura\Http\Message;
 
-use Aura\Http\Header\Collection as Headers;
-use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Content;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
+use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\Factory as HeaderFactory;
 
 class Factory
 {
@@ -19,6 +20,7 @@ class Factory
         $class = $this->map[$type];
         $headers = new Headers(new HeaderFactory);
         $cookies = new Cookies(new CookieFactory);
-        return new $class($headers, $cookies);
+        $content = new Content(new Headers(new HeaderFactory));
+        return new $class($headers, $cookies, $content);
     }
 }

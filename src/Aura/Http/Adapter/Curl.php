@@ -32,10 +32,11 @@ class Curl implements AdapterInterface
      * 
      * Make the request, then return an array of headers and content.
      * 
-     * @param Request The request to send.
+     * @param Request $request The request to send.
      * 
-     * @return array A sequential array where element 0 is a sequential array of
-     * header lines, and element 1 is the body content.
+     * @param Options $options The transport options.
+     * 
+     * @return Aura\Http\Response\Stack
      * 
      * @todo Implement an exception for timeouts.
      * 
@@ -255,14 +256,22 @@ class Curl implements AdapterInterface
     
     protected function curlContent()
     {
+        // get the method
         $method  = $this->request->method;
-        $content = $this->request->content;
+        
+        // get the content.
+        // @todo Make this a curl callback so we can stream it out.
+        $content = '';
+        $this->request->content->rewind();
+        while (! $this->request->content->eof()) {
+            $content .= $this->request->content->read();
+        };
         
         // only send content if we're POST or PUT
-        $send_content = $method == Request::METHOD_POST
-                     || $method == Request::METHOD_PUT;
+        $post_or_put = $method == Request::METHOD_POST
+                    || $method == Request::METHOD_PUT;
         
-        if ($send_content && ! empty($content)) {
+        if ($post_or_put && ! empty($content)) {
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $content);
         }
     }

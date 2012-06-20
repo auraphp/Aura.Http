@@ -1,12 +1,8 @@
 <?php
 namespace Aura\Http\Content;
 
-interface ContentInterface
+interface StreamInterface
 {
-    public function get();
-    
-    public function add();
-    
     public function read();
     
     public function eof();

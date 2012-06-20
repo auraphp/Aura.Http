@@ -8,6 +8,7 @@
  */
 namespace Aura\Http;
 
+use Aura\Http\Content;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
 
@@ -65,10 +66,14 @@ class Message
      * @param Cookies $cookies A Cookies object.
      * 
      */
-    public function __construct(Headers $headers, Cookies $cookies)
-    {
+    public function __construct(
+        Headers $headers,
+        Cookies $cookies,
+        Content $content
+    ) {
         $this->headers = $headers;
         $this->cookies = $cookies;
+        $this->content = $content;
     }
     
     /**
@@ -114,15 +119,14 @@ class Message
     
     /**
      * 
-     * Sets the content of the message.
+     * Sets the content for the message.
      * 
-     * @param mixed $content The body content of the message. Note that this
-     * may be a resource, in which case it will be streamed out when sending.
+     * @param Content $content The content object.
      * 
      * @return void
      * 
      */
-    public function setContent($content)
+    public function setContent(Content $content)
     {
         $this->content = $content;
         return $this;
@@ -130,9 +134,9 @@ class Message
     
     /**
      * 
-     * Gets the content of the message.
+     * Returns the $content object.
      * 
-     * @return mixed The body content of the message.
+     * @return Content The Content object.
      * 
      */
     public function getContent()

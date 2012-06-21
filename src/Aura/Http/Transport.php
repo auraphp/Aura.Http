@@ -109,21 +109,12 @@ class Transport implements TransportInterface
             );
         }
         
-        // get the content
-        $content = $response->getContent();
-        
-        // is the content a stream?
-        $is_stream = $this->phpfunc->is_resource($content)
-                  && $this->phpfunc->get_resource_type($content) == 'stream';
-        
         // send the content
-        if ($is_stream) {
-            while (! $this->phpfunc->feof($content)) {
-                $text = $this->phpfunc->fread($content, 8192);
-                $this->phpfunc->output($text);
-            }
-        } else {
-            $this->phpfunc->output($content);
+        $content = $response->getContent();
+        $content->rewind();
+        while (! $content->eof()) {
+            $output = $content->read();
+            $this->phpfunc->output($output);
         }
     }
 }

@@ -243,6 +243,11 @@ class Curl implements AdapterInterface
             }
         }
         
+        // add headers from content object, if any
+        foreach ($this->request->content->getHeaders() as $header) {
+            $headers[] = $header->__toString();
+        }
+        
         // set remaining headers
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $headers);
         
@@ -252,6 +257,7 @@ class Curl implements AdapterInterface
             curl_setopt($this->curl, CURLOPT_COOKIE, $value);
             break;
         }
+        
     }
     
     protected function curlContent()

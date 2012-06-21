@@ -160,13 +160,17 @@ class Stream implements AdapterInterface
         $this->context_headers = [];
         
         // headers
-        foreach ($this->request->headers as $header) {
+        foreach ($this->request->getHeaders() as $header) {
             $this->context_headers[] = $header->__toString();
         }
-        $this->context_headers[] = 'Connection: close';
+        
+        // add headers from content object, if any
+        foreach ($this->request->content->getHeaders() as $header) {
+            $headers[] = $header->__toString();
+        }
         
         // cookies
-        $cookies = $this->request->cookies->__toString();
+        $cookies = $this->request->getCookies()->__toString();
         if ($cookies) {
             $this->context_headers[] = $cookies;
         }
@@ -182,6 +186,9 @@ class Stream implements AdapterInterface
             $credentials = $this->getDigestCredentials();
             $this->context_headers[] = "Authorization: Digest $credentials";
         }
+        
+        // always close the connection
+        $this->context_headers[] = 'Connection: close';
     }
     
     /**

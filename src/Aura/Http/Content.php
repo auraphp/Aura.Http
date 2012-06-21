@@ -20,11 +20,6 @@ class Content implements StreamInterface
         $this->storage = $storage;
     }
     
-    public function __get($key)
-    {
-        return $this->$key;
-    }
-    
     public function __toString()
     {
         $text = null;
@@ -33,11 +28,6 @@ class Content implements StreamInterface
             $text .= $this->read();
         }
         return $text;
-    }
-    
-    public function setHeaders(Headers $headers)
-    {
-        $this->headers = $headers;
     }
     
     public function set($storage)
@@ -50,6 +40,38 @@ class Content implements StreamInterface
         return $this->storage;
     }
     
+    public function setType($type, $charset = null)
+    {
+        if ($charset) {
+            $type .= "; charset={$charset}";
+        }
+        $this->headers->set('Content-Type', $type);
+    }
+    
+    public function setDisposition(
+        $disposition,
+        $name = null,
+        $filename = null
+    ) {
+        if ($name) {
+            $disposition .= "; name=\"{$name}\"";
+        }
+        if ($filename) {
+            $disposition .= "; filename=\"{$filename}\"";
+        }
+        $this->headers->set('Content-Disposition', $disposition);
+    }
+    
+    public function setTransferEncoding($transfer_encoding)
+    {
+        $this->headers->set('Content-Transfer-Encoding', $transfer_encoding);
+    }
+    
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+    
     public function read()
     {
         if (is_resource($this->storage)) {
@@ -58,9 +80,9 @@ class Content implements StreamInterface
         } elseif (is_array($this->storage)) {
             $data = http_build_query($this->storage);
             $this->eof = true;
-        } elseif ($this->storage instanceof StreamInterface) {
-            $data = $this->storage->read();
-            $this->eof = $this->storage->eof();
+        // } elseif ($this->storage instanceof StreamInterface) {
+        //     $data = $this->storage->read();
+        //     $this->eof = $this->storage->eof();
         } else {
             $data = (string) $this->storage;
             $this->eof = true;
@@ -82,9 +104,9 @@ class Content implements StreamInterface
         } elseif (is_array($this->storage)) {
             reset($this->storage);
             $this->eof = false;
-        } elseif ($this->storage instanceof StreamInterface) {
-            $this->storage->rewind();
-            $this->eof = $this->storage->eof();
+        // } elseif ($this->storage instanceof StreamInterface) {
+        //     $this->storage->rewind();
+        //     $this->eof = $this->storage->eof();
         } else {
             $this->eof = false;
         }

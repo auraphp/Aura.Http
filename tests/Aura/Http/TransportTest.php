@@ -50,6 +50,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         ]);
         
         $response->content->set('Hola Mundo!');
+        $response->content->setType('text/plain');
         
         return $response;
     }
@@ -88,6 +89,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             0 => 'HTTP/1.1 200 OK',
             1 => 'Foo: hello world',
             2 => 'Bar: hello world 2',
+            3 => 'Content-Type: text/plain',
         ];
         $this->assertSame($expect, $actual);
         
@@ -122,6 +124,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             0 => 'Status: 200 OK',
             1 => 'Foo: hello world',
             2 => 'Bar: hello world 2',
+            3 => 'Content-Type: text/plain',
         ];
         $this->assertSame($expect, $actual);
         

@@ -91,8 +91,13 @@ class Transport implements TransportInterface
         // send the status header
         $this->phpfunc->header($status, true, $response->status_code);
         
-        // send the non-cookie headers
+        // send the headers
         foreach ($response->getHeaders() as $header) {
+            $this->phpfunc->header($header->__toString());
+        }
+        
+        // send the content headers
+        foreach ($response->getContent()->getHeaders() as $header) {
             $this->phpfunc->header($header->__toString());
         }
         

@@ -82,10 +82,10 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $header->getValue());
     }
     
-    public function testTransferEncoding()
+    public function testSetEncoding()
     {
-        $this->content->setTransferEncoding('binary');
-        $header = $this->content->getHeaders()->get('Content-Transfer-Encoding');
+        $this->content->setEncoding('binary');
+        $header = $this->content->getHeaders()->get('Content-Encoding');
         $expect = 'binary';
         $this->assertSame($expect, $header->getValue());
     }

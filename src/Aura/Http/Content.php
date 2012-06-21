@@ -62,9 +62,13 @@ class Content implements StreamInterface
         $this->headers->set('Content-Disposition', $disposition);
     }
     
-    public function setTransferEncoding($transfer_encoding)
+    // HTTP, unlike MIME, does not use Content-Transfer-Encoding, and
+    // does use Transfer-Encoding and Content-Encoding.
+    // -- <http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.15>,
+    //    the "Note" at the end.
+    public function setEncoding($encoding)
     {
-        $this->headers->set('Content-Transfer-Encoding', $transfer_encoding);
+        $this->headers->set('Content-Encoding', $encoding);
     }
     
     public function getHeaders()

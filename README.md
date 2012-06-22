@@ -155,13 +155,15 @@ uses a `Transport` and `Adapter` under the hood).
 
 ```php
 <?php
-
 $request = $http->newRequest();
 $request->setUri('http://example.com');
 $stack = $http->send($request);
 ```
 
-You can then read the stack of request responses.
+You can then read the stack of responses. The `$stack` is an
+`Aura\Http\Message\Response\Stack` containing all the responses, including
+redirects. The stack order is last in first out. Each item in the stack is an
+`Aura\Http\Message\Response` object.
 
 
 Making a GET Request
@@ -171,6 +173,9 @@ Making a GET request to Github to list Aura's repositories in JSON format:
 
 ```php
 <?php
+// get a request object from the manager
+$request = $http->newRequest();
+
 // build the request
 $request->setUri('http://github.com/api/v2/json/repos/show/auraphp');
 
@@ -178,12 +183,8 @@ $request->setUri('http://github.com/api/v2/json/repos/show/auraphp');
 $stack = $http->send($request);
 
 // decode the most-recent response
-$repos = json_decode($stack[0]->getContent());
+$repos = json_decode($stack[0]->content);
 ```
-
-The `$stack` is a `Aura\Http\Request\ResponseStack` containing all the
-responses including redirects, the stack order is last in first out. Each item
-in the stack is a `\Aura\Http\Request\Response` object.
 
 
 Making a POST Request
@@ -191,15 +192,25 @@ Making a POST Request
 
 ```php
 <?php    
-$stack = $request->content->set(['foo' => 'bar', 'baz' => 'dib'])
-                 ->setUri('http://example.com/submit.php')
-                 ->setMethod(Request::METHOD_POST);
+// get a request object from the manager
+$request = $http->newRequest();
 
+// set the uri and method
+$request->setUri('http://example.com/submit.php');
+$request->setMethod(Request::METHOD_POST);
+
+// set the content to an array; this will be converted
+// using http_build_query() for you
+$request->content->set(['foo' => 'bar', 'baz' => 'dib'])
+
+// send the request and get the stack of responses
 $stack = $http->send($request);
 ```
  
 Downloading a File
 ------------------    
+
+In this example, the download is stored in memory:
 
 ```php
 <?php
@@ -207,34 +218,35 @@ $request->setUri('http://example.com/download.ext');
 $stack = $http->send($request);
 ```
 
-In the example above the download is stored in memory. For larger files you
-will probably want to save the download to disk as it is received. This is
-done using the `saveTo()` method and a full path to a file or directory that
-is writeable by PHP as an argument.
+For larger files you will probably want to save the download to disk as it is
+received. This is done using the `saveTo()` method and a full path to a file
+or directory that is writeable by PHP as an argument.
 
 ```php
 <?php
-$request->saveTo('/a/path')
-        ->setUri('http://example.com/download.ext');
-                    
+$request->setUri('http://example.com/download.ext')
+        ->saveTo('/path/to/downloads');
+
 // send the request and get back a stack of responses
 $stack = $http->send($request);
 ```
 
-When you save a file to disk `$stack[0]->getContent()` will return a file
+When you save a file to disk, `$stack[0]->content` will return a file
 resource.
+
 
 Submitting Custom Content
 -------------------------
 
 ```php
 <?php
-$json = json_encode(['hello' => 'world']);
+$request = $http->newRequest();
+$request->setUri('http://example.com/submit.php')
+$request->setMethod('post');
 
-$response = $request->setContent($json)
-                    ->setHeader('Content-Type', 'application/json')
-                    ->setUri('http://example.com/submit.php')
-                    ->setMethod('post');
+$json = json_encode(['hello' => 'world']);
+$request->content->set($json);
+$request->content->setType('application/json');
 
 $stack = $http->send($request);
 ```

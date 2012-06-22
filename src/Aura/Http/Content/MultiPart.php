@@ -1,31 +1,33 @@
 <?php
 namespace Aura\Http\Content;
 
-use Aura\Http\Content\AbstractContent;
-use Aura\Http\Content\Factory as ContentFactory;
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Content\ContentInterface;
+use Aura\Http\Content\PartFactory;
 
-class MultiPart extends AbstractContent
+class MultiPart implements ContentInterface
 {
+    protected $eof = false;
+    
     protected $parts = [];
     
     protected $boundary;
     
     protected $current;
     
-    public function __construct(
-        Headers $headers,
-        ContentFactory $content_factory
-    ) {
-        $this->headers = $headers;
-        $this->content_factory = $content_factory;
-        
-        $this->setBoundary(uniqid(null, true));
-        
-        $this->headers->set(
-            "Content-Type",
-            "multipart/form-data; boundary={$this->boundary}"
-        );
+    public function __construct(PartFactory $part_factory)
+    {
+        $this->part_factory = $part_factory;
+        $this->boundary = uniqid(null, true);
+    }
+    
+    public function __toString()
+    {
+        $string = null;
+        $this->rewind();
+        while (! $this->eof()) {
+            $string .= $this->read();
+        }
+        return $string;
     }
     
     public function getBoundary()
@@ -33,14 +35,9 @@ class MultiPart extends AbstractContent
         return $this->boundary;
     }
     
-    public function setBoundary($boundary)
-    {
-        $this->boundary = $boundary;
-    }
-    
     public function add()
     {
-        $part = $this->content_factory->newSinglePart();
+        $part = $this->part_factory->newInstance();
         $this->parts[] = $part;
         return $part;
     }
@@ -58,8 +55,13 @@ class MultiPart extends AbstractContent
         return $part;
     }
     
-    public function addFile($name, $filename, $value, $type = null, $encoding = null)
-    {
+    public function addFile(
+        $name,
+        $filename,
+        $value,
+        $type = null,
+        $encoding = null
+    ) {
         $part = $this->add();
         $part->setDisposition('form-data', $name, $filename);
         $part->set($value);
@@ -75,6 +77,11 @@ class MultiPart extends AbstractContent
         return $part;
     }
     
+    public function eof()
+    {
+        return $this->eof;
+    }
+    
     public function read()
     {
         // do we have a current part?
@@ -83,7 +90,7 @@ class MultiPart extends AbstractContent
             // pick the current part.
             $this->current = current($this->parts);
             
-            // now return the prolog for the part (includes boundary
+            // now return the prologue for the part (includes boundary
             // and headers)
             $text = "--{$this->boundary}\r\n"
                   . $this->current->getHeaders()->__toString()

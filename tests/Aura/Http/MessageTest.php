@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http;
 
-use Aura\Http\Content\SinglePart;
+use Aura\Http\Content;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Factory as HeaderFactory;
@@ -16,7 +16,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->message = new Message(
             new Headers(new HeaderFactory),
             new Cookies(new CookieFactory),
-            new SinglePart(new Headers(new HeaderFactory))
+            new Content
         );
     }
     
@@ -31,7 +31,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     
     public function testSetAndGetContent()
     {
-        $content = new SinglePart(new Headers(new HeaderFactory));
+        $content = new Content;
         $this->message->setContent($content);
         
         $this->assertSame($this->message->getContent(), $content);

@@ -4,9 +4,9 @@ require_once __DIR__ . '/src/Aura/Http/Adapter/Curl.php';
 require_once __DIR__ . '/src/Aura/Http/Adapter/Stream.php';
 
 require_once __DIR__ . '/src/Aura/Http/Content/ContentInterface.php';
-require_once __DIR__ . '/src/Aura/Http/Content/AbstractContent.php';
-require_once __DIR__ . '/src/Aura/Http/Content/Factory.php';
-require_once __DIR__ . '/src/Aura/Http/Content/SinglePart.php';
+require_once __DIR__ . '/src/Aura/Http/Content.php';
+require_once __DIR__ . '/src/Aura/Http/Content/Part.php';
+require_once __DIR__ . '/src/Aura/Http/Content/PartFactory.php';
 require_once __DIR__ . '/src/Aura/Http/Content/MultiPart.php';
 
 require_once __DIR__ . '/src/Aura/Http/Cookie.php';

@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http;
 
-use Aura\Http\Content\SinglePart;
+use Aura\Http\Content;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Collection as Headers;
@@ -38,7 +38,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         $response = new Response(
             new Headers(new HeaderFactory),
             new Cookies(new CookieFactory),
-            new SinglePart(new Headers(new HeaderFactory))
+            new Content
         );
         
         $response->headers->setAll([
@@ -51,7 +51,6 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         ]);
         
         $response->content->set('Hola Mundo!');
-        $response->content->setType('text/plain');
         
         return $response;
     }
@@ -61,7 +60,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         $request = new Request(
             new Headers(new HeaderFactory),
             new Cookies(new CookieFactory),
-            new SinglePart(new Headers(new HeaderFactory))
+            new Content
         );
         
         return $request;
@@ -90,7 +89,6 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             0 => 'HTTP/1.1 200 OK',
             1 => 'Foo: hello world',
             2 => 'Bar: hello world 2',
-            3 => 'Content-Type: text/plain',
         ];
         $this->assertSame($expect, $actual);
         
@@ -125,7 +123,6 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             0 => 'Status: 200 OK',
             1 => 'Foo: hello world',
             2 => 'Bar: hello world 2',
-            3 => 'Content-Type: text/plain',
         ];
         $this->assertSame($expect, $actual);
         

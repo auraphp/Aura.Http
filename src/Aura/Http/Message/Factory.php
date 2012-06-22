@@ -1,9 +1,9 @@
 <?php
 namespace Aura\Http\Message;
 
-use Aura\Http\Content\Factory as ContentFactory;
+use Aura\Http\Content;
 use Aura\Http\Content\Multipart;
-use Aura\Http\Content\SinglePart;
+use Aura\Http\Content\PartFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Collection as Headers;
@@ -16,50 +16,43 @@ class Factory
 {
     public function newMessage()
     {
-        list($headers, $cookies) = $this->newHeadersCookies();
-        $content = $this->newSinglePart();
+        $headers = new Headers(new HeaderFactory);
+        $cookies = new Cookies(new CookieFactory);
+        $content = new Content;
         return new Message($headers, $cookies, $content);
     }
     
     public function newRequest()
     {
-        list($headers, $cookies) = $this->newHeadersCookies();
-        $content = $this->newSinglePart();
+        $headers = new Headers(new HeaderFactory);
+        $cookies = new Cookies(new CookieFactory);
+        $content = new Content;
         return new Request($headers, $cookies, $content);
     }
     
     public function newRequestMultipart()
     {
-        list($headers, $cookies) = $this->newHeadersCookies();
-        $content = $this->newMultiPart();
+        // basic components
+        $headers = new Headers(new HeaderFactory);
+        $cookies = new Cookies(new CookieFactory);
+        $content = new MultiPart(new PartFactory);
+        
+        // preset the content-type on the headers using the boundary value
+        $boundary = $content->getBoundary();
+        $headers->set(
+            'Content-Type',
+            'multipart/form-data; boundary="{$boundary}"'
+        );
+        
+        // now create the request object
         return new Request($headers, $cookies, $content);
     }
     
     public function newResponse()
     {
-        list($headers, $cookies) = $this->newHeadersCookies();
-        $content = $this->newSinglePart();
+        $headers = new Headers(new HeaderFactory);
+        $cookies = new Cookies(new CookieFactory);
+        $content = new Content;
         return new Response($headers, $cookies, $content);
-    }
-    
-    protected function newHeadersCookies()
-    {
-        return [
-            new Headers(new HeaderFactory),
-            new Cookies(new CookieFactory),
-        ];
-    }
-    
-    protected function newSinglePart()
-    {
-        return new SinglePart(new Headers(new HeaderFactory));
-    }
-    
-    protected function newMultiPart()
-    {
-        return new MultiPart(
-            new Headers(new HeaderFactory),
-            new ContentFactory(new Headers(new HeaderFactory))
-        );
     }
 }

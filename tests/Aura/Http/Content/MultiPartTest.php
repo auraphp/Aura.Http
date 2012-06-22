@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Content;
 
-use Aura\Http\Content\Factory as ContentFactory;
+use Aura\Http\Content\PartFactory;
 
 class MultiPartTest extends \PHPUnit_Framework_TestCase
 {
@@ -9,20 +9,13 @@ class MultiPartTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $factory = new ContentFactory;
-        $this->content = $factory->newMultiPart();
+        $this->content = new MultiPart(new PartFactory);
     }
     
-    public function testSetAndGetBoundary()
+    public function testGetBoundary()
     {
-        // the initial boundary should be 23 chars
         $actual = strlen($this->content->getBoundary());
         $this->assertSame(23, $actual);
-        
-        // set and get a new boundary
-        $expect = uniqid(null, true);
-        $this->content->setBoundary($expect);
-        $this->assertSame($expect, $this->content->getBoundary());
     }
     
     public function testAddAndCount()
@@ -30,10 +23,10 @@ class MultiPartTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(0, $this->content->count());
         
         $part1 = $this->content->add();
-        $this->assertInstanceOf('Aura\Http\Content\SinglePart', $part1);
+        $this->assertInstanceOf('Aura\Http\Content\Part', $part1);
         
         $part2 = $this->content->add();
-        $this->assertInstanceOf('Aura\Http\Content\SinglePart', $part2);
+        $this->assertInstanceOf('Aura\Http\Content\Part', $part2);
         
         $this->assertNotSame($part1, $part2);
         

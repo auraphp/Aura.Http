@@ -1,22 +1,21 @@
 <?php
 namespace Aura\Http\Content;
 
-use Aura\Http\Content\AbstractContent;
+use Aura\Http\Content;
+use Aura\Http\Header\Collection as Headers;
 
-class SinglePart extends AbstractContent
+class Part extends Content
 {
-    protected $storage;
+    protected $headers;
     
-    protected $eof = false;
-    
-    public function set($storage)
+    public function __construct(Headers $headers)
     {
-        $this->storage = $storage;
+        $this->headers = $headers;
     }
     
-    public function get()
+    public function getHeaders()
     {
-        return $this->storage;
+        return $this->headers;
     }
     
     public function setType($type, $charset = null)
@@ -48,31 +47,5 @@ class SinglePart extends AbstractContent
     public function setEncoding($encoding)
     {
         $this->headers->set('Content-Encoding', $encoding);
-    }
-    
-    public function read()
-    {
-        if (is_resource($this->storage)) {
-            $data = fread($this->storage, 8192);
-            $this->eof = feof($this->storage);
-        } elseif (is_array($this->storage)) {
-            $data = http_build_query($this->storage);
-            $this->eof = true;
-        } else {
-            $data = (string) $this->storage;
-            $this->eof = true;
-        }
-        
-        return $data;
-    }
-    
-    public function rewind()
-    {
-        if (is_resource($this->storage)) {
-            rewind($this->storage);
-        } elseif (is_array($this->storage)) {
-            reset($this->storage);
-        }
-        $this->eof = false;
     }
 }

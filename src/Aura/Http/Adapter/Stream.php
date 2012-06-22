@@ -164,11 +164,6 @@ class Stream implements AdapterInterface
             $this->context_headers[] = $header->__toString();
         }
         
-        // add headers from content object, if any
-        foreach ($this->request->content->getHeaders() as $header) {
-            $headers[] = $header->__toString();
-        }
-        
         // cookies
         $cookies = $this->request->getCookies()->__toString();
         if ($cookies) {

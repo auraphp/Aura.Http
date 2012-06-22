@@ -96,11 +96,6 @@ class Transport implements TransportInterface
             $this->phpfunc->header($header->__toString());
         }
         
-        // send the content headers
-        foreach ($response->getContent()->getHeaders() as $header) {
-            $this->phpfunc->header($header->__toString());
-        }
-        
         // send the cookie headers
         foreach ($response->getCookies() as $cookie) {
             $this->phpfunc->setcookie(

@@ -224,25 +224,6 @@ $stack = $http->send($request);
 When you save a file to disk `$stack[0]->getContent()` will return a file
 resource.
 
-Uploading a File
-----------------
-
-```php
-<?php
-$content = [
-    'name' => 'value',
-    'file' => [
-        '@/a/path/file.ext',
-        '@/a/path/file2.ext',
-    ],
-];
-            
-$response = $request->setContent($content)
-                    ->setUri('http://example.com/submit.php');
-
-$stack = $http->send($request);
-```
-
 Submitting Custom Content
 -------------------------
 
@@ -307,6 +288,35 @@ $request->setCookieJar('/path/to/cookiejar')
         ->setUri('http://www.example.com/');
 ```
 
+Multipart Requests
+==================
+
+You can upload form data, including files, using a `MultiPart` request.
+
+```php
+<?php
+$request = $http->newRequestMultipart();
+$request->setUri('http://example.com/submit.php');
+$request->setMethod(Message\Request::METHOD_POST);
+
+// add data fields
+$request->content->addData('first_name', 'Bolivar');
+$request->content->addData('last_name', 'Shagnasty');
+
+// add file fields
+$file = '/path/to/headshot.jpg';
+$fh = fopen();
+$request->content->addFile(
+    'picture',          // field name
+    basename($file),    // file name
+    $fh,                // file handle
+    'image/jpeg'        // content type
+    'binary'            // encoding
+);
+
+$stack = $http->send($request);
+```
+
 
 Transport
 =========
@@ -315,10 +325,10 @@ Available Adapters
 ------------------
 
 Curl
-:    `Aura\Http\Request\Adapter\Curl`
+: `Aura\Http\Request\Adapter\Curl`
 
 Stream
-:    `Aura\Http\Request\Adapter\Stream`   
+: `Aura\Http\Request\Adapter\Stream`   
 
      Note: Stream is not suitable for uploading large files. When uploading
      files the entire file(s) is loaded into memory, this is due to a

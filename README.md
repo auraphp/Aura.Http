@@ -1,8 +1,9 @@
 Aura HTTP
 =========
 
-The Aura HTTP package provides objects to build and transport HTTP requests
-and responses.
+The Aura HTTP package provides objects to build and send HTTP requests and
+responses, including `multipart/form-data` requests, with streaming of file
+resources.
 
 
 Getting Started With Response
@@ -24,7 +25,7 @@ $response = $http->newResponse();
 Setting Content
 ---------------
 
-To set the content of the `Response`, access the `$content` property.
+To set and get the content of the `Response`, access the `$content` property.
 
 ```php
 <?php
@@ -33,6 +34,8 @@ $html = '<html>'
       . '<body>Hello World!</body>'
       . '</html>';
 $response->content->set($html);
+
+// use $response->content->get() to get the current content
 ```
 
 Setting Headers
@@ -64,6 +67,18 @@ $response->headers->setAll([
 Note that header labels are sanitized and normalized, so if you enter a label
 `header_foo` it will be retained as `Header-Foo`.
 
+To get an existing headers, use `$headers->get()`.
+
+```php
+<?php
+// set a header
+$reponse->headers->set('Content-Type', 'text/plain');
+
+// get a header
+$header = $reponse->headers->get('Content-Type');
+// $header->getLabel() is 'Content-Type'
+// $header->getValue() is 'text/plain'
+```
 
 Setting Cookies
 ---------------
@@ -320,8 +335,8 @@ $file = '/path/to/headshot.jpg';
 $fh = fopen();
 $request->content->addFile(
     'picture',          // field name
-    basename($file),    // file name
-    $fh,                // file handle
+    basename($file),    // file name the remote system will use
+    $fh,                // file handle, or the actual file contents
     'image/jpeg'        // content type
     'binary'            // encoding
 );

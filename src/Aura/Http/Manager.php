@@ -27,12 +27,17 @@ class Manager
     
     public function newRequest()
     {
-        return $this->message_factory->newInstance('request');
+        return $this->message_factory->newRequest();
+    }
+    
+    public function newRequestMultipart()
+    {
+        return $this->message_factory->newRequestMultipart();
     }
     
     public function newResponse()
     {
-        return $this->message_factory->newInstance('response');
+        return $this->message_factory->newResponse();
     }
     
     public function send(Message $message)

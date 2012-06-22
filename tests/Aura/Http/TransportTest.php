@@ -1,6 +1,7 @@
 <?php
 namespace Aura\Http;
 
+use Aura\Http\Content\SinglePart;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Header\Collection as Headers;
@@ -37,7 +38,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         $response = new Response(
             new Headers(new HeaderFactory),
             new Cookies(new CookieFactory),
-            new Content(new Headers(new HeaderFactory))
+            new SinglePart(new Headers(new HeaderFactory))
         );
         
         $response->headers->setAll([
@@ -60,7 +61,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
         $request = new Request(
             new Headers(new HeaderFactory),
             new Cookies(new CookieFactory),
-            new Content(new Headers(new HeaderFactory))
+            new SinglePart(new Headers(new HeaderFactory))
         );
         
         return $request;

@@ -8,7 +8,7 @@
  */
 namespace Aura\Http\Message;
 
-use Aura\Http\Content;
+use Aura\Http\Content\ContentInterface;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Exception;
 use Aura\Http\Header\Collection as Headers;
@@ -103,13 +103,13 @@ class Response extends Message
      * 
      * @param Cookies $cookies A Cookies object.
      * 
-     * @param Content $content A Content object.
+     * @param ContentInterface $content A Content object.
      * 
      */
     public function __construct(
         Headers $headers,
         Cookies $cookies,
-        Content $content
+        ContentInterface $content
     ) {
         parent::__construct($headers, $cookies, $content);
         $this->setStatusCode(200);

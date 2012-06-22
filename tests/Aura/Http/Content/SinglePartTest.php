@@ -1,19 +1,16 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Content;
 
-use Aura\Http\Header\Collection as Headers;
-use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Content\Factory as ContentFactory;
 
-class ContentTest extends \PHPUnit_Framework_TestCase
+class SinglePartTest extends \PHPUnit_Framework_TestCase
 {
     protected $content;
     
-    protected $headers;
-    
     protected function setUp()
     {
-        $this->headers = new Headers(new HeaderFactory);
-        $this->content = new Content($this->headers);
+        $factory = new ContentFactory;
+        $this->content = $factory->newSinglePart();
     }
     
     public function test__toString()
@@ -110,7 +107,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     
     public function testEofReadRewind_resource()
     {
-        $file = __DIR__ . DIRECTORY_SEPARATOR
+        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
               . '_files' . DIRECTORY_SEPARATOR
               . 'resource.txt';
         
@@ -128,10 +125,5 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->content->eof());
         
         fclose($fh);
-    }
-    
-    public function testEofReadRewind_streamInterface()
-    {
-        $this->markTestIncomplete('todo');
     }
 }

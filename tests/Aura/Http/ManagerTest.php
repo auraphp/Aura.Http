@@ -31,6 +31,17 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($request, $transport->request);
     }
     
+    public function test_requestMultipart()
+    {
+        $request = $this->http->newRequestMultipart();
+        $this->assertInstanceOf('Aura\Http\Message\Request', $request);
+        $content = $request->getContent();
+        $this->assertInstanceOf('Aura\Http\Content\Multipart', $content);
+        $this->http->send($request);
+        $transport = $this->http->transport;
+        $this->assertSame($request, $transport->request);
+    }
+    
     public function test_response()
     {
         $response = $this->http->newResponse();
@@ -42,7 +53,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     
     public function test_unknown()
     {
-        $message = $this->message_factory->newInstance('message');
+        $message = $this->message_factory->newMessage();
         $this->setExpectedException('Aura\Http\Exception\UnknownMessageType');
         $this->http->send($message);
     }

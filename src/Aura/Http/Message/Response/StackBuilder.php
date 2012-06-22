@@ -39,7 +39,7 @@ class StackBuilder
         $stack = new Stack;
         
         // have a new response available regardless
-        $response = $this->message_factory->newInstance('response');
+        $response = $this->message_factory->newResponse();
         
         // add headers
         foreach ($headers as $header) {
@@ -52,7 +52,7 @@ class StackBuilder
             if ($pos === false && $is_http) {
                 
                 // start a new response and add it to the stack
-                $response = $this->message_factory->newInstance('response');
+                $response = $this->message_factory->newResponse();
                 $stack->push($response);
                 
                 // set the version, status code, and status text in the response

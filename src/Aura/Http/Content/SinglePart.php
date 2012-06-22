@@ -1,34 +1,13 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Content;
 
-use Aura\Http\Content\StreamInterface;
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Content\AbstractContent;
 
-class Content implements StreamInterface
+class SinglePart extends AbstractContent
 {
-    protected $headers;
-    
     protected $storage;
     
     protected $eof = false;
-    
-    public function __construct(
-        Headers $headers,
-        $storage = null
-    ) {
-        $this->headers = $headers;
-        $this->storage = $storage;
-    }
-    
-    public function __toString()
-    {
-        $text = null;
-        $this->rewind();
-        while (! $this->eof()) {
-            $text .= $this->read();
-        }
-        return $text;
-    }
     
     public function set($storage)
     {
@@ -71,11 +50,6 @@ class Content implements StreamInterface
         $this->headers->set('Content-Encoding', $encoding);
     }
     
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-    
     public function read()
     {
         if (is_resource($this->storage)) {
@@ -84,9 +58,6 @@ class Content implements StreamInterface
         } elseif (is_array($this->storage)) {
             $data = http_build_query($this->storage);
             $this->eof = true;
-        // } elseif ($this->storage instanceof StreamInterface) {
-        //     $data = $this->storage->read();
-        //     $this->eof = $this->storage->eof();
         } else {
             $data = (string) $this->storage;
             $this->eof = true;
@@ -95,24 +66,13 @@ class Content implements StreamInterface
         return $data;
     }
     
-    public function eof()
-    {
-        return $this->eof;
-    }
-    
     public function rewind()
     {
         if (is_resource($this->storage)) {
             rewind($this->storage);
-            $this->eof = false;
         } elseif (is_array($this->storage)) {
             reset($this->storage);
-            $this->eof = false;
-        // } elseif ($this->storage instanceof StreamInterface) {
-        //     $this->storage->rewind();
-        //     $this->eof = $this->storage->eof();
-        } else {
-            $this->eof = false;
         }
+        $this->eof = false;
     }
 }

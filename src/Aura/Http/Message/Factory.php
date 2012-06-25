@@ -40,8 +40,8 @@ class Factory
         // preset the content-type on the headers using the boundary value
         $boundary = $content->getBoundary();
         $headers->set(
-            'Content-Type',
-            'multipart/form-data; boundary="{$boundary}"'
+            "Content-Type",
+            "multipart/form-data; boundary=\"{$boundary}\""
         );
         
         // now create the request object

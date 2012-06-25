@@ -84,7 +84,7 @@ class Response extends Message
      * @var int
      * 
      */
-    protected $status_code;
+    protected $status_code = 200;
     
     /**
      * 
@@ -93,27 +93,7 @@ class Response extends Message
      * @var string
      * 
      */
-    protected $status_text;
-    
-    /**
-     * 
-     * Constructor.
-     * 
-     * @param Headers $headers A Headers object.
-     * 
-     * @param Cookies $cookies A Cookies object.
-     * 
-     * @param ContentInterface $content A Content object.
-     * 
-     */
-    public function __construct(
-        Headers $headers,
-        Cookies $cookies,
-        ContentInterface $content
-    ) {
-        parent::__construct($headers, $cookies, $content);
-        $this->setStatusCode(200);
-    }
+    protected $status_text = 'OK';
     
     /**
      * 

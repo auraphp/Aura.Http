@@ -46,10 +46,10 @@ class Curl implements AdapterInterface
         $this->request = $request;
         $this->options = $options;
         
-        // create the handle and connect
+        // create the handle, then connect and read
         $this->setCurl();
         $this->connect();
-                
+        
         // build a stack
         $stack = $this->stack_builder->newInstance(
             $this->headers,
@@ -72,6 +72,7 @@ class Curl implements AdapterInterface
         $this->curlAuth();
         $this->curlHeaders();
         $this->curlContent();
+        $this->curlSave();
     }
     
     protected function connect()
@@ -88,18 +89,22 @@ class Curl implements AdapterInterface
             throw new Exception($text);
         }
         
-        // get the metadata and close the connection
-        $meta = curl_getinfo($this->curl);
+        // close the connection
         curl_close($this->curl);
         
-        // get the header lines from the response
-        $this->headers = explode(
-            "\r\n",
-            substr($response, 0, $meta['header_size'])
-        );
+        // convert headers to an array, removing the trailing blank lines
+        $this->headers = explode("\r\n", rtrim($this->headers));
         
-        // get the content portion from the response
-        $this->content = substr($response, $meta['header_size']);
+        // did we save the response to a file?
+        if ($this->save) {
+            // close the existing file handle ...
+            fclose($this->save);
+            // ... and re-open for reading as content
+            $this->content = fopen($this->request->getSaveToFile(), 'rb');
+        } else {
+            // the content is the response text
+            $this->content = $response;
+        }
     }
     
     protected function curlBasicOptions()
@@ -117,8 +122,15 @@ class Curl implements AdapterInterface
         // CURLOPT_MAXREDIRS is set).
         curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
         
-        // include the headers in the response
-        curl_setopt($this->curl, CURLOPT_HEADER, true);
+        // do not include headers in the content ...
+        curl_setopt($this->curl, CURLOPT_HEADER, false);
+        
+        // ... instead, save headers using a callback
+        curl_setopt(
+            $this->curl,
+            CURLOPT_HEADERFUNCTION,
+            [$this, 'saveHeaders']
+        );
         
         // return the transfer as a string instead of printing it
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
@@ -275,5 +287,35 @@ class Curl implements AdapterInterface
         if ($post_or_put && ! empty($content)) {
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $content);
         }
+    }
+    
+    protected function curlSave()
+    {
+        $file = $this->request->getSaveToFile();
+        if (! $file) {
+            return;
+        }
+        
+        // open a file handle for saving
+        $this->save = fopen($file, 'wb');
+        
+        // callback for saving response content
+        curl_setopt(
+            $this->curl,
+            CURLOPT_WRITEFUNCTION,
+            [$this, 'saveContent']
+        );
+    }
+    
+    public function saveHeaders($curl, $data)
+    {
+        $this->headers .= $data;
+        return strlen($data);
+    }
+    
+    public function saveContent($curl, $data)
+    {
+        fwrite($this->save, $data);
+        return strlen($data);
     }
 }

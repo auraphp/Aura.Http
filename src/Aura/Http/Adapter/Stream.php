@@ -70,6 +70,13 @@ class Stream implements AdapterInterface
             }
         }
         
+        // save to file?
+        $file = $this->request->getSaveToFile();
+        if ($file) {
+            file_put_contents($file, $this->content);
+            $this->content = fopen($file, 'rb');
+        }
+        
         // build a stack
         $stack = $this->stack_builder->newInstance(
             $this->headers,
@@ -92,7 +99,7 @@ class Stream implements AdapterInterface
         // connect to the uri (suppress errors and deal with them later)
         $uri = $this->request->uri;
         $level = error_reporting(0);
-        $this->stream = fopen($uri, 'r', false, $this->context);
+        $this->stream = fopen($uri, 'rb', false, $this->context);
         error_reporting($level);
         
         // did we hit any errors?

@@ -74,6 +74,8 @@ class Request extends Message
     
     protected $password;
     
+    protected $save_to_file;
+    
     /**
      * 
      * Sets the URI for the request.
@@ -169,5 +171,17 @@ class Request extends Message
     public function getCredentials()
     {
         return $this->username . ':' . $this->password;
+    }
+    
+    // transport should save response content to this file
+    public function setSaveToFile($file)
+    {
+        $this->save_to_file = $file;
+    }
+    
+    // the file where response content should be saved to
+    public function getSaveToFile()
+    {
+        return $this->save_to_file;
     }
 }

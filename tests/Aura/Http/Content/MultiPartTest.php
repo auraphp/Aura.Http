@@ -5,37 +5,37 @@ use Aura\Http\Content\PartFactory;
 
 class MultiPartTest extends \PHPUnit_Framework_TestCase
 {
-    protected $content;
+    protected $multipart;
     
     protected function setUp()
     {
-        $this->content = new MultiPart(new PartFactory);
+        $this->multipart = new MultiPart(new PartFactory);
     }
     
     public function testGetBoundary()
     {
-        $actual = strlen($this->content->getBoundary());
+        $actual = strlen($this->multipart->getBoundary());
         $this->assertSame(23, $actual);
     }
     
     public function testAddAndCount()
     {
-        $this->assertSame(0, $this->content->count());
+        $this->assertSame(0, $this->multipart->count());
         
-        $part1 = $this->content->add();
+        $part1 = $this->multipart->add();
         $this->assertInstanceOf('Aura\Http\Content\Part', $part1);
         
-        $part2 = $this->content->add();
+        $part2 = $this->multipart->add();
         $this->assertInstanceOf('Aura\Http\Content\Part', $part2);
         
         $this->assertNotSame($part1, $part2);
         
-        $this->assertSame(2, $this->content->count());
+        $this->assertSame(2, $this->multipart->count());
     }
     
     public function testAddData()
     {
-        $part = $this->content->addData('field_name', 'field_value');
+        $part = $this->multipart->addData('field_name', 'field_value');
         
         // check the disposition
         $expect = 'form-data; name="field_name"';
@@ -44,98 +44,42 @@ class MultiPartTest extends \PHPUnit_Framework_TestCase
         
         // check the content
         $expect = 'field_value';
-        $actual = $part->get();
+        $actual = $part->getContent();
         $this->assertSame($expect, $actual);
     }
     
     public function testAddFile()
     {
-        $part = $this->content->addFile(
-            'field_name',
-            'image.png',
-            'binary_picture_data',
-            'image/png',
-            'binary'
-        );
+        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
+              . '_files' . DIRECTORY_SEPARATOR
+              . 'resource.txt';
+        
+        $part = $this->multipart->addFile('field_name', $file);
         
         // check the disposition
-        $expect = 'form-data; name="field_name"; filename="image.png"';
+        $expect = 'form-data; name="field_name"; filename="resource.txt"';
         $actual = $part->getHeaders()->get('Content-Disposition');
         $this->assertSame($expect, $actual->getValue());
         
-        // check the type
-        $expect = 'image/png';
-        $actual = $part->getHeaders()->get('Content-Type');
-        $this->assertSame($expect, $actual->getValue());
-        
-        // check the encoding
-        $expect = 'binary';
-        $actual = $part->getHeaders()->get('Content-Encoding');
-        $this->assertSame($expect, $actual->getValue());
-        
         // check the content
-        $expect = 'binary_picture_data';
-        $actual = $part->get();
+        $expect = 'Hello Resource';
+        $actual = $part->getContent();
         $this->assertSame($expect, $actual);
-    }
-    
-    public function testEofReadRewind()
-    {
-        // add two data fields and a file upload
-        $this->content->addData('foo', 'bar');
-        $this->content->addData('baz', 'dib');
-        $this->content->addFile('zim', 'gir.png', 'gir-binary-data', 'image/png', 'binary');
-        
-        // not eof yet
-        $this->assertFalse($this->content->eof());
-        
-        // what we expect
-        $boundary = $this->content->getBoundary();
-        $expect[] = "--{$boundary}";
-        $expect[] = 'Content-Disposition: form-data; name="foo"';
-        $expect[] = '';
-        $expect[] = 'bar';
-        $expect[] = "--{$boundary}";
-        $expect[] = 'Content-Disposition: form-data; name="baz"';
-        $expect[] = '';
-        $expect[] = 'dib';
-        $expect[] = "--{$boundary}";
-        $expect[] = 'Content-Disposition: form-data; name="zim"; filename="gir.png"';
-        $expect[] = 'Content-Type: image/png';
-        $expect[] = 'Content-Encoding: binary';
-        $expect[] = '';
-        $expect[] = 'gir-binary-data';
-        $expect[] = "--{$boundary}--";
-        $expect[] = '';
-        $expect = implode("\r\n", $expect);
-        
-        // read the whole thing
-        $this->content->rewind();
-        $actual = null;
-        while (! $this->content->eof()) {
-            $actual .= $this->content->read();
-        }
-        
-        // do they match?
-        $this->assertSame($expect, $actual);
-        
-        // we should be at the end
-        $this->assertTrue($this->content->eof());
-        
-        // rewind and make sure we're not at the end any more
-        $this->content->rewind();
-        $this->assertFalse($this->content->eof());
     }
     
     public function test__toString()
     {
+        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
+              . '_files' . DIRECTORY_SEPARATOR
+              . 'resource.txt';
+        
         // add two data fields and a file upload
-        $this->content->addData('foo', 'bar');
-        $this->content->addData('baz', 'dib');
-        $this->content->addFile('zim', 'gir.png', 'gir-binary-data', 'image/png', 'binary');
+        $this->multipart->addData('foo', 'bar');
+        $this->multipart->addData('baz', 'dib');
+        $this->multipart->addFile('zim', $file);
         
         // what we expect
-        $boundary = $this->content->getBoundary();
+        $boundary = $this->multipart->getBoundary();
         $expect[] = "--{$boundary}";
         $expect[] = 'Content-Disposition: form-data; name="foo"';
         $expect[] = '';
@@ -145,17 +89,15 @@ class MultiPartTest extends \PHPUnit_Framework_TestCase
         $expect[] = '';
         $expect[] = 'dib';
         $expect[] = "--{$boundary}";
-        $expect[] = 'Content-Disposition: form-data; name="zim"; filename="gir.png"';
-        $expect[] = 'Content-Type: image/png';
-        $expect[] = 'Content-Encoding: binary';
+        $expect[] = 'Content-Disposition: form-data; name="zim"; filename="resource.txt"';
         $expect[] = '';
-        $expect[] = 'gir-binary-data';
+        $expect[] = 'Hello Resource';
         $expect[] = "--{$boundary}--";
         $expect[] = '';
         $expect = implode("\r\n", $expect);
         
         // read the whole thing
-        $actual = $this->content->__toString();
+        $actual = $this->multipart->__toString();
         $this->assertSame($expect, $actual);
     }
 }

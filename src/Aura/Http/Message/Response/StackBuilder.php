@@ -83,7 +83,7 @@ class StackBuilder
         }
         
         // set the content on the current (last) response in the stack
-        $response->content->set($content);
+        $response->setContent($content);
         
         // done!
         return $stack;

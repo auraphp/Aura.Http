@@ -4,13 +4,25 @@ namespace Aura\Http\Content;
 use Aura\Http\Content;
 use Aura\Http\Header\Collection as Headers;
 
-class Part extends Content
+class Part
 {
     protected $headers;
+    
+    protected $content;
     
     public function __construct(Headers $headers)
     {
         $this->headers = $headers;
+    }
+    
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+    
+    public function getContent()
+    {
+        return $this->content;
     }
     
     public function getHeaders()

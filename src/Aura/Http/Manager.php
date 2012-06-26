@@ -30,11 +30,6 @@ class Manager
         return $this->message_factory->newRequest();
     }
     
-    public function newRequestMultipart()
-    {
-        return $this->message_factory->newRequestMultipart();
-    }
-    
     public function newResponse()
     {
         return $this->message_factory->newResponse();

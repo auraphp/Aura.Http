@@ -8,10 +8,7 @@
  */
 namespace Aura\Http\Message;
 
-use Aura\Http\Content\ContentInterface;
-use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Exception;
-use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Message;
 
 /**

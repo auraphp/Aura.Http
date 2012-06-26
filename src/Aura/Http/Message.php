@@ -8,7 +8,6 @@
  */
 namespace Aura\Http;
 
-use Aura\Http\Content\ContentInterface;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
 
@@ -34,7 +33,7 @@ class Message
      * 
      * The content of this message.
      * 
-     * @var string
+     * @var mixed
      * 
      */
     protected $content;
@@ -66,14 +65,10 @@ class Message
      * @param Cookies $cookies A Cookies object.
      * 
      */
-    public function __construct(
-        Headers $headers,
-        Cookies $cookies,
-        ContentInterface $content
-    ) {
+    public function __construct(Headers $headers, Cookies $cookies)
+    {
         $this->headers = $headers;
         $this->cookies = $cookies;
-        $this->content = $content;
     }
     
     /**
@@ -121,12 +116,12 @@ class Message
      * 
      * Sets the content for the message.
      * 
-     * @param ContentInterface $content The content object.
+     * @param mixed The content for the message.
      * 
      * @return void
      * 
      */
-    public function setContent(ContentInterface $content)
+    public function setContent($content)
     {
         $this->content = $content;
         return $this;
@@ -136,7 +131,7 @@ class Message
      * 
      * Returns the $content object.
      * 
-     * @return ContentInterface The Content object.
+     * @return mixed The content for the message.
      * 
      */
     public function getContent()

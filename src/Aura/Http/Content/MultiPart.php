@@ -1,18 +1,13 @@
 <?php
 namespace Aura\Http\Content;
 
-use Aura\Http\Content\ContentInterface;
 use Aura\Http\Content\PartFactory;
 
-class MultiPart implements ContentInterface
+class MultiPart
 {
-    protected $eof = false;
-    
     protected $parts = [];
     
     protected $boundary;
-    
-    protected $current;
     
     public function __construct(PartFactory $part_factory)
     {
@@ -22,17 +17,51 @@ class MultiPart implements ContentInterface
     
     public function __toString()
     {
-        $string = null;
-        $this->rewind();
-        while (! $this->eof()) {
-            $string .= $this->read();
+        $text = '';
+        foreach ($this->parts as $part) {
+            $text .= "--{$this->boundary}\r\n"
+                   . $part->getHeaders()->__toString()
+                   . "\r\n\r\n"
+                   . $part->getContent()
+                   . "\r\n";
         }
-        return $string;
+        $text .= "--{$this->boundary}--\r\n";
+        return $text;
     }
     
     public function getBoundary()
     {
         return $this->boundary;
+    }
+    
+    public function count()
+    {
+        return count($this->parts);
+    }
+    
+    public function setFromArray(array $array, $prefix = null)
+    {
+        $this->parts = [];
+        foreach ($array as $name => $value) {
+            
+            // prefix the name if needed
+            if ($prefix) {
+                $name = $prefix . '[' . $name . ']';
+            }
+            
+            // add parts
+            if (is_array($value)) {
+                // recursively descend
+                $this->addFromArray($value, $name);
+            } elseif ($value{0} == '@') {
+                // treat as a file upload
+                $file = substr($value, 1);
+                $this->addFile($name, $file);
+            } else {
+                // treat as string data
+                $this->addData($name, $value);
+            }
+        }
     }
     
     public function add()
@@ -42,89 +71,20 @@ class MultiPart implements ContentInterface
         return $part;
     }
     
-    public function count()
-    {
-        return count($this->parts);
-    }
-    
-    public function addData($name, $value)
+    public function addData($name, $string)
     {
         $part = $this->add();
         $part->setDisposition('form-data', $name);
-        $part->set($value);
+        $part->setContent($string);
         return $part;
     }
     
-    public function addFile(
-        $name,
-        $filename,
-        $value,
-        $type = null,
-        $encoding = null
-    ) {
+    public function addFile($name, $file)
+    {
         $part = $this->add();
+        $filename = basename($file);
         $part->setDisposition('form-data', $name, $filename);
-        $part->set($value);
-        
-        if ($type) {
-            $part->setType($type);
-        }
-        
-        if ($encoding) {
-            $part->setEncoding($encoding);
-        }
-        
+        $part->setContent(file_get_contents($file));
         return $part;
-    }
-    
-    public function eof()
-    {
-        return $this->eof;
-    }
-    
-    public function read()
-    {
-        // do we have a current part?
-        if (! $this->current) {
-            // we have not started reading yet.
-            // pick the current part.
-            $this->current = current($this->parts);
-            
-            // now return the prologue for the part (includes boundary
-            // and headers)
-            $text = "--{$this->boundary}\r\n"
-                  . $this->current->getHeaders()->__toString()
-                  . "\r\n\r\n";
-            return $text;
-        }
-        
-        // read from the current part until it ends
-        if (! $this->current->eof()) {
-            return $this->current->read();
-        }
-        
-        // this part is ended
-        $this->current = null;
-        
-        // move to the next part, if there is one
-        $this->eof = ! (bool) next($this->parts);
-        
-        // are we at the end of parts?
-        if ($this->eof) {
-            // there is no next part
-            return "\r\n--{$this->boundary}--\r\n";
-        } else {
-            // there is a next part
-            return "\r\n";
-        }
-    }
-    
-    public function rewind()
-    {
-        $this->eof = false;
-        foreach ($this->parts as $part) {
-            $part->rewind();
-        }
-        reset($this->parts);
     }
 }

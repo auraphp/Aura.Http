@@ -6,6 +6,14 @@ use Aura\Http\Message\Request;
 use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Transport\Options;
 
+        // // preset the content-type on the headers using the boundary value
+        // $boundary = $content->getBoundary();
+        // $headers->set(
+        //     "Content-Type",
+        //     "multipart/form-data; boundary=\"{$boundary}\""
+        // );
+        // 
+
 class Stream implements AdapterInterface
 {
     protected $stack_builder;

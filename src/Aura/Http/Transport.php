@@ -88,7 +88,7 @@ class Transport implements TransportInterface
             $status .= " {$status_text}";
         }
         
-        // send the status header
+        // send the status
         $this->phpfunc->header($status, true, $response->status_code);
         
         // send the headers
@@ -96,7 +96,7 @@ class Transport implements TransportInterface
             $this->phpfunc->header($header->__toString());
         }
         
-        // send the cookie headers
+        // send the cookies
         foreach ($response->getCookies() as $cookie) {
             $this->phpfunc->setcookie(
                 $cookie->getName(),
@@ -111,10 +111,14 @@ class Transport implements TransportInterface
         
         // send the content
         $content = $response->getContent();
-        $content->rewind();
-        while (! $content->eof()) {
-            $output = $content->read();
-            $this->phpfunc->output($output);
+        if (is_array($content)) {
+            $this->phpfunc->output(http_build_query($content));
+        } elseif (is_resource($content)) {
+            while (! feof($content)) {
+                $this->phpfunc->output(fread($content, 8192));
+            }
+        } else {
+            $this->phpfunc->output($content);
         }
     }
 }

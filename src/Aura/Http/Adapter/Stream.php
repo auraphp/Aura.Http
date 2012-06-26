@@ -7,7 +7,7 @@ use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Transport\Options;
 
         // // preset the content-type on the headers using the boundary value
-        // $boundary = $content->getBoundary();
+        // $boundary = $form_data->getBoundary();
         // $headers->set(
         //     "Content-Type",
         //     "multipart/form-data; boundary=\"{$boundary}\""

@@ -20,6 +20,8 @@ class Curl implements AdapterInterface
     
     protected $curl;
     
+    protected $save;
+    
     public function __construct(StackBuilder $stack_builder)
     {
         if (! extension_loaded('curl')) {
@@ -264,27 +266,34 @@ class Curl implements AdapterInterface
             curl_setopt($this->curl, CURLOPT_COOKIE, $value);
             break;
         }
-        
     }
     
     protected function curlContent()
     {
-        // get the method
-        $method  = $this->request->method;
+        curl_setopt($this->curl, CURLOPT_VERBOSE, true);
         
-        // get the content.
-        // @todo Make this a curl callback so we can stream it out.
-        $content = '';
-        $this->request->content->rewind();
-        while (! $this->request->content->eof()) {
-            $content .= $this->request->content->read();
-        };
+        // get the content
+        $content = $this->request->content;
         
-        // only send content if we're POST or PUT
+        // send only if non-empty
+        if (! $content) {
+            return;
+        }
+        
+        // send only for POST or PUT
+        $method = $this->request->method;
         $post_or_put = $method == Request::METHOD_POST
                     || $method == Request::METHOD_PUT;
+        if (! $post_or_put) {
+            return;
+        }
         
-        if ($post_or_put && ! empty($content)) {
+        // what kind of content?
+        if (is_resource($content)) {
+            // a file resource
+            curl_setopt($this->curl, CURLOPT_INFILE, $content);
+        } else {
+            // anything else
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $content);
         }
     }

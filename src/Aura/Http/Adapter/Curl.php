@@ -111,9 +111,6 @@ class Curl implements AdapterInterface
     
     protected function curlBasicOptions()
     {
-        // convert Unix newlines to CRLF newlines on transfers.
-        curl_setopt($this->curl, CURLOPT_CRLF, true);
-        
         // automatically set the Referer: field in requests where it
         // follows a Location: redirect.
         curl_setopt($this->curl, CURLOPT_AUTOREFERER, true);

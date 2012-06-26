@@ -1,7 +1,6 @@
 <?php
-namespace Aura\Http\Content;
+namespace Aura\Http\Multipart;
 
-use Aura\Http\Content;
 use Aura\Http\Header\Collection as Headers;
 
 class Part

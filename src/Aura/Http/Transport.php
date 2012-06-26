@@ -111,9 +111,7 @@ class Transport implements TransportInterface
         
         // send the content
         $content = $response->getContent();
-        if (is_array($content)) {
-            $this->phpfunc->output(http_build_query($content));
-        } elseif (is_resource($content)) {
+        if (is_resource($content)) {
             while (! feof($content)) {
                 $this->phpfunc->output(fread($content, 8192));
             }

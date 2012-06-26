@@ -1,9 +1,9 @@
 <?php
-namespace Aura\Http\Content;
+namespace Aura\Http\Multipart;
 
-use Aura\Http\Content\PartFactory;
+use Aura\Http\Multipart\PartFactory;
 
-class MultiPart
+class FormData
 {
     protected $parts = [];
     
@@ -39,9 +39,8 @@ class MultiPart
         return count($this->parts);
     }
     
-    public function setFromArray(array $array, $prefix = null)
+    public function addFromArray(array $array, $prefix = null)
     {
-        $this->parts = [];
         foreach ($array as $name => $value) {
             
             // prefix the name if needed

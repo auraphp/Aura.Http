@@ -1,8 +1,7 @@
 <?php
-namespace Aura\Http\Content;
+namespace Aura\Http\Multipart;
 
-use Aura\Http\ContentTest;
-use Aura\Http\Content\PartFactory;
+use Aura\Http\Multipart\PartFactory;
 
 class PartTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,9 +3,9 @@ require_once __DIR__ . '/src/Aura/Http/Adapter/AdapterInterface.php';
 require_once __DIR__ . '/src/Aura/Http/Adapter/Curl.php';
 require_once __DIR__ . '/src/Aura/Http/Adapter/Stream.php';
 
-require_once __DIR__ . '/src/Aura/Http/Content/Part.php';
-require_once __DIR__ . '/src/Aura/Http/Content/PartFactory.php';
-require_once __DIR__ . '/src/Aura/Http/Content/MultiPart.php';
+require_once __DIR__ . '/src/Aura/Http/Multipart/Part.php';
+require_once __DIR__ . '/src/Aura/Http/Multipart/PartFactory.php';
+require_once __DIR__ . '/src/Aura/Http/Multipart/FormData.php';
 
 require_once __DIR__ . '/src/Aura/Http/Cookie.php';
 require_once __DIR__ . '/src/Aura/Http/Cookie/Collection.php';

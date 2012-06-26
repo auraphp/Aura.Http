@@ -327,8 +327,8 @@ $request->setUri('http://example.com/submit.php');
 $request->setMethod(Message\Request::METHOD_POST);
 
 // add data fields
-$request->content->addData('first_name', 'Bolivar');
-$request->content->addData('last_name', 'Shagnasty');
+$request->content->addString('first_name', 'Bolivar');
+$request->content->addString('last_name', 'Shagnasty');
 
 // add file fields
 $file = '/path/to/headshot.jpg';

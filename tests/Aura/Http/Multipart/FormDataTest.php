@@ -33,9 +33,9 @@ class FormDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(2, $this->form_data->count());
     }
     
-    public function testAddData()
+    public function testaddString()
     {
-        $part = $this->form_data->addData('field_name', 'field_value');
+        $part = $this->form_data->addString('field_name', 'field_value');
         
         // check the disposition
         $expect = 'form-data; name="field_name"';
@@ -74,8 +74,8 @@ class FormDataTest extends \PHPUnit_Framework_TestCase
               . 'resource.txt';
         
         // add two data fields and a file upload
-        $this->form_data->addData('foo', 'bar');
-        $this->form_data->addData('baz', 'dib');
+        $this->form_data->addString('foo', 'bar');
+        $this->form_data->addString('baz', 'dib');
         $this->form_data->addFile('zim', $file);
         
         // what we expect

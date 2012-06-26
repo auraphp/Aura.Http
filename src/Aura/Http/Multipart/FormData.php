@@ -58,7 +58,7 @@ class FormData
                 $this->addFile($name, $file);
             } else {
                 // treat as string data
-                $this->addData($name, $value);
+                $this->addString($name, $value);
             }
         }
     }
@@ -70,7 +70,7 @@ class FormData
         return $part;
     }
     
-    public function addData($name, $string)
+    public function addString($name, $string)
     {
         $part = $this->add();
         $part->setDisposition('form-data', $name);

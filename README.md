@@ -33,7 +33,7 @@ $html = '<html>'
       . '<head><title>Test</title></head>'
       . '<body>Hello World!</body>'
       . '</html>';
-$response->content->set($html);
+$response->setContent($html);
 
 // use $response->content->get() to get the current content
 ```
@@ -216,7 +216,7 @@ $request->setMethod(Request::METHOD_POST);
 
 // set the content to an array; this will be converted
 // using http_build_query() for you
-$request->content->set(['foo' => 'bar', 'baz' => 'dib'])
+$request->setContent(['foo' => 'bar', 'baz' => 'dib'])
 
 // send the request and get the stack of responses
 $stack = $http->send($request);
@@ -260,8 +260,8 @@ $request->setUri('http://example.com/submit.php')
 $request->setMethod('post');
 
 $json = json_encode(['hello' => 'world']);
-$request->content->set($json);
-$request->content->setType('application/json');
+$request->setContent($json);
+$request->headers->set('Content-Type', 'application/json');
 
 $stack = $http->send($request);
 ```

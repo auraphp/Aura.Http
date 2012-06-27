@@ -22,7 +22,8 @@ if (extension_loaded('curl')) {
             // use stream adapter for transport
             new Adapter\Stream(
                 new Message\Response\StackBuilder(new Message\Factory),
-                new Multipart\FormData(new Multipart\PartFactory)
+                new Multipart\FormData(new Multipart\PartFactory),
+                new Cookie\JarFactory,
             )
         )
     );

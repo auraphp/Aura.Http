@@ -11,6 +11,7 @@ require_once __DIR__ . '/src/Aura/Http/Cookie.php';
 require_once __DIR__ . '/src/Aura/Http/Cookie/Collection.php';
 require_once __DIR__ . '/src/Aura/Http/Cookie/Factory.php';
 require_once __DIR__ . '/src/Aura/Http/Cookie/Jar.php';
+require_once __DIR__ . '/src/Aura/Http/Cookie/JarFactory.php';
 
 require_once __DIR__ . '/src/Aura/Http/Exception.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/ConnectionFailed.php';

@@ -20,7 +20,7 @@ class PhpFunc
         echo $text;
     }
     
-    public function headers_sent(&$file, &$line = null)
+    public function headers_sent(&$file, &$line)
     {
         return headers_sent($file, $line);
     }

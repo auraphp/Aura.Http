@@ -61,7 +61,7 @@ class Response extends Message
         '411' => 'Length Required',
         '412' => 'Precondition Failed',
         '413' => 'Request Entity Too Large',
-        '414' => 'Request Uri Too Long',
+        '414' => 'Request-URI Too Long',
         '415' => 'Unsupported Media Type',
         '416' => 'Requested Range Not Satisfiable',
         '417' => 'Expectation Failed',

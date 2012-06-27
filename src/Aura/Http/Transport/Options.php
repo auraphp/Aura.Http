@@ -64,7 +64,7 @@ class Options
      * 
      * Send all requests through this proxy server.
      * 
-     * @param string $spec The URI for the proxy server.
+     * @param string $spec The URL for the proxy server.
      * 
      * @return Aura\Http\Transport\Options This object.
      * 

@@ -99,7 +99,7 @@ class Stream implements AdapterInterface
         $stack = $this->stack_builder->newInstance(
             $this->headers,
             $this->content,
-            $this->request->uri
+            $this->request->url
         );
         
         // done!
@@ -120,10 +120,10 @@ class Stream implements AdapterInterface
         // set the context, including authentication
         $this->setContext();
         
-        // connect to the uri (suppress errors and deal with them later)
-        $uri = $this->request->uri;
+        // connect to the url (suppress errors and deal with them later)
+        $url = $this->request->url;
         $level = error_reporting(0);
-        $this->stream = fopen($uri, 'rb', false, $this->context);
+        $this->stream = fopen($url, 'rb', false, $this->context);
         error_reporting($level);
         
         // did we hit any errors?
@@ -157,7 +157,7 @@ class Stream implements AdapterInterface
         
         // did it time out?
         if ($meta['timed_out']) {
-            throw new Exception\ConnectionTimeout($uri);
+            throw new Exception\ConnectionTimeout($url);
         }
         
         // if php was compiled with --with-curlwrappers, then the field
@@ -182,7 +182,7 @@ class Stream implements AdapterInterface
         $this->setContextOptions();
         
         // what scheme are we using?
-        $url = parse_url($this->request->uri);
+        $url = parse_url($this->request->url);
         if ($url['scheme'] == 'https') {
             // secure scheme
             $this->setContextOptionsSecure();
@@ -253,7 +253,7 @@ class Stream implements AdapterInterface
         if ($this->cookie_jar) {
             $this->request->cookies->setFromJar(
                 $this->cookie_jar,
-                $this->request->uri
+                $this->request->url
             );
         }
         
@@ -414,7 +414,7 @@ class Stream implements AdapterInterface
     {
         $user    = $this->request->username;
         $pass    = $this->request->password;
-        $path    = parse_url($this->request->uri, PHP_URL_PATH);
+        $path    = parse_url($this->request->url, PHP_URL_PATH);
         if (! $path) {
             $path = '/';
         }

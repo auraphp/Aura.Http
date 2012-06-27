@@ -56,7 +56,7 @@ class Curl implements AdapterInterface
         $stack = $this->stack_builder->newInstance(
             $this->headers,
             $this->content,
-            $this->request->uri
+            $this->request->url
         );
         
         // done!
@@ -65,7 +65,7 @@ class Curl implements AdapterInterface
     
     protected function setCurl()
     {
-        $this->curl = curl_init($this->request->uri);
+        $this->curl = curl_init($this->request->url);
         $this->curlBasicOptions();
         $this->curlSecureOptions();
         $this->curlProxyOptions();

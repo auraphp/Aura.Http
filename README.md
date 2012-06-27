@@ -6,21 +6,26 @@ responses, including `multipart/form-data` requests, with streaming of file
 resources.
 
 
-Getting Started With Response
-=============================
+Getting Started
+===============
 
 Instantiation
 -------------
 
 The easiest way to get started is to use the `scripts/instance.php` script to
-get an HTTP `Manager` object, and use that to create a `Response` object.
+get an HTTP `Manager` object.
 
 ```php
 <?php
 $http = include '/path/to/Aura.Http/scripts/instance.php';
-$response = $http->newResponse();
 ```
 
+You can then create new `Request` and `Response` objects, and send them via
+the `Manager`.
+
+```php
+<?php
+$request = $http->newRequest();
 
 Setting Content
 ---------------
@@ -171,7 +176,7 @@ uses a `Transport` and `Adapter` under the hood).
 ```php
 <?php
 $request = $http->newRequest();
-$request->setUri('http://example.com');
+$request->setUrl('http://example.com');
 $stack = $http->send($request);
 ```
 
@@ -192,7 +197,7 @@ Making a GET request to Github to list Aura's repositories in JSON format:
 $request = $http->newRequest();
 
 // build the request
-$request->setUri('http://github.com/api/v2/json/repos/show/auraphp');
+$request->setUrl('http://github.com/api/v2/json/repos/show/auraphp');
 
 // send the request and get back a stack of responses
 $stack = $http->send($request);
@@ -210,8 +215,8 @@ Making a POST Request
 // get a request object from the manager
 $request = $http->newRequest();
 
-// set the uri and method
-$request->setUri('http://example.com/submit.php');
+// set the url and method
+$request->setUrl('http://example.com/submit.php');
 $request->setMethod(Request::METHOD_POST);
 
 // set the content to an array; this will be converted
@@ -229,7 +234,7 @@ In this example, the download is stored in memory:
 
 ```php
 <?php
-$request->setUri('http://example.com/download.ext');
+$request->setUrl('http://example.com/download.ext');
 $stack = $http->send($request);
 ```
 
@@ -239,7 +244,7 @@ or directory that is writeable by PHP as an argument.
 
 ```php
 <?php
-$request->setUri('http://example.com/download.ext')
+$request->setUrl('http://example.com/download.ext')
         ->saveTo('/path/to/downloads');
 
 // send the request and get back a stack of responses
@@ -256,7 +261,7 @@ Submitting Custom Content
 ```php
 <?php
 $request = $http->newRequest();
-$request->setUri('http://example.com/submit.php')
+$request->setUrl('http://example.com/submit.php')
 $request->setMethod('post');
 
 $json = json_encode(['hello' => 'world']);
@@ -276,7 +281,7 @@ HTTP Basic:
 $request->setAuth(Request::AUTH_BASIC)
         ->setUsername('username')
         ->setPassword('password')
-        ->setUri('http://example.com/private/index.php');
+        ->setUrl('http://example.com/private/index.php');
 
 $stack = $http->send($request);
 ```
@@ -288,7 +293,7 @@ HTTP Digest:
 $request->setAuth(Request::AUTH_DIGEST)
         ->setUsername('username')
         ->setPassword('password')
-        ->setUri('http://example.com/private/index.php');
+        ->setUrl('http://example.com/private/index.php');
 
 $stack = $http->send($request);
 ```
@@ -306,13 +311,13 @@ in place this won't work):
 <?php
 $request->setCookieJar('/path/to/cookiejar')
         ->setContent(['usr_name' => 'name', 'usr_pass' => 'pass'])
-        ->setUri('http://www.example.com/login')
+        ->setUrl('http://www.example.com/login')
         ->setMethod('post');
 
 $stack = $http->send($request);
 
 $request->setCookieJar('/path/to/cookiejar')
-        ->setUri('http://www.example.com/');
+        ->setUrl('http://www.example.com/');
 ```
 
 Multipart Requests
@@ -323,7 +328,7 @@ You can upload form data, including files, using a `MultiPart` request.
 ```php
 <?php
 $request = $http->newRequestMultipart();
-$request->setUri('http://example.com/submit.php');
+$request->setUrl('http://example.com/submit.php');
 $request->setMethod(Message\Request::METHOD_POST);
 
 // add data fields

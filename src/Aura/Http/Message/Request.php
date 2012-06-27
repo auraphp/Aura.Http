@@ -61,12 +61,12 @@ class Request extends Message
     
     /**
      *
-     * The URI to request.
+     * The URL to request.
      * 
      * @var string
      * 
      */
-    protected $uri;
+    protected $url;
     
     protected $auth;
     
@@ -78,16 +78,16 @@ class Request extends Message
     
     /**
      * 
-     * Sets the URI for the request.
+     * Sets the URL for the request.
      * 
-     * @param string $uri The URI for the request.
+     * @param string $url The URL for the request.
      * 
      * @return Aura\Http\Request This object.
      * 
      */
-    public function setUri($uri)
+    public function setUrl($url)
     {
-        $this->uri = $uri;
+        $this->url = $url;
         return $this;
     }
 

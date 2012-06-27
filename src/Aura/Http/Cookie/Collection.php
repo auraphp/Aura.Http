@@ -162,16 +162,16 @@ class Collection implements \IteratorAggregate, \Countable
      * 
      * @param string $text The Set-Cookie text string value.
      * 
-     * @param string $uri The URL to use when setting the secure,
+     * @param string $url The URL to use when setting the secure,
      * host and path property defaults.
      * 
      * @return void
      * 
      */
-    public function setFromString($str, $uri = null)
+    public function setFromString($str, $url = null)
     {
         $cookie = $this->factory->newInstance();
-        $cookie->setFromString($str, $uri);
+        $cookie->setFromString($str, $url);
         $this->list[$cookie->getName()] = $cookie;
     }
     

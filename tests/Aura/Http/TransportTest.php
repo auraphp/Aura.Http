@@ -168,7 +168,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     public function testSendRequest()
     {
         $request = $this->newRequest();
-        $request->setUri('http://example.com');
+        $request->setUrl('http://example.com');
         $this->transport->sendRequest($request);
         
         $this->assertSame($request, $this->adapter->request);

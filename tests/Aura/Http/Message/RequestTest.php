@@ -17,11 +17,11 @@ class RequestTest extends MessageTest
         );
     }
     
-    public function testSetAndGetUri()
+    public function testSetAndGetUrl()
     {
         $expect = 'http://example.com';
-        $this->message->setUri($expect);
-        $this->assertSame($expect, $this->message->uri);
+        $this->message->setUrl($expect);
+        $this->assertSame($expect, $this->message->url);
     }
     
     public function testSetAndGetMethod()

@@ -5,6 +5,6 @@ class JarFactory
 {
     public function newInstance($file)
     {
-        return new Jar(new Factory);
+        return new Jar(new Factory, $file);
     }
 }

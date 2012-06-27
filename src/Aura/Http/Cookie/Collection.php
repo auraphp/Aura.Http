@@ -147,7 +147,15 @@ class Collection implements \IteratorAggregate, \Countable
 
         $this->list[$cookie->getName()] = $cookie;
     }
-
+    
+    public function setFromJar(CookieJar $jar, $url)
+    {
+        $cookies = $jar->listAll($url);
+        foreach ($cookies as $cookie) {
+            $this->set($cookie);
+        }
+    }
+    
     /**
      * 
      * Parses the value of the "Set-Cookie" header and sets it.

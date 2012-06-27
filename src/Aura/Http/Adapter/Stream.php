@@ -1,23 +1,20 @@
 <?php
 namespace Aura\Http\Adapter;
 
+use Aura\Http\Cookie\Jar\Factory as CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Multipart\FormData;
 use Aura\Http\Transport\Options;
 
-        // // preset the content-type on the headers using the boundary value
-        // $boundary = $form_data->getBoundary();
-        // $headers->set(
-        //     "Content-Type",
-        //     "multipart/form-data; boundary=\"{$boundary}\""
-        // );
-        // 
-
 class Stream implements AdapterInterface
 {
     protected $stack_builder;
+    
+    protected $cookie_jar_factory;
+    
+    protected $cookie_jar;
     
     protected $request;
     
@@ -39,15 +36,17 @@ class Stream implements AdapterInterface
     
     public function __construct(
         StackBuilder $stack_builder,
-        FormData $form_data
+        FormData $form_data,
+        CookieJarFactory $cookie_jar_factory
     ) {
         if (! ini_get('allow_url_fopen')) {
             $msg = "PHP setting 'allow_url_fopen' is off.";
-            throw new Http\Exception($msg);
+            throw new Exception($msg);
         }
         
-        $this->stack_builder = $stack_builder;
-        $this->form_data = $form_data;
+        $this->stack_builder      = $stack_builder;
+        $this->form_data          = $form_data;
+        $this->cookie_jar_factory = $cookie_jar;
     }
     
     /**
@@ -66,6 +65,13 @@ class Stream implements AdapterInterface
     {
         $this->request = $request;
         $this->options = $options;
+        
+        // create a cookie jar if needed
+        if ($this->options->cookie_jar) {
+            $this->cookie_jar = $this->cookie_jar_factory->newInstance(
+                $this->options->cookie_jar
+            );
+        }
         
         // open and read the stream
         $this->openStream();
@@ -104,6 +110,12 @@ class Stream implements AdapterInterface
     {
         $this->headers = [];
         $this->content = null;
+        
+        // set cookies from the jar. we do this here because we may
+        // open two connections, and want to retain them each time.
+        if ($this->cookie_jar) {
+            $this->request->cookies->setFromJar($this->cookie_jar);
+        }
         
         // set the context, including authentication
         $this->setContext();
@@ -237,12 +249,27 @@ class Stream implements AdapterInterface
             $this->context_headers[] = $header->__toString();
         }
         
+        // add cookies from the jar to the request
+        if ($this->cookie_jar) {
+            $this->request->cookies->setFromJar(
+                $this->cookie_jar,
+                $this->request->uri
+            );
+        }
+        
         // cookies
         $cookies = $this->request->getCookies()->__toString();
         if ($cookies) {
             $this->context_headers[] = $cookies;
         }
         
+        // proxy authentication
+        $credentials = $this->options->getProxyCredentials();
+        if ($credentials) {
+            $credentials = base64_encode($credentials);
+            $this->headers[] = 'Proxy-Authorization: Basic {$credentials}';
+        }
+            
         // authentication
         $auth = $this->request->auth;
         if ($auth == Request::AUTH_BASIC) {
@@ -281,11 +308,17 @@ class Stream implements AdapterInterface
             'method'           => $this->request->method,
         ];
         
+        // general options
         $this->setOptions([
-            'proxy'         => 'proxy',
             'max_redirects' => 'max_redirects',
             'timeout'       => 'timeout',
         ]);
+        
+        // proxy options
+        if ($this->options->proxy) {
+            $this->context_options['request_fulluri'] = true;
+            $this->context_options['proxy'] = $this->options->getProxyHostAndPort();
+        }
         
         // method
         if ($this->request->method != Request::METHOD_GET) {

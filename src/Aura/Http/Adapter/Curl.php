@@ -134,6 +134,13 @@ class Curl implements AdapterInterface
         // return the transfer as a string instead of printing it
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
         
+        // cookie jar: read from and save to this file
+        $cookie_jar = $this->options->cookie_jar;
+        if ($cookie_jar) {
+            curl_setopt($this->ch, CURLOPT_COOKIEJAR,  $cookie_jar);
+            curl_setopt($this->ch, CURLOPT_COOKIEFILE, $cookie_jar);
+        }
+        
         // property-name => curlopt-constant
         $this->curlSetopt([
             'max_redirects' => CURLOPT_MAXREDIRS,

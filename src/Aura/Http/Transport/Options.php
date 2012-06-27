@@ -3,6 +3,7 @@ namespace Aura\Http\Transport;
 
 class Options
 {
+    protected $cookie_jar       = null;
     protected $max_redirects    = 10;
     protected $timeout          = 10;
     
@@ -20,6 +21,11 @@ class Options
     public function __get($key)
     {
         return $this->$key;
+    }
+    
+    public function setCookieJar($cookie_jar)
+    {
+        $this->cookie_jar = $cookie_jar;
     }
     
     /**
@@ -75,6 +81,15 @@ class Options
         return $this;
     }
     
+    public function getProxyHostAndPort()
+    {
+        $proxy = $this->proxy;
+        if ($this->proxy_port) {
+            $proxy .= ':' . $this->proxy_port;
+        }
+        return $proxy;
+    }
+    
     public function setProxyUsername($proxy_username)
     {
         $this->proxy_username = $proxy_username;
@@ -89,7 +104,9 @@ class Options
     
     public function getProxyCredentials()
     {
-        return $this->proxy_username . ':' . $this->proxy_password;
+        if ($this->proxy_username || $this->proxy_password) {
+            return $this->proxy_username . ':' . $this->proxy_password;
+        }
     }
     
     /**

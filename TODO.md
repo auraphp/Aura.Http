@@ -1,0 +1,3 @@
+- finish tests for non-adapter classes
+- figure out how to write tests for adapter classes
+- revisit expireSessionCookies()

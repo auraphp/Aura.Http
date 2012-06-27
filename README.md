@@ -160,7 +160,7 @@ will get an `Exception\HeadersSent` exception.
 
 Getting Started With Request
 ============================
- 
+
 Instantiation
 -------------
 
@@ -171,7 +171,7 @@ installed.
 
 ```php
 <?php
-use Aura\Http\Factory\Request RequestFactory;
+use Aura\Http\Factory\Request as RequestFactory;
 
 $request_factory = new RequestFactory;
 $request         = $request_factory->newInstance();
@@ -184,7 +184,7 @@ Curl
 :    `Aura\Http\Request\Adapter\Curl`
 
 Stream
-:    `Aura\Http\Request\Adapter\Stream`   
+:    `Aura\Http\Request\Adapter\Stream`
 
      Note: Stream is not suitable for uploading large files. When uploading
      files the entire file(s) is loaded into memory, this is due to a
@@ -202,7 +202,7 @@ $response = $request->get('http://github.com/api/v2/json/repos/show/auraphp');
 
 The `$response` is a `Aura\Http\Request\ResponseStack` containing all the
 responses including redirects, the stack order is last in first out. Each item
-in the stack is a `\Aura\Http\RequestResponse` object.
+in the stack is a `Aura\Http\Request\Response` object.
 
 Listing the repositories as an array:
 
@@ -215,13 +215,13 @@ Submitting a Request
 --------------------
 
 ```php
-<?php    
+<?php
 $response = $request->setContent(['name' => 'value', 'foo' => ['bar']])
                     ->post('http://localhost/submit.php');
 ```
- 
+
 Downloading a File
-------------------    
+------------------
 
 ```php
 <?php

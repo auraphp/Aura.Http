@@ -19,4 +19,9 @@ class PhpFunc
     {
         echo $text;
     }
+    
+    public function headers_sent(&$file, &$line = null)
+    {
+        return headers_sent($file, $line);
+    }
 }

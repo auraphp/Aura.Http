@@ -214,8 +214,6 @@ Use the `Manager` to create a new HTTP request.
 
 ```php
 <?php
-use Aura\Http\Message\Request;
-
 $request = $http->newRequest();
 ```
 

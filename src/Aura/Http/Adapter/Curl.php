@@ -267,8 +267,6 @@ class Curl implements AdapterInterface
     
     protected function curlContent()
     {
-        curl_setopt($this->curl, CURLOPT_VERBOSE, true);
-        
         // get the content
         $content = $this->request->content;
         

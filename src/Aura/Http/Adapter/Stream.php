@@ -4,6 +4,7 @@ namespace Aura\Http\Adapter;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response\StackBuilder;
+use Aura\Http\Multipart\FormData;
 use Aura\Http\Transport\Options;
 
         // // preset the content-type on the headers using the boundary value
@@ -24,11 +25,11 @@ class Stream implements AdapterInterface
     
     protected $context;
     
+    protected $context_content = null;
+    
     protected $context_headers = [];
     
-    protected $context_http = [];
-    
-    protected $context_https = [];
+    protected $context_options = [];
     
     protected $challenge = [];
     
@@ -36,14 +37,17 @@ class Stream implements AdapterInterface
     
     protected $content;
     
-    public function __construct(StackBuilder $stack_builder)
-    {
+    public function __construct(
+        StackBuilder $stack_builder,
+        FormData $form_data
+    ) {
         if (! ini_get('allow_url_fopen')) {
             $msg = "PHP setting 'allow_url_fopen' is off.";
             throw new Http\Exception($msg);
         }
         
         $this->stack_builder = $stack_builder;
+        $this->form_data = $form_data;
     }
     
     /**
@@ -160,13 +164,67 @@ class Stream implements AdapterInterface
     
     protected function setContext()
     {
+        // set content first so we can manipulate headers
+        $this->setContextContent();
         $this->setContextHeaders();
-        $this->setContextHttp();
-        $this->setContextHttps();
+        $this->setContextOptions();
+        
+        // what scheme are we using?
+        $url = parse_url($this->request->uri);
+        if ($url['scheme'] == 'https') {
+            // secure scheme
+            $this->setContextOptionsSecure();
+        }
+        
+        // set context
         $this->context = stream_context_create([
-            'http'  => $this->context_http,
-            'https' => $this->context_https,
+            $url['scheme'] => $this->context_options,
         ]);
+    }
+    
+    protected function setContextContent()
+    {
+        // reset content
+        $this->context_content = null;
+        
+        // get the content
+        $content = $this->request->content;
+        
+        // send only if non-empty
+        if (! $content) {
+            return;
+        }
+        
+        // send only for POST or PUT
+        $method = $this->request->method;
+        $post_or_put = $method == Request::METHOD_POST
+                    || $method == Request::METHOD_PUT;
+        if (! $post_or_put) {
+            return;
+        }
+        
+        // read from resource
+        if (is_resource($content)) {
+            while (! feof($content)) {
+                $this->context_content .= fread($content, 8192);
+            }
+            return;
+        }
+        
+        // convert to multipart/form-data ?
+        if (is_array($content)) {
+            $boundary = $this->form_data->getBoundary();
+            $this->request->headers->set(
+                "Content-Type",
+                "multipart/form-data; boundary=\"{$boundary}\""
+            );
+            $this->form_data->addFromArray($content);
+            $this->context_content = $this->form_data->__toString();
+            return;
+        }
+        
+        // all other types of content
+        $this->context_content = $content;
     }
     
     protected function setContextHeaders()
@@ -197,7 +255,7 @@ class Stream implements AdapterInterface
             $this->context_headers[] = "Authorization: Digest $credentials";
         }
         
-        // always close the connection
+        // close the connection or we wait a long time to finish
         $this->context_headers[] = 'Connection: close';
     }
     
@@ -215,55 +273,39 @@ class Stream implements AdapterInterface
      * @see <http://php.net/manual/en/wrappers.http.php>
      * 
      */
-    protected function setContextHttp()
+    protected function setContextOptions()
     {
-        $this->context_http = [
+        $this->context_options = [
             'ignore_errors'    => true,
             'protocol_version' => $this->request->version,
             'method'           => $this->request->method,
         ];
         
-        $this->setContextOptions($this->context_http, [
+        $this->setOptions([
             'proxy'         => 'proxy',
             'max_redirects' => 'max_redirects',
             'timeout'       => 'timeout',
         ]);
         
-        
         // method
         if ($this->request->method != Request::METHOD_GET) {
-            $this->context_http['method'] = $this->request->method;
+            $this->context_options['method'] = $this->request->method;
         }
         
-        // send headers and cookies?
+        // headers
         if ($this->context_headers) {
-            $this->context_http['header'] = implode("\r\n", $this->context_headers);
+            $this->context_options['header'] = implode("\r\n", $this->context_headers);
         }
         
-        // get the method
-        $method  = $this->request->method;
-        
-        // get the content.
-        // @todo Make this a curl callback so we can stream it out.
-        $content = null;
-        $this->request->content->rewind();
-        while (! $this->request->content->eof()) {
-            $content .= $this->request->content->read();
-        };
-        
-        // only send content if we're POST or PUT
-        $post_or_put = $method == Request::METHOD_POST
-                    || $method == Request::METHOD_PUT;
-        
-        if ($post_or_put && ! empty($content)) {
-            $this->context_http['content'] = $content;
+        // content
+        if ($this->context_content) {
+            $this->context_options['content'] = $this->context_content;
         }
     }
     
-    protected function setContextHttps()
+    protected function setContextOptionsSecure()
     {
-        $this->context_https = $this->context_http;
-        $this->setContextOptions($this->context_https, [
+        $this->setOptions([
             'ssl_verify_peer' => 'verify_peer',
             'ssl_cafile'      => 'cafile',
             'ssl_capath'      => 'capath',
@@ -272,11 +314,13 @@ class Stream implements AdapterInterface
         ]);
     }
     
-    protected function setContextOptions(&$arr, $var_key)
+    protected function setOptions($var_key)
     {
         foreach ($var_key as $var => $key) {
-            if ($this->options->$var) {
-                $arr[$key] = $this->options->$var;
+            // use this comparison so boolean false and integer zero values
+            // are honored
+            if ($this->options->$var !== null) {
+                $this->context_options[$key] = $this->options->$var;
             }
         }
     }

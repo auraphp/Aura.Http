@@ -30,7 +30,7 @@ $di->params['Aura\Http\Request\Adapter\Curl'] = [
 ];
 $di->params['Aura\Http\Request\Adapter\Stream'] = [
     'builder'   => $di->lazyNew('Aura\Http\Request\ResponseBuilder'),
-    'multipart' => $di->lazyNew('Aura\Http\Request\Multipart'),
+    'multipart' => $di->lazyNew('Aura\Http\Transport\Multipart'),
 ];
 
 $adapter = extension_loaded('curl') ? 'Aura\Http\Request\Adapter\Curl' : 'Aura\Http\Request\Adapter\Stream';

@@ -8,9 +8,10 @@
  */
 namespace Aura\Http\Cookie;
 
-use Aura\Http\Exception as Exception;
 use Aura\Http\Cookie;
 use Aura\Http\Cookie\Factory as CookieFactory;
+use Aura\Http\Exception as Exception;
+use Aura\Http\Response\Stack as ResponseStack;
 
 /**
  * 
@@ -43,7 +44,9 @@ class Jar
      * 
      */
     protected $opened = false;
-
+    
+    protected $file;
+    
     /**
      * 
      * @var boolean
@@ -51,9 +54,12 @@ class Jar
      */
     protected $expire_session_cookies = false;
 
-    public function __construct(CookieFactory $factory)
-    {
+    public function __construct(
+        CookieFactory $factory,
+        $file
+    ) {
         $this->factory = $factory;
+        $this->file = $file;
     }
     
     /**
@@ -82,18 +88,28 @@ class Jar
         $key = $cookie->getName() . $cookie->getDomain() . $cookie->getPath();
         $this->list[$key] = $cookie;
     }
-
+    
+    public function addFromResponseStack(ResponseStack $stack)
+    {
+        foreach ($stack as $response) {
+            $cookies = $response->getCookies()->getAll();
+            foreach ($cookies as $cookie) {
+                $this->add($cookie);
+            }
+        }
+    }
+    
     /**
      *
      * Open a cookiejar file.
      *
-     * @param string $file
-     *
      * @return boolean
      *
      */
-    public function open($file)
+    public function open()
     {
+        $file = $this->file;
+        
         if ($this->opened) {
             return false;
         }
@@ -101,7 +117,7 @@ class Jar
         $cookies = file_get_contents($file);
         $cookies = explode("\n", $cookies);
 
-        foreach($cookies as $line) {
+        foreach ($cookies as $line) {
             $this->parseLine($line);
         }
 
@@ -121,8 +137,10 @@ class Jar
      * @return boolean
      *
      */
-    public function save($file)
+    public function save()
     {
+        $file = $this->file;
+        
         if (! $this->list) {
             return false;
         }
@@ -159,6 +177,8 @@ class Jar
      */
     public function listAll($matching_url = null)
     {
+        $this->open();
+        
         if (! $matching_url) {
             return $this->list;
         }

@@ -12,47 +12,107 @@ namespace Aura\Http;
  * 
  * A class representing a single header.
  * 
- * @package Aura.Header
+ * @package Aura.Http
  * 
  */
 class Header
 {
     /**
      * 
-     * @var string The header label.
+     * The header label.
+     * 
+     * @var string
      * 
      */
     protected $label;
 
     /**
      * 
-     * @var string The header value.
+     * The header value.
+     * 
+     * @var string
      * 
      */
     protected $value;
 
-
-    public function __construct($label, $value)
-    {
-        $this->label = $this->sanitizeLabel($label);
-        $this->value = $value;
-    }
-
     /**
      * 
-     * Magic __get
+     * Constructor.
+     * 
+     * @param string $label The header label.
+     * 
+     * @param string $value The header value.
+     * 
+     */
+    public function __construct($label, $value)
+    {
+        $this->setLabel($label);
+        $this->setValue($value);
+    }
+    
+    /**
+     * 
+     * Magic get for label and value.
+     * 
+     * @param string $key The property to get.
      * 
      * @return string
      * 
      */
     public function __get($key)
     {
-        return $this->$key;
+        if ($key == 'label') {
+            return $this->getLabel();
+        }
+        
+        if ($key == 'value') {
+            return $this->getValue();
+        }
     }
-
+    
     /**
      * 
-     * Get the header label.
+     * Returns this header object as a "label: value" string.
+     * 
+     * @return string
+     * 
+     */
+    public function __toString()
+    {
+        $label = $this->getLabel();
+        $value = $this->getValue();
+        return "{$label}: {$value}";
+    }
+    
+    /**
+     * 
+     * Sets the header label after sanitizing and normalizing it.
+     * 
+     * @param string $label The header label.
+     * 
+     * @return void
+     * 
+     */
+    protected function setLabel($label)
+    {
+        // sanitize
+        $label = preg_replace('/[^a-zA-Z0-9_-]/', '', $label);
+        
+        // normalize
+        $label = ucwords(
+            strtolower(
+                str_replace(array('-', '_'), ' ', $label)
+            )
+        );
+        $label = str_replace(' ', '-', $label);
+        
+        // set
+        $this->label = $label;
+    }
+    
+    /**
+     * 
+     * Gets the header label.
      * 
      * @return string
      * 
@@ -64,7 +124,21 @@ class Header
 
     /**
      * 
-     * Get the header value.
+     * Sets the header value after sanitizing it.
+     * 
+     * @param string $label The header value.
+     * 
+     * @return void
+     * 
+     */
+    public function setValue($value)
+    {
+        $this->value = str_replace(["\r", "\n"], "", $value);
+    }
+    
+    /**
+     * 
+     * Gets the header value.
      * 
      * @return string
      * 
@@ -72,50 +146,5 @@ class Header
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * 
-     * Return the label and value in the HTTP header format:  `label: value`.
-     * 
-     * @return string
-     * 
-     */
-    public function toString()
-    {
-        return sprintf('%s: %s', $this->label, $this->value);
-    }
-
-    /**
-     * 
-     * Return the label and value in the HTTP header format:  `label: value`.
-     * 
-     * @return string
-     * 
-     */
-    public function __toString()
-    {
-        return $this->toString();
-    }
-    
-    /**
-     * 
-     * Sanitizes header labels by removing all characters besides [a-zA-z0-9_-].
-     * 
-     * Underscores are converted to dashes, and word case is normalized.
-     * 
-     * Converts "foo \r bar_ baz-dib \n 9" to "Foobar-Baz-Dib9".
-     * 
-     * @param string $label The header label to sanitize.
-     * 
-     * @return string The sanitized header label.
-     * 
-     */
-    protected function sanitizeLabel($label)
-    {
-        $label = preg_replace('/[^a-zA-Z0-9_-]/', '', $label);
-        $label = ucwords(strtolower(str_replace(array('-', '_'), ' ', $label)));
-        $label = str_replace(' ', '-', $label);
-        return $label;
     }
 }

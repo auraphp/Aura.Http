@@ -1,5 +1,4 @@
 <?php
-
 namespace Aura\Http;
 
 class CookieTest extends \PHPUnit_Framework_TestCase
@@ -111,13 +110,6 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = $this->newCookie('cname', 'cvalue', 42, '/path', '.example.com', false, true);
 
         $this->assertTrue($cookie->getHttpOnly());
-    }
-
-    public function testToString()
-    {
-        $cookie = $this->newCookie('cname', 'cvalue', 42, '/path', '.example.com', true, true);
-
-        $this->assertEquals('cname=cvalue; expires=42; path=/path; domain=.example.com; secure; HttpOnly', $cookie->toString());
     }
 
     public function test__toString()

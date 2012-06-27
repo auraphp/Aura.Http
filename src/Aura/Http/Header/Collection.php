@@ -48,16 +48,6 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * 
-     * Reset the list of headers.
-     * 
-     */
-    public function __clone()
-    {
-        $this->list = [];
-    }
-    
-    /**
-     * 
      * Get a header. If a header has multiple values the first value is returned.
      * 
      * @param string $key 
@@ -112,10 +102,10 @@ class Collection implements \IteratorAggregate, \Countable
         $list = [];
         foreach ($this->list as $headers) {
             foreach ($headers as $header) {
-                $list[] = $header->getLabel() . ': ' . $header->getValue();
+                $list[] = $header->__toString();
             }
         }
-        return implode(PHP_EOL, $list);
+        return implode("\r\n", $list);
     }
     
     /**
@@ -136,22 +126,23 @@ class Collection implements \IteratorAggregate, \Countable
      * 
      * @param string $label
      * 
-     * @param boolean $list If true an array of `Aura\Http\Header` is returned 
-     * else a `Aura\Http\Header` is return with the first result.
-     * 
-     * @return Aura\Http\Header|array
+     * @return null|Aura\Http\Header|array
      * 
      */
-    public function get($label, $list = true)
+    public function get($label)
     {
+        // get a sanitized label
         $header = $this->factory->newInstance($label, null);
         $label  = $header->getLabel();
-
-        if ($list) {
+        
+        // return null, header, or array of headers
+        if (! isset($this->list[$label])) {
+            return null;
+        } elseif (count($this->list[$label]) == 1) {
+            return $this->list[$label][0];
+        } else {
             return $this->list[$label];
         }
-
-        return $this->list[$label][0];
     }
     
     /**
@@ -175,7 +166,13 @@ class Collection implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->list);
+        $flat = [];
+        foreach ($this->list as $headers) {
+            foreach ($headers as $header) {
+                $flat[] = $header;
+            }
+        }
+        return new \ArrayIterator($flat);
     }
     
     /**
@@ -238,22 +235,6 @@ class Collection implements \IteratorAggregate, \Countable
         foreach ($headers as $label => $values) {
             foreach ((array) $values as $value) {
                 $this->add($label, $value);
-            }
-        }
-    }
-    
-    /**
-     * 
-     * Sends all the headers using `header()`.
-     * 
-     * @return void
-     * 
-     */
-    public function send()
-    {
-        foreach ($this->list as $values) {
-            foreach ($values as $header) {
-                header($header->toString());
             }
         }
     }

@@ -38,7 +38,6 @@ class Cookie
      */
     protected $expires;
 
-
     /**
      * 
      * @var string Cookie path.
@@ -297,43 +296,14 @@ class Cookie
     
     /**
      * 
-     * Return the cookie in the Set-Cookie format.
-     * 
-     * @return string
-     * 
-     */
-    public function toString()
-    {
-        $cookie[] = "$this->name=$this->value";
-        $parts    = ['expires', 'path', 'domain'];
-
-        foreach($parts as $part) {
-            if (! empty($this->$part)) {
-                $cookie[] = $part . '=' . $this->$part;
-            }
-        }
-
-        if ($this->secure) {
-            $cookie[] = 'secure';
-        }
-
-        if ($this->httponly) {
-            $cookie[] = 'HttpOnly';
-        }
-
-        return implode('; ', $cookie);
-    }
-
-    /**
-     * 
-     * Return the cookie in the Set-Cookie format.
+     * Returns the cookie in name=value format.
      * 
      * @return string
      * 
      */
     public function __toString()
     {
-        return $this->toString();
+        return urlencode($this->name) . '=' . urlencode($this->value);
     }
 
     /**

@@ -48,16 +48,6 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * 
-     * Reset the cookie list.
-     * 
-     */
-    public function __clone()
-    {
-        $this->list = [];
-    }
-    
-    /**
-     * 
      * Get a cookie.
      * 
      * @param string $key 
@@ -96,6 +86,22 @@ class Collection implements \IteratorAggregate, \Countable
     public function __unset($key)
     {
         unset($this->list[$key]);
+    }
+    
+    /**
+     * 
+     * Returns the cookie collection as a string of `name=value` pairs.
+     * 
+     * @return string
+     * 
+     */
+    public function __toString()
+    {
+        $list = array();
+        foreach ($this->list as $cookie) {
+            $list[] = $cookie->__toString();
+        }
+        return implode(';', $list);
     }
     
     /**
@@ -141,24 +147,31 @@ class Collection implements \IteratorAggregate, \Countable
 
         $this->list[$cookie->getName()] = $cookie;
     }
-
+    
+    public function setFromJar(CookieJar $jar, $url)
+    {
+        $cookies = $jar->listAll($url);
+        foreach ($cookies as $cookie) {
+            $this->set($cookie);
+        }
+    }
+    
     /**
      * 
      * Parses the value of the "Set-Cookie" header and sets it.
      * 
      * @param string $text The Set-Cookie text string value.
      * 
-     * @param string $default_url The URL to use when setting the secure,
+     * @param string $uri The URL to use when setting the secure,
      * host and path property defaults.
      * 
      * @return void
      * 
      */
-    public function setFromString($str, $default_url = null)
+    public function setFromString($str, $uri = null)
     {
         $cookie = $this->factory->newInstance();
-        $cookie->setFromString($str, $default_url);
-
+        $cookie->setFromString($str, $uri);
         $this->list[$cookie->getName()] = $cookie;
     }
     
@@ -189,28 +202,6 @@ class Collection implements \IteratorAggregate, \Countable
         $this->list = [];
         foreach ($cookies as $name => $info) {
             $this->set($name, $info);
-        }
-    }
-    
-    /**
-     * 
-     * Sends the cookies using `setcookie()`.
-     * 
-     * @return void
-     * 
-     */
-    public function send()
-    {
-        foreach ($this->list as $cookie) {
-            setcookie(
-                $cookie->getName(),
-                $cookie->getValue(),
-                $cookie->getExpire(),
-                $cookie->getPath(),
-                $cookie->getDomain(),
-                $cookie->getSecure(),
-                $cookie->getHttpOnly()
-            );
         }
     }
 }

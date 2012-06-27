@@ -33,7 +33,7 @@ class Message
      * 
      * The content of this message.
      * 
-     * @var string
+     * @var mixed
      * 
      */
     protected $content;
@@ -48,24 +48,6 @@ class Message
     protected $headers;
     
     /**
-     * 
-     * The HTTP status code of the message.
-     * 
-     * @var int
-     * 
-     */
-    protected $status_code;
-    
-    /**
-     * 
-     * The HTTP status message of the message.
-     * 
-     * @var string
-     * 
-     */
-    protected $status_text;
-    
-    /** 
      * 
      * The HTTP version for this message.
      * 
@@ -91,7 +73,7 @@ class Message
     
     /**
      * 
-     * Read-only access to $headers and $cookies objects.
+     * Read-only access to properties.
      * 
      * @param string $key The property to retrieve.
      * 
@@ -100,15 +82,7 @@ class Message
      */
     public function __get($key)
     {
-        if ($key == 'headers') {
-            return $this->headers;
-        }
-        
-        if ($key == 'cookies') {
-            return $this->cookies;
-        }
-        
-        throw new Exception("No such property '$key'");
+        return $this->$key;
     }
     
     /** 
@@ -140,10 +114,9 @@ class Message
     
     /**
      * 
-     * Sets the content of the message.
+     * Sets the content for the message.
      * 
-     * @param mixed $content The body content of the message. Note that this
-     * may be a resource, in which case it will be streamed out when sending.
+     * @param mixed The content for the message.
      * 
      * @return void
      * 
@@ -156,9 +129,9 @@ class Message
     
     /**
      * 
-     * Gets the content of the message.
+     * Returns the $content object.
      * 
-     * @return mixed The body content of the message.
+     * @return mixed The content for the message.
      * 
      */
     public function getContent()
@@ -183,7 +156,7 @@ class Message
     
     /**
      * 
-     * Returns the headers for the message (not including cookies).
+     * Returns the $headers object (not including cookies).
      * 
      * @return Headers
      * 
@@ -195,64 +168,7 @@ class Message
     
     /**
      * 
-     * Sets the HTTP status code to for the message.
-     * 
-     * @param int $code An HTTP status code, such as 200, 302, 404, etc.
-     * 
-     */
-    public function setStatusCode($code)
-    {
-        $code = (int) $code;
-        if ($code < 100 || $code > 599) {
-            throw new Exception\UnknownStatus("Status code $code not recognized.");
-        }
-        $this->status_code = $code;
-        return $this;
-    }
-    
-    /**
-     * 
-     * Returns the HTTP status code for the message.
-     * 
-     * @return int
-     * 
-     */
-    public function getStatusCode()
-    {
-        return $this->status_code;
-    }
-    
-    /**
-     * 
-     * Sets the HTTP status text for the message.
-     * 
-     * @param string $text The status text.
-     * 
-     * @return void
-     * 
-     */
-    public function setStatusText($text)
-    {
-        $text = trim(str_replace(["\r", "\n"], '', $text));
-        $this->status_text = $text;
-        return $this;
-    }
-    
-    /**
-     * 
-     * Returns the HTTP status text for the message.
-     * 
-     * @return string
-     * 
-     */
-    public function getStatusText()
-    {
-        return $this->status_text;
-    }
-    
-    /**
-     * 
-     * Sets the HTTP version for the message to '1.0' or '1.1'.
+     * Sets the HTTP version for the message.
      * 
      * @param string $version The HTTP version to use for this message.
      * 
@@ -262,11 +178,7 @@ class Message
     public function setVersion($version)
     {
         $version = trim($version);
-        if ($version != '1.0' && $version != '1.1') {
-            throw new Exception\UnknownVersion("HTTP version '$version' not recognized.");
-        } else {
-            $this->version = $version;
-        }
+        $this->version = $version;
         return $this;
     }
     

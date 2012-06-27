@@ -170,7 +170,15 @@ class Curl implements AdapterInterface
             'proxy'         => CURLOPT_PROXY,
             'proxy_port'    => CURLOPT_PROXYPORT,
         ]);
-        curl_setopt($this->curl, CURLOPT_PROXYUSERPWD, $this->options->getProxyCredentials());
+        
+        $credentials = $this->options->getProxyCredentials();
+        if ($credentials) {
+            curl_setopt(
+                $this->curl,
+                CURLOPT_PROXYUSERPWD,
+                $this->options->getProxyCredentials()
+            );
+        }
     }
     
     protected function curlSecureOptions()

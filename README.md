@@ -3,7 +3,7 @@ Aura HTTP
 
 The Aura HTTP package provides objects to build and send HTTP requests and
 responses, including `multipart/form-data` requests, with streaming of file
-resources.
+resources when using the `curl` adapter.
 
 
 Getting Started
@@ -13,7 +13,7 @@ Instantiation
 -------------
 
 The easiest way to get started is to use the `scripts/instance.php` script to
-get an HTTP `Manager` object.
+instantiate an HTTP `Manager` object.
 
 ```php
 <?php
@@ -25,12 +25,36 @@ the `Manager`.
 
 ```php
 <?php
+// send a response
+$response = $http->newResponse();
+$response->headers->set('Content-Type', 'text/plain');
+$response->setContent('Hello World!');
+$http->send($response);
+
+// make a request and get a response stack
 $request = $http->newRequest();
+$request->setUrl('http://example.com');
+$stack = $http->send($request);
+echo $stack[0]->content;
+```
 
-Setting Content
----------------
+HTTP Responses
+==============
 
-To set and get the content of the `Response`, access the `$content` property.
+Instantiation
+-------------
+
+Use the `Manager` to create a new HTTP response.
+
+```php
+<?php
+$response = $http->newResponse();
+```
+
+Setting And Getting Content
+---------------------------
+
+To set the content of the `Response`, use `setContent()`.
 
 ```php
 <?php
@@ -39,14 +63,18 @@ $html = '<html>'
       . '<body>Hello World!</body>'
       . '</html>';
 $response->setContent($html);
-
-// use $response->content->get() to get the current content
 ```
 
-Setting Headers
----------------
+Instead of a string, the content may be a file resource; when the response is
+sent, the file will be streamed out via `fread()`.
 
-To set headers, access the `$headers` property.
+To get the content, use `getContent()` or access the `$content` property.
+
+
+Setting And Getting Headers
+---------------------------
+
+To set headers, access the `$headers` property, and use its `set()` method.
 
 ```php
 <?php
@@ -69,10 +97,11 @@ $response->headers->setAll([
 ]);
 ```
 
-Note that header labels are sanitized and normalized, so if you enter a label
-`header_foo` it will be retained as `Header-Foo`.
+> N.b.: Header labels are sanitized and normalized, so if you enter a label
+> `header_foo` it will be converted to `Header-Foo`.
 
-To get an existing headers, use `$headers->get()`.
+To get the headers, use `getHeaders()` or access the `$headers` property and
+use the `get()` method.
 
 ```php
 <?php
@@ -81,12 +110,13 @@ $reponse->headers->set('Content-Type', 'text/plain');
 
 // get a header
 $header = $reponse->headers->get('Content-Type');
-// $header->getLabel() is 'Content-Type'
-// $header->getValue() is 'text/plain'
+
+// $header->label is 'Content-Type'
+// $header->value is 'text/plain'
 ```
 
-Setting Cookies
----------------
+Setting and Getting Cookies
+---------------------------
 
 To set cookies, access the `$cookies` property . Pass the cookie name and an
 array of information about the cookie (including its value).
@@ -103,7 +133,7 @@ $response->cookies->set('cookie_name', [
 ]);
 ```
 
-The information array mimics the [setcookies()](http://php.net/setcookies)
+The information array keys mimic the [setcookies()](http://php.net/setcookies)
 parameter names. You only need to provide the parts of the array that you
 need; the remainder will be filled in with `null` defaults for you.
 
@@ -123,8 +153,17 @@ $response->cookies->setAll([
 ]);
 ```
 
-Setting the Status
-------------------
+To get cookies, use `getCookies()` or access the `$cookies` property and use
+the `get()` method.
+
+```php
+<?php
+$cookie = $response->cookies->get('cookie_foo');
+```
+
+
+Setting and Getting the Status
+------------------------------
 
 To set the HTTP response status, use `setStatusCode()` and `setStatusText()`.
 The `setStatusCode()` method automatically sets the text for known codes.
@@ -138,231 +177,226 @@ $response->setStatusCode(304);
 $response->setStatusText('Same As It Ever Was');
 ```
 
-By default, a new `Response` starts with a status of `'200 OK'`.
+> N.b.: By default, a new `Response` starts with a status of `'200 OK'`.
+
+To get the response status, use `getStatusCode()` and `getStatusText()`.
 
 
 Sending the Response
 --------------------
 
 Once you have set the content, headers, cookies, and status, you can send the
-response to the client using the HTTP `Manager` object.
+response using the HTTP `Manager` object.
 
 ```php
 <?php
 $http->send($response);
 ```
 
-This will send all the headers using [header()](http://php.net/header), all
-the cookies using [setcookie()](http://php.net/setcookie), and then `echo` the
-content.
+This will send all the headers using [header()](http://php.net/header) and all
+the cookies using [setcookie()](http://php.net/setcookie).
 
-Note that you can only send the `Response` once. If you try to send it again,
-or if you try to send another response of any sort with headers on it, you
-will get an `Exception\HeadersSent` exception.
+If the content is a string, it will be `echo`-ed; if the content is a file
+resource, it will be streamed out with `fread()`.
+
+> N.b.: You can only send the `Response` once. If you try to send it again,
+> or if you try to send another response of any sort with headers on it, you
+> will get a `HeadersSent` exception.
 
 
-
-Getting Started With Request
-============================
+HTTP Requests
+=============
  
 Instantiation
 -------------
 
-It takes two steps to build and send a request. First, you create a `Request`
-object and manipulate it, then you send it via the `Manager` (which itself
-uses a `Transport` and `Adapter` under the hood).
-
+Use the `Manager` to create a new HTTP request.
 
 ```php
 <?php
+use Aura\Http\Message\Request;
+
 $request = $http->newRequest();
+```
+
+Setting and Getting Headers and Cookies
+---------------------------------------
+
+You can set and get headers and cookies just as with a `Response` object,
+described above.
+
+
+Setting and Getting Content
+---------------------------
+
+You can set and get content just as with a `Response` object, described above.
+
+> N.b.: Content will be sent only if the request method is `POST` or `PUT`.
+
+If the `Request` content is a string, it will be sent as-is.
+
+If the `Request` content is a file resource, it will be read from disk and
+sent.
+
+If the content is an array, it will be converted to `x-www-form-urlencoded` or
+`multipart/form-data`. The array may specify files to be uploaded by prefixing
+the array value with `@`.
+
+> **WARNING:** Be sure to sanitize user data to make sure only values intended
+> as file uploads begin with `@`.
+
+```php
+<?php
+// set content directly as a string
+$request->setContent(json_encode([
+    'foo' => 'bar',
+    'baz' => 'dib',
+]));
+
+// set content to a file to be be streamed out
+$fh = fopen('/path/to/file');
+$request->setContent($fh);
+
+// set content to an array of data, which will be converted
+// to x-www-form-urlencoded or multipart/form-data.
+$request->setContent([
+    'foo' => 'bar',
+    'baz' => 'dib',
+]);
+
+// set content to an array of data with files to be uploaded
+// (note the use of '@' to indicate a file).
+$request->setContent([
+    'foo' => 'bar',
+    'baz' => 'dib',
+    'zim' => '@/path/to/file'
+]);
+```
+
+
+Setting URL and Method
+----------------------
+
+To set the URL and method, do the following:
+
+```php
+<?php
 $request->setUrl('http://example.com');
-$stack = $http->send($request);
-```
-
-You can then read the stack of responses. The `$stack` is an
-`Aura\Http\Message\Response\Stack` containing all the responses, including
-redirects. The stack order is last in first out. Each item in the stack is an
-`Aura\Http\Message\Response` object.
-
-
-Making a GET Request
---------------------
-
-Making a GET request to Github to list Aura's repositories in JSON format:
-
-```php
-<?php
-// get a request object from the manager
-$request = $http->newRequest();
-
-// build the request
-$request->setUrl('http://github.com/api/v2/json/repos/show/auraphp');
-
-// send the request and get back a stack of responses
-$stack = $http->send($request);
-
-// decode the most-recent response
-$repos = json_decode($stack[0]->content);
-```
-
-
-Making a POST Request
----------------------
-
-```php
-<?php    
-// get a request object from the manager
-$request = $http->newRequest();
-
-// set the url and method
-$request->setUrl('http://example.com/submit.php');
 $request->setMethod(Request::METHOD_POST);
-
-// set the content to an array; this will be converted
-// using http_build_query() for you
-$request->setContent(['foo' => 'bar', 'baz' => 'dib'])
-
-// send the request and get the stack of responses
-$stack = $http->send($request);
 ```
- 
-Downloading a File
-------------------    
 
-In this example, the download is stored in memory:
+(By default, all requests use a `Request::METHOD_GET` method to begin with.)
+
+
+Setting Authentication
+----------------------
+
+To set authentication credentials, pick the authentication type, then set
+a username and password.
 
 ```php
 <?php
-$request->setUrl('http://example.com/download.ext');
-$stack = $http->send($request);
+$request->setAuth(Request::AUTH_BASIC);
+$request->setUsername('username');
+$request->setPassword('password');
 ```
 
-For larger files you will probably want to save the download to disk as it is
-received. This is done using the `saveTo()` method and a full path to a file
-or directory that is writeable by PHP as an argument.
+Available authentication types are `Request::AUTH_BASIC` and
+`Request::AUTH_DIGEST`.
+
+
+Sending the Request
+-------------------
+
+You can send the request via the `Manager` object; it returns a `ResponseStack`.
 
 ```php
 <?php
-$request->setUrl('http://example.com/download.ext')
-        ->saveTo('/path/to/downloads');
-
-// send the request and get back a stack of responses
 $stack = $http->send($request);
+// $stack[0]->headers contains the headers of the last response
+// $stack[0]->content contains the content of the last response
 ```
 
-When you save a file to disk, `$stack[0]->content` will return a file
-resource.
+The `$stack` is an `Aura\Http\Message\Response\Stack` containing all the
+responses, including redirects. The stack order is last in first out. Each
+item in the stack is an `Aura\Http\Message\Response` object.
 
 
-Submitting Custom Content
--------------------------
+Further Examples
+----------------
+
+Making a GET request to the Github API to list Aura's repositories:
 
 ```php
 <?php
-$request = $http->newRequest();
+$request->setUrl('https://api.github.com/orgs/auraphp/repos');
+$stack = $http->send($request);
+$repos = json_decode($stack[0]->content);
+foreach ($repos as $repo) {
+    echo $repo->name . PHP_EOL;
+}
+```
+
+Making a custom POST request:
+
+```php
+<?php
 $request->setUrl('http://example.com/submit.php')
 $request->setMethod('post');
-
-$json = json_encode(['hello' => 'world']);
-$request->setContent($json);
+$request->setContent(json_encode(['hello' => 'world']));
 $request->headers->set('Content-Type', 'application/json');
-
 $stack = $http->send($request);
 ```
 
-HTTP Authorization
-------------------
-
-HTTP Basic:
+Saving the response content to a file:
 
 ```php
 <?php
-$request->setAuth(Request::AUTH_BASIC)
-        ->setUsername('username')
-        ->setPassword('password')
-        ->setUrl('http://example.com/private/index.php');
-
+$filename = 'download.ext';
+$request->setUrl("http://example.com/$filename");
+$request->setSaveToFile("/path/to/downloads/$filename");
 $stack = $http->send($request);
+// $stack[0]->content will be a file handle to the local $filename
 ```
 
-HTTP Digest:
+
+HTTP Transport and Adapters
+===========================
+
+The HTTP `Manager` uses a `Transport` object to send requests.  You can
+specify various options for the transport.
 
 ```php
-<?php
-$request->setAuth(Request::AUTH_DIGEST)
-        ->setUsername('username')
-        ->setPassword('password')
-        ->setUrl('http://example.com/private/index.php');
+// use a cookie jar for all requests
+$http->transport->options->setCookieJar('/path/to/cookie.jar');
 
-$stack = $http->send($request);
+// the maximum number of request redirects
+$http->transport->options->setMaxRedirects(10);
+
+// the request timeout in seconds
+$http->transport->options->setTimeout(10);
+
+// the proxy host, port, username, and password
+$http->transport->options->setProxy('proxy.example.com');
+$http->transport->options->setProxyPort('12345');
+$http->transport->options->setProxyUsername('username');
+$http->transport->options->setProxyPassword('password');
+
+// ssl options
+$http->transport->options->setSslCafile('/path/to/cafile');
+$http->transport->options->setSslCapath('capath');
+$http->transport->options->setSslLocalCert('/path/to/local.crt');
+$http->transport->options->setSslPassphrase('passphrase');
+$http->transport->options->setSslVerifyPeer(true);
 ```
 
-Cookies and Cookie Authorization
---------------------------------
+The transport uses an `Adapter` to handle the actual sending of requests.
+There are two adapters available:
 
-> Note: Currently the `CookieJar` file that `Curl` creates is incompatible
-> with the `Streams` `CookieJar` file and vice versa.
+- `Aura\Http\Request\Adapter\Curl`, which is used automatically when the
+  `curl` extension is loaded.  This adapter will stream file resources
+  directly to and from disk, without loading the entire file into memory.
 
-Logging into a site using cookies (although if the site has CSRF protection
-in place this won't work):
-
-```php
-<?php
-$request->setCookieJar('/path/to/cookiejar')
-        ->setContent(['usr_name' => 'name', 'usr_pass' => 'pass'])
-        ->setUrl('http://www.example.com/login')
-        ->setMethod('post');
-
-$stack = $http->send($request);
-
-$request->setCookieJar('/path/to/cookiejar')
-        ->setUrl('http://www.example.com/');
-```
-
-Multipart Requests
-==================
-
-You can upload form data, including files, using a `MultiPart` request.
-
-```php
-<?php
-$request = $http->newRequestMultipart();
-$request->setUrl('http://example.com/submit.php');
-$request->setMethod(Message\Request::METHOD_POST);
-
-// add data fields
-$request->content->addString('first_name', 'Bolivar');
-$request->content->addString('last_name', 'Shagnasty');
-
-// add file fields
-$file = '/path/to/headshot.jpg';
-$fh = fopen();
-$request->content->addFile(
-    'picture',          // field name
-    basename($file),    // file name the remote system will use
-    $fh,                // file handle, or the actual file contents
-    'image/jpeg'        // content type
-    'binary'            // encoding
-);
-
-$stack = $http->send($request);
-```
-
-
-Transport
-=========
-
-Available Adapters
-------------------
-
-Curl
-: `Aura\Http\Request\Adapter\Curl`
-
-Stream
-: `Aura\Http\Request\Adapter\Stream`   
-
-     Note: Stream is not suitable for uploading large files. When uploading
-     files the entire file(s) is loaded into memory, this is due to a
-     limitation in PHP HTTP Streams.
-
+- `Aura\Http\Request\Adapter\Stream`, which is the fallback if `curl` is not
+  loaded. This adapter is not suitable for sending or receiving large files.
+  Each file will loaded into memory. This is a limitation in PHP HTTP streams.

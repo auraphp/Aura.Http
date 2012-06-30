@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Adapter;
 
-use Aura\Http\Cookie\Jar\Factory as CookieJarFactory;
+use Aura\Http\Cookie\JarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response\StackBuilder;
@@ -11,74 +11,74 @@ use Aura\Http\Transport\Options;
 class Stream implements AdapterInterface
 {
     protected $stack_builder;
-    
+
     protected $cookie_jar_factory;
-    
+
     protected $cookie_jar;
-    
+
     protected $request;
-    
+
     protected $options;
-    
+
     protected $context;
-    
+
     protected $context_content = null;
-    
+
     protected $context_headers = [];
-    
+
     protected $context_options = [];
-    
+
     protected $challenge = [];
-    
+
     protected $headers;
-    
+
     protected $content;
-    
+
     public function __construct(
         StackBuilder $stack_builder,
         FormData $form_data,
-        CookieJarFactory $cookie_jar_factory
+        JarFactory $cookie_jar_factory
     ) {
         if (! ini_get('allow_url_fopen')) {
             $msg = "PHP setting 'allow_url_fopen' is off.";
             throw new Exception($msg);
         }
-        
+
         $this->stack_builder      = $stack_builder;
         $this->form_data          = $form_data;
         $this->cookie_jar_factory = $cookie_jar;
     }
-    
+
     /**
-     * 
+     *
      * Make the request, then return an array of headers and content.
-     * 
+     *
      * @param Request The request to send.
-     * 
+     *
      * @return array A sequential array where element 0 is a sequential array of
      * header lines, and element 1 is the body content.
-     * 
+     *
      * @todo Implement an exception for timeouts.
-     * 
+     *
      */
     public function exec(Request $request, Options $options)
     {
         $this->request = $request;
         $this->options = $options;
-        
+
         // create a cookie jar if needed
         if ($this->options->cookie_jar) {
             $this->cookie_jar = $this->cookie_jar_factory->newInstance(
                 $this->options->cookie_jar
             );
         }
-        
+
         // open and read the stream
         $this->openStream();
         if ($this->stream) {
             $this->readStream();
         }
-        
+
         // do we need to authenticate?
         if ($this->mustAuthenticate()) {
             $this->setChallenge();
@@ -87,48 +87,48 @@ class Stream implements AdapterInterface
                 $this->readStream();
             }
         }
-        
+
         // save to file?
         $file = $this->request->getSaveToFile();
         if ($file) {
             file_put_contents($file, $this->content);
             $this->content = fopen($file, 'rb');
         }
-        
+
         // build a stack
         $stack = $this->stack_builder->newInstance(
             $this->headers,
             $this->content,
             $this->request->url
         );
-        
+
         // done!
         return $stack;
     }
-    
+
     protected function openStream()
     {
         $this->headers = [];
         $this->content = null;
-        
+
         // set cookies from the jar. we do this here because we may
         // open two connections, and want to retain them each time.
         if ($this->cookie_jar) {
             $this->request->cookies->setFromJar($this->cookie_jar);
         }
-        
+
         // set the context, including authentication
         $this->setContext();
-        
+
         // connect to the url (suppress errors and deal with them later)
         $url = $this->request->url;
         $level = error_reporting(0);
         $this->stream = fopen($url, 'rb', false, $this->context);
         error_reporting($level);
-        
+
         // did we hit any errors?
         if ($this->stream === false) {
-            
+
             // the $http_response_header variable is automatically created
             // by the streams extension
             if (empty($http_response_header)) {
@@ -136,36 +136,36 @@ class Stream implements AdapterInterface
                 $info = error_get_last();
                 throw new Exception\ConnectionFailed($info);
             }
-            
+
             // server responded, but there's no content
             $this->headers = $http_response_header;
         }
     }
-    
+
     protected function readStream()
     {
         // get the response content
         while (! feof($this->stream)) {
             $this->content .= fread($this->stream, 8192);
         }
-        
+
         // get the metadata
         $meta = stream_get_meta_data($this->stream);
-        
+
         // close the stream
         fclose($this->stream);
-        
+
         // did it time out?
         if ($meta['timed_out']) {
             throw new Exception\ConnectionTimeout($url);
         }
-        
+
         // if php was compiled with --with-curlwrappers, then the field
         // 'wrapper_data' contains two arrays, one with headers and another
         // with readbuf.  cf. <http://darkain.livejournal.com/492112.html>
         $with_curlwrappers = isset($meta['wrapper_type'])
                           && strtolower($meta['wrapper_type']) == 'curl';
-        
+
         // get the headers
         if ($with_curlwrappers) {
             $this->headers = $meta['wrapper_data']['headers'];
@@ -173,40 +173,40 @@ class Stream implements AdapterInterface
             $this->headers = $meta['wrapper_data'];
         }
     }
-    
+
     protected function setContext()
     {
         // set content first so we can manipulate headers
         $this->setContextContent();
         $this->setContextHeaders();
         $this->setContextOptions();
-        
+
         // what scheme are we using?
         $url = parse_url($this->request->url);
         if ($url['scheme'] == 'https') {
             // secure scheme
             $this->setContextOptionsSecure();
         }
-        
+
         // set context
         $this->context = stream_context_create([
             $url['scheme'] => $this->context_options,
         ]);
     }
-    
+
     protected function setContextContent()
     {
         // reset content
         $this->context_content = null;
-        
+
         // get the content
         $content = $this->request->content;
-        
+
         // send only if non-empty
         if (! $content) {
             return;
         }
-        
+
         // send only for POST or PUT
         $method = $this->request->method;
         $post_or_put = $method == Request::METHOD_POST
@@ -214,7 +214,7 @@ class Stream implements AdapterInterface
         if (! $post_or_put) {
             return;
         }
-        
+
         // read from resource
         if (is_resource($content)) {
             while (! feof($content)) {
@@ -222,7 +222,7 @@ class Stream implements AdapterInterface
             }
             return;
         }
-        
+
         // convert to multipart/form-data ?
         if (is_array($content)) {
             $boundary = $this->form_data->getBoundary();
@@ -234,21 +234,21 @@ class Stream implements AdapterInterface
             $this->context_content = $this->form_data->__toString();
             return;
         }
-        
+
         // all other types of content
         $this->context_content = $content;
     }
-    
+
     protected function setContextHeaders()
     {
         // reset headers
         $this->context_headers = [];
-        
+
         // headers
         foreach ($this->request->getHeaders() as $header) {
             $this->context_headers[] = $header->__toString();
         }
-        
+
         // add cookies from the jar to the request
         if ($this->cookie_jar) {
             $this->request->cookies->setFromJar(
@@ -256,20 +256,20 @@ class Stream implements AdapterInterface
                 $this->request->url
             );
         }
-        
+
         // cookies
         $cookies = $this->request->getCookies()->__toString();
         if ($cookies) {
             $this->context_headers[] = $cookies;
         }
-        
+
         // proxy authentication
         $credentials = $this->options->getProxyCredentials();
         if ($credentials) {
             $credentials = base64_encode($credentials);
             $this->headers[] = 'Proxy-Authorization: Basic {$credentials}';
         }
-            
+
         // authentication
         $auth = $this->request->auth;
         if ($auth == Request::AUTH_BASIC) {
@@ -281,24 +281,24 @@ class Stream implements AdapterInterface
             $credentials = $this->getDigestCredentials();
             $this->context_headers[] = "Authorization: Digest $credentials";
         }
-        
+
         // close the connection or we wait a long time to finish
         $this->context_headers[] = 'Connection: close';
     }
-    
+
     /**
-     * 
+     *
      * Builds the stream context from property options for _fetch().
-     * 
+     *
      * @param array $headers A sequential array of headers.
-     * 
+     *
      * @param string $content The body content.
-     * 
+     *
      * @return resource A stream context resource for "http" and "https"
      * protocols.
-     * 
+     *
      * @see <http://php.net/manual/en/wrappers.http.php>
-     * 
+     *
      */
     protected function setContextOptions()
     {
@@ -307,35 +307,35 @@ class Stream implements AdapterInterface
             'protocol_version' => $this->request->version,
             'method'           => $this->request->method,
         ];
-        
+
         // general options
         $this->setOptions([
             'max_redirects' => 'max_redirects',
             'timeout'       => 'timeout',
         ]);
-        
+
         // proxy options
         if ($this->options->proxy) {
             $this->context_options['request_fulluri'] = true;
             $this->context_options['proxy'] = $this->options->getProxyHostAndPort();
         }
-        
+
         // method
         if ($this->request->method != Request::METHOD_GET) {
             $this->context_options['method'] = $this->request->method;
         }
-        
+
         // headers
         if ($this->context_headers) {
             $this->context_options['header'] = implode("\r\n", $this->context_headers);
         }
-        
+
         // content
         if ($this->context_content) {
             $this->context_options['content'] = $this->context_content;
         }
     }
-    
+
     protected function setContextOptionsSecure()
     {
         $this->setOptions([
@@ -346,7 +346,7 @@ class Stream implements AdapterInterface
             'ssl_passphrase'  => 'passphrase',
         ]);
     }
-    
+
     protected function setOptions($var_key)
     {
         foreach ($var_key as $var => $key) {
@@ -357,17 +357,17 @@ class Stream implements AdapterInterface
             }
         }
     }
-    
+
     protected function mustAuthenticate()
     {
         preg_match('/HTTP\/(.+?) ([0-9]+)(.*)/i', $this->headers[0], $matches);
         return $matches[2] == 401;
     }
-    
+
     /**
      *
      * Check the response for a HTTP digest challenge.
-     * 
+     *
      * To return true the response must contain the HTTP status code 401
      * and the WWW-Authenticate header.
      *
@@ -377,7 +377,7 @@ class Stream implements AdapterInterface
     protected function setChallenge()
     {
         $auth = false;
-        
+
         // Look for a `WWW-Authenticate` header.
         foreach ($this->headers as $header) {
             if (false !== strpos($header, 'WWW-Authenticate')) {
@@ -394,7 +394,7 @@ class Stream implements AdapterInterface
 
         // Remove Digest from the start of the header.
         $auth = substr($auth, 7);
-        
+
         // Break up the header into key => value pairs.
         $parts = explode(',', $auth);
         $this->challenge  = [
@@ -409,7 +409,7 @@ class Stream implements AdapterInterface
             $this->challenge[trim($key)] = trim($value);
         }
     }
-    
+
     protected function getDigestCredentials()
     {
         $user    = $this->request->username;
@@ -421,7 +421,7 @@ class Stream implements AdapterInterface
         $options = stream_context_get_options($this->context);
         $method  = $options['http']['method'];
         $a1      = sprintf('%s:%s:%s', $user, $this->challenge['realm'], $pass);
-        
+
         $qop = false;
         if (! empty($this->challenge['qop'])) {
             $qop_challenge = explode(',', $this->challenge['qop']);
@@ -434,7 +434,7 @@ class Stream implements AdapterInterface
                 }
             }
         }
-        
+
         if ('auth-int' == $qop) {
             throw new Exception('`auth-int` is not implemented');
         } else {
@@ -444,10 +444,10 @@ class Stream implements AdapterInterface
         $ha1    = md5($a1);
         $ha2    = md5($a2);
         $cnonce = md5(rand());
-        
+
         if ($qop && in_array($qop, ['auth', 'auth-int'])) {
             $concat = sprintf(
-                '%s:%s:%08d:%s:%s:%s', 
+                '%s:%s:%08d:%s:%s:%s',
                 $ha1,
                 $this->challenge['nonce'],
                 1,
@@ -478,14 +478,14 @@ class Stream implements AdapterInterface
         }
 
         return sprintf(
-            $template, 
-            $user, 
+            $template,
+            $user,
             $this->challenge['realm'],
             $this->challenge['nonce'],
-            $path, 
-            $qop, 
-            $cnonce, 
-            md5($concat), 
+            $path,
+            $qop,
+            $cnonce,
+            md5($concat),
             $this->challenge['opaque']
         );
     }

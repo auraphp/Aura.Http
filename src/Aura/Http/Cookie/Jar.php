@@ -11,7 +11,7 @@ namespace Aura\Http\Cookie;
 use Aura\Http\Cookie;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Exception as Exception;
-use Aura\Http\Response\Stack as ResponseStack;
+use Aura\Http\Message\Response\Stack as ResponseStack;
 
 /**
  * 

@@ -36,6 +36,16 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $this->options->proxy_port);
     }
     
+    public function testGetProxyHostAndPort()
+    {
+        $host = 'example.com';
+        $port = '12345';
+        $this->options->setProxy($host);
+        $this->options->setProxyPort($port);
+        $expect = "{$host}:{$port}";
+        $actual = $this->options->getProxyHostAndPort();
+    }
+    
     public function testSetAndGetProxyUsername()
     {
         $expect = 'user';
@@ -52,6 +62,8 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     
     public function testGetProxyCredentials()
     {
+        $this->assertNull($this->options->getProxyCredentials());
+        
         $this->options->setProxyUsername('user');
         $this->options->setProxyPassword('pass');
         $expect = 'user:pass';
@@ -91,5 +103,12 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $expect = 'passphrase';
         $this->options->setSslPassphrase($expect);
         $this->assertSame($expect, $this->options->ssl_passphrase);
+    }
+    
+    public function testSetAndGetCookieJar()
+    {
+        $expect = '/path/to/cookie_jar';
+        $this->options->setCookieJar($expect);
+        $this->assertSame($expect, $this->options->cookie_jar);
     }
 }

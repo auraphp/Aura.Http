@@ -1,9 +1,11 @@
 <?php
-namespace Aura\Http\Request;
+namespace Aura\Http\Cookie;
 
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Jar as CookieJar;
 use Aura\Http\Cookie\JarFactory as CookieJarFactory;
+use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Message\Response\StackBuilder;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
 {
@@ -191,23 +193,54 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $list   = $jar->listAll();
         $expect = [
             'foowww.example.com/' => $this->cookie_factory->newInstance('foo', [
-                    'value'    => 'bar',
-                    'expire'   => '1645033667',
-                    'path'     => '/',
-                    'domain'   => 'www.example.com',
-                    'secure'   => false,
-                    'httponly' => false,
-                ]),
+                'value'    => 'bar',
+                'expire'   => '1645033667',
+                'path'     => '/',
+                'domain'   => 'www.example.com',
+                'secure'   => false,
+                'httponly' => false,
+            ]),
             'bar.example.com/path' => $this->cookie_factory->newInstance('bar', [
-                    'value'    => 'foo',
-                    'expire'   => '1645033667',
-                    'path'     => '/path',
-                    'domain'   => '.example.com',
-                    'secure'   => true,
-                    'httponly' => true,
-                ]),
+                'value'    => 'foo',
+                'expire'   => '1645033667',
+                'path'     => '/path',
+                'domain'   => '.example.com',
+                'secure'   => true,
+                'httponly' => true,
+            ]),
         ];
 
         $this->assertEquals($expect, $list);
     }
+    
+    // public function testAddFromResponseStack()
+    // {
+    //     $headers = [
+    //         'HTTP/1.1 302 Found',
+    //         'Location: /path',
+    //         'Set-Cookie: foo=bar',
+    //         'Content-Length: 0',
+    //         'Connection: close',
+    //         'Content-Type: text/html',
+    //         'HTTP/1.1 200 OK',
+    //         'Content-Length: 13',
+    //         'Connection: close',
+    //         'Content-Type: text/html',
+    //     ];
+    // 
+    //     $content = 'Hello World!';
+    // 
+    //     $builder = new StackBuilder(new MessageFactory);
+    //     $stack = $builder->newInstance($headers, $content, 'http://example.com');
+    //     
+    //     $jar = $this->newJar('cookiejar_savetest');
+    //     $jar->save();
+    //     
+    //     $jar->addFromResponseStack($stack);
+    //     
+    //     $actual = $jar->listAll();
+    //     var_export($actual);
+    //     
+    //     unlink($this->file('cookiejar_response_stack'));
+    // }
 }

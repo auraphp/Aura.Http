@@ -18,14 +18,6 @@ class Factory
 {
     public function newInstance($type = null)
     {
-        if ($type == null) {
-            if (extension_loaded('curl')) {
-                $type = 'curl';
-            } else {
-                $type = 'stream';
-            }
-        }
-        
         if ($type == 'curl') {
             $adapter = new AdapterCurl(
                 new StackBuilder(new MessageFactory)

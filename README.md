@@ -350,11 +350,11 @@ Saving the response content to a file:
 
 ```php
 <?php
-$filename = 'download.ext';
-$request->setUrl("http://example.com/$filename");
-$request->setSaveToFile("/path/to/downloads/$filename");
+$fp = fopen('/path/to/download.ext', 'wb+');
+$request->setUrl('http://example.com/download.ext');
+$request->setSaveToStream($fp);
 $stack = $http->send($request);
-// $stack[0]->content will be a file handle to the local $filename
+// $stack[0]->content will be a file stream
 ```
 
 

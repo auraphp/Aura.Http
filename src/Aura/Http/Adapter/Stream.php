@@ -89,7 +89,7 @@ class Stream implements AdapterInterface
         }
 
         // save to file?
-        $file = $this->request->getSaveToFile();
+        $file = $this->request->getSaveToStream();
         if ($file) {
             file_put_contents($file, $this->content);
             $this->content = fopen($file, 'rb');

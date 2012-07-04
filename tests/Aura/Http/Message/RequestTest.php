@@ -99,11 +99,12 @@ class RequestTest extends MessageTest
         $this->assertSame($expect, $this->message->getCredentials());
     }
     
-    public function testSetAndGetSaveToFile()
+    public function testSetAndGetSaveToStream()
     {
-        $expect = "/tmp/save-file-here";
-        $this->message->setSaveToFile($expect);
-        $actual = $this->message->getSaveToFile();
-        $this->assertSame($expect, $actual);
+        $stream = fopen('php://memory', 'wb+');
+        $this->message->setSaveToStream($stream);
+        $actual = $this->message->getSaveToStream();
+        $this->assertSame($stream, $actual);
+        fclose($stream);
     }
 }

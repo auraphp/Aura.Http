@@ -74,7 +74,7 @@ class Request extends Message
     
     protected $password;
     
-    protected $save_to_file;
+    protected $save_to_stream;
     
     /**
      * 
@@ -108,24 +108,8 @@ class Request extends Message
      */
     public function setMethod($method)
     {
-        $known = [
-            self::METHOD_GET,
-            self::METHOD_POST,
-            self::METHOD_PUT,
-            self::METHOD_DELETE,
-            self::METHOD_TRACE,
-            self::METHOD_OPTIONS,
-            self::METHOD_TRACE,
-            self::METHOD_COPY,
-            self::METHOD_LOCK,
-            self::METHOD_MKCOL,
-            self::METHOD_MOVE,
-            self::METHOD_PROPFIND,
-            self::METHOD_PROPPATCH,
-            self::METHOD_UNLOCK
-        ];
-        
-        if (! in_array($method, $known)) {
+        $const = __CLASS__ . '::METHOD_' . $method;
+        if (! defined($const)) {
             throw new Exception\UnknownMethod("Method '{$method}' is unknown");
         }
         
@@ -173,15 +157,15 @@ class Request extends Message
         return $this->username . ':' . $this->password;
     }
     
-    // transport should save response content to this file
-    public function setSaveToFile($file)
+    // transport should save response content to this stream
+    public function setSaveToStream($stream)
     {
-        $this->save_to_file = $file;
+        $this->save_to_stream = $stream;
     }
     
-    // the file where response content should be saved to
-    public function getSaveToFile()
+    // the stream where response content should be saved to
+    public function getSaveToStream()
     {
-        return $this->save_to_file;
+        return $this->save_to_stream;
     }
 }

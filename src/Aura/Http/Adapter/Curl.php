@@ -24,9 +24,6 @@ class Curl implements AdapterInterface
     
     public function __construct(StackBuilder $stack_builder)
     {
-        if (! extension_loaded('curl')) {
-            throw new Exception("Extension 'curl' not loaded");
-        }
         $this->stack_builder = $stack_builder;
     }
     
@@ -88,7 +85,7 @@ class Curl implements AdapterInterface
                   . curl_errno($this->curl)
                   . ' '
                   . curl_error($this->curl);
-            throw new Exception($text);
+            throw new Exception\ConnectionFailed($text);
         }
         
         // close the connection
@@ -99,10 +96,9 @@ class Curl implements AdapterInterface
         
         // did we save the response to a file?
         if ($this->save) {
-            // close the existing file handle ...
-            fclose($this->save);
-            // ... and re-open for reading as content
-            $this->content = fopen($this->request->getSaveToFile(), 'rb');
+            // rewind and retain the file handle
+            rewind($this->save);
+            $this->content = $this->save;
         } else {
             // the content is the response text
             $this->content = $response;
@@ -220,9 +216,6 @@ class Curl implements AdapterInterface
             case Request::METHOD_PUT:
                 curl_setopt($this->curl, CURLOPT_PUT, true);
                 break;
-            case Request::METHOD_HEAD:
-                curl_setopt($this->curl, CURLOPT_HEAD, true);
-                break;
             default:
                 curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->request->method);
                 break;
@@ -275,8 +268,7 @@ class Curl implements AdapterInterface
         // set cookies
         $cookies = $this->request->getCookies()->__toString();
         if ($cookies) {
-            curl_setopt($this->curl, CURLOPT_COOKIE, $value);
-            break;
+            curl_setopt($this->curl, CURLOPT_COOKIE, $cookies);
         }
     }
     
@@ -310,13 +302,10 @@ class Curl implements AdapterInterface
     
     protected function curlSave()
     {
-        $file = $this->request->getSaveToFile();
-        if (! $file) {
+        $this->save = $this->request->getSaveToStream();
+        if (! $this->save) {
             return;
         }
-        
-        // open a file handle for saving
-        $this->save = fopen($file, 'wb');
         
         // callback for saving response content
         curl_setopt(

@@ -10,8 +10,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $path     = null,  
         $domain   = null, 
         $secure   = null, 
-        $httponly = null)
-    {
+        $httponly = null
+    ) {
         return new Cookie($name, $value, $expire, $path, $domain, $secure, $httponly);
     }
 
@@ -22,7 +22,6 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('cname',        $cookie->name);
         $this->assertEquals('cvalue',       $cookie->value);
         $this->assertEquals(42,             $cookie->expire);
-        $this->assertEquals(42,             $cookie->expires);
         $this->assertEquals('/path',        $cookie->path);
         $this->assertEquals('.example.com', $cookie->domain);
 
@@ -30,16 +29,15 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cookie->httponly);
     }
 
-    public function testSetFromString()
+    public function testSetFromHeader()
     {
         $cookie = $this->newCookie();
-        $cookie->setFromString('cname=cvalue; expires=42; path=/path; domain=.example.com; Secure; HttpOnly',
+        $cookie->setFromHeader('cname=cvalue; expires=42; path=/path; domain=.example.com; Secure; HttpOnly',
                                'https://example.com/path/');
 
         $this->assertEquals('cname',        $cookie->name);
         $this->assertEquals('cvalue',       $cookie->value);
         $this->assertEquals(42,             $cookie->expire);
-        $this->assertEquals(42,             $cookie->expires);
         $this->assertEquals('/path',        $cookie->path);
         $this->assertEquals('.example.com', $cookie->domain);
 
@@ -47,15 +45,90 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cookie->httponly);
     }
 
-    public function testSetFromStringUsingDefault()
+    public function testSetFromJar()
+    {
+        $lines = [
+            // correct
+            "www.example.com\tFALSE\t/\tFALSE\t1645033667\tfoo\tbar",
+            // correct, httponly
+            "#HttpOnly_.example.com\tTRUE\t/path\tTRUE\t1645033667\tbar\tfoo",
+            // malformed, only 6 parts
+            "#HttpOnly_.example.com	TRUE	/	FALSE	1645033667	foo",
+        ];
+        
+        $cookie = $this->newCookie();
+        $cookie->setFromJar($lines[0]);
+        $this->assertSame(false, $cookie->httponly);
+        $this->assertSame('www.example.com', $cookie->domain);
+        $this->assertSame('/', $cookie->path);
+        $this->assertSame(false, $cookie->secure); 
+        $this->assertSame('1645033667', $cookie->expire); 
+        $this->assertSame('foo', $cookie->name);
+        $this->assertSame('bar', $cookie->value);
+        
+        $cookie = $this->newCookie();
+        $cookie->setFromJar($lines[1]);
+        $this->assertSame(true, $cookie->httponly);
+        $this->assertSame('.example.com', $cookie->domain);
+        $this->assertSame('/path', $cookie->path);
+        $this->assertSame(true, $cookie->secure); 
+        $this->assertSame('1645033667', $cookie->expire); 
+        $this->assertSame('bar', $cookie->name);
+        $this->assertSame('foo', $cookie->value);
+        
+        // malformed line
+        $cookie = $this->newCookie();
+        $cookie->setFromJar($lines[2]);
+        $this->assertNull($cookie->httponly);
+        $this->assertNull($cookie->domain);
+        $this->assertNull($cookie->path);
+        $this->assertNull($cookie->secure); 
+        $this->assertNull($cookie->expire); 
+        $this->assertNull($cookie->name);
+        $this->assertNull($cookie->value);
+    }
+    
+    public function testToJarString()
+    {
+        // not httponly, not secure
+        $cookie = $this->newCookie(
+            'foo',
+            'bar',
+            '1645033667',
+            '/',
+            'www.example.com',
+            false,
+            false
+        );
+        
+        $actual = $cookie->toJarString();
+        $expect = "www.example.com\tFALSE\t/\tFALSE\t1645033667\tfoo\tbar";
+        $this->assertSame($expect, $actual);
+        
+        // httponly, secure
+        $cookie = $this->newCookie(
+            'bar',
+            'foo',
+            '1645033667',
+            '/path',
+            '.example.com',
+            true,
+            true
+        );
+        
+        $actual = $cookie->toJarString();
+        $expect = "#HttpOnly_.example.com\tTRUE\t/path\tTRUE\t1645033667\tbar\tfoo";
+        $this->assertSame($expect, $actual);
+    }
+    
+    public function testsetFromHeaderUsingDefault()
     {
         $cookie = $this->newCookie();
-        $cookie->setFromString('cname=cvalue; expires=42; HttpOnly', 'https://example.com/path/');
+        $cookie->setFromHeader('cname=cvalue; expires=42; HttpOnly', 'https://example.com/path/');
 
         $this->assertEquals('cname',        $cookie->name);
         $this->assertEquals('cvalue',       $cookie->value);
         $this->assertEquals(42,             $cookie->expire);
-        $this->assertEquals(42,             $cookie->expires);
         $this->assertEquals('/path/',       $cookie->path);
         $this->assertEquals('example.com',  $cookie->domain);
 
@@ -116,7 +189,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = $this->newCookie('cname', 'cvalue');
 
-        $this->assertEquals('cname=cvalue', $cookie->__toString());
+        $this->assertEquals('cname=cvalue', $cookie->toRequestHeaderString());
     }
 
     public function testIsMatch()

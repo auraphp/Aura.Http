@@ -114,7 +114,7 @@ class Stream implements AdapterInterface
         // set cookies from the jar. we do this here because we may
         // open two connections, and want to retain them each time.
         if ($this->cookie_jar) {
-            $this->request->cookies->setFromJar($this->cookie_jar);
+            $this->request->cookies->setAllFromJar($this->cookie_jar);
         }
         
         // set the context, including authentication
@@ -251,7 +251,7 @@ class Stream implements AdapterInterface
         
         // add cookies from the jar to the request
         if ($this->cookie_jar) {
-            $this->request->cookies->setFromJar(
+            $this->request->cookies->setAllFromJar(
                 $this->cookie_jar,
                 $this->request->url
             );

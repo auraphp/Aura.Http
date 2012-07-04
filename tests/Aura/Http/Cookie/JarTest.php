@@ -36,10 +36,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
     {
         $jar = $this->newJar('cookiejar');
         
-        $return = $jar->open();
-        $this->assertTrue($return);
-        
-        $list   = $jar->listAll();
+        $list   = $jar->getAll();
         $expect = [
             'foowww.example.com/' => $this->cookie_factory->newInstance('foo', [
                     'value'    => 'bar',
@@ -62,24 +59,11 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $list);
     }
 
-    public function testOpeningMorethanOnceReturnFalse()
-    {
-        $jar = $this->newJar('cookiejar');
-        
-        $return = $jar->open();
-        $this->assertTrue($return);
-
-        $return = $jar->open();
-        $this->assertFalse($return);
-    }
-
     public function testMalformedLineIsIgnored()
     {
         $jar = $this->newJar('cookiejar_with_malformed_line');
         
-        $jar->open();
-        
-        $list   = $jar->listAll();
+        $list   = $jar->getAll();
         $expect = [
             'foowww.example.com/' => $this->cookie_factory->newInstance('foo', [
                     'value'    => 'bar',
@@ -124,8 +108,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
             'httponly' => true,
         ]));
 
-        $return   = $jar->save();
-        $this->assertTrue($return);
+        $jar->save();
         
         $expect = file_get_contents($this->file('cookiejar'));
         $actual = file_get_contents($this->file('cookiejar_savetest'));
@@ -144,9 +127,8 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
     public function testListingAllThatMatch()
     {
         $jar = $this->newJar('cookiejar');
-        $jar->open();
         
-        $list   = $jar->listAll('http://www.example.com/');
+        $list   = $jar->getAll('http://www.example.com/');
         $expect = [
             'foowww.example.com/' => $this->cookie_factory->newInstance('foo', [
                     'value'    => 'bar',
@@ -164,9 +146,9 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
     public function testListingAllWithoutSchemeOnMatchingUrlException()
     {
         $jar = $this->newJar('cookiejar');
-        $jar->open();
+
         $this->setExpectedException('\Aura\Http\Exception');
-        $jar->listAll('www.example.com');
+        $jar->getAll('www.example.com');
     }
 
     // public function testExpiredCookiesAreNotSaved()
@@ -187,10 +169,8 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
     public function testExpiringSessionCookies()
     {
         $jar = $this->newJar('cookiejar_with_session_cookie');
-        $jar->expireSessionCookies();
-        $jar->open();
         
-        $list   = $jar->listAll();
+        $list   = $jar->getAll();
         $expect = [
             'foowww.example.com/' => $this->cookie_factory->newInstance('foo', [
                 'value'    => 'bar',
@@ -238,7 +218,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
     //     
     //     $jar->addFromResponseStack($stack);
     //     
-    //     $actual = $jar->listAll();
+    //     $actual = $jar->getAll();
     //     var_export($actual);
     //     
     //     unlink($this->file('cookiejar_response_stack'));

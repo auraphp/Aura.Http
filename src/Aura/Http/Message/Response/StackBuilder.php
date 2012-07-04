@@ -75,7 +75,7 @@ class StackBuilder
             // is this a set-cookie header?
             if (strtolower($label) == 'set-cookie') {
                 // add the cookie
-                $cookie = $response->cookies->setFromString($value, $url);
+                $cookie = $response->cookies->setOneFromHeader($value, $url);
             } else {
                 // add the header
                 $response->headers->add($label, $value, false);

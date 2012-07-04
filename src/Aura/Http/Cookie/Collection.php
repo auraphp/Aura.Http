@@ -99,7 +99,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         $list = array();
         foreach ($this->list as $cookie) {
-            $list[] = $cookie->__toString();
+            $list[] = $cookie->toRequestHeaderString();
         }
         return implode(';', $list);
     }
@@ -148,9 +148,9 @@ class Collection implements \IteratorAggregate, \Countable
         $this->list[$cookie->getName()] = $cookie;
     }
     
-    public function setFromJar(CookieJar $jar, $url)
+    public function setAllFromJar(CookieJar $jar, $url)
     {
-        $cookies = $jar->listAll($url);
+        $cookies = $jar->getAll($url);
         foreach ($cookies as $cookie) {
             $this->set($cookie);
         }
@@ -168,10 +168,10 @@ class Collection implements \IteratorAggregate, \Countable
      * @return void
      * 
      */
-    public function setFromString($str, $url = null)
+    public function setOneFromHeader($str, $url = null)
     {
         $cookie = $this->factory->newInstance();
-        $cookie->setFromString($str, $url);
+        $cookie->setFromHeader($str, $url);
         $this->list[$cookie->getName()] = $cookie;
     }
     

@@ -95,11 +95,11 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($cookie, $this->cookies->Foo);
     }
 
-    public function testSetFromString()
+    public function testsetOneFromHeader()
     {
         $set      = 'name=value; Expires=Wed, 09 Jun 2021 10:18:14 GMT;httponly';
 
-        $this->cookies->setFromString($set);
+        $this->cookies->setOneFromHeader($set);
 
         $expected = ['name' => $this->newCookie('name', 'value', 'Wed, 09 Jun 2021 10:18:14 GMT')];
         $this->assertEquals($expected, $this->cookies->getAll());

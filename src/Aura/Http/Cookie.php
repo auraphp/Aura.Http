@@ -33,10 +33,10 @@ class Cookie
 
     /**
      * 
-     * @var string Cookie expires date in unix epoch seconds.
+     * @var string Cookie expiration date in unix epoch seconds.
      * 
      */
-    protected $expires;
+    protected $expire;
 
     /**
      * 
@@ -78,18 +78,29 @@ class Cookie
     {
         $this->name     = $name;
         $this->value    = $value;
-        $this->expires  = 0;
+        $this->setExpire($expire);
         $this->path     = $path;
         $this->domain   = $domain;
         $this->secure   = $secure;
         $this->httponly = $httponly;
         
         if (! empty($expire)) {    
-            $this->expires = $this->isValidTimeStamp($expire) ? 
-                                    $expire : strtotime($expire);
+            $this->expire = $this->isValidTimeStamp($expire)
+                          ? $expire
+                          : strtotime($expire);
         }
     }
-
+    
+    public function setExpire($expire)
+    {
+        $this->expire = null;
+        if ($expire !== null) {    
+            $this->expire = $this->isValidTimeStamp($expire)
+                          ? $expire
+                          : strtotime($expire);
+        }
+    }
+    
     /**
      * 
      * Magic get.
@@ -97,10 +108,6 @@ class Cookie
      */
     public function __get($key)
     {
-        if ('expire' == $key) {
-            return $this->expires;
-        }
-
         return $this->$key;
     }
 
@@ -116,7 +123,7 @@ class Cookie
      * @return void
      * 
      */
-    public function setFromString($text, $default_url)
+    public function setFromHeader($text, $default_url)
     {
         // setup defaults
         $this->setDefaults($default_url);
@@ -133,31 +140,60 @@ class Cookie
             $data[0] = strtolower($data[0]);
             
             switch ($data[0]) {
-            // string-literal values
-            case 'expires':
-                $this->$data[0] = $this->isValidTimeStamp($data[1]) ?
-                                        $data[1] : strtotime($data[1]);
-                break;
+                case 'expires':
+                    $this->expire = $this->isValidTimeStamp($data[1])
+                                  ? $data[1]
+                                  : strtotime($data[1]);
+                    break;
 
-            case 'path':
-                $this->$data[0] = $data[1];
-                break;
+                case 'path':
+                    $this->path = $data[1];
+                    break;
 
-            case 'domain':
-                // prefix the domain with a dot to be consistent with Curl
-                $this->$data[0] = ('.' == $data[1][0]) ? $data[1] : ".{$data[1]}";
-                break;
+                case 'domain':
+                    // prefix the domain with a dot to be consistent with Curl
+                    $this->domain = ('.' == $data[1][0])
+                                  ? $data[1]
+                                  : ".{$data[1]}";
+                    break;
             
-            // true/false values
-            case 'secure':
-            case 'httponly':
-            default:
-                $this->$data[0] = true;
-                break;
+                case 'secure':
+                    $this->secure = true;
+                    break;
+                
+                case 'httponly':
+                    $this->httponly = true;
+                    break;
             }
         }
     }
 
+    public function setFromJar($line)
+    {
+        $line = trim($line);
+        $parts = explode("\t", $line);
+
+        // Malformed line
+        if (7 != count($parts)) {
+            return;
+        }
+
+        // part 0
+        $this->httponly = (boolean) ('#HttpOnly_' == substr($parts[0], 0, 10));
+        if ($this->httponly) {
+            $this->domain = substr($parts[0], 10);
+        } else {
+            $this->domain = $parts[0];
+        }
+        
+        // part 1 is ignored; remaining parts follow
+        $this->path     = $parts[2]; 
+        $this->secure   = ("TRUE" === $parts[3]) ? true : false; 
+        $this->setExpire($parts[4]); 
+        $this->name     = $parts[5];
+        $this->value    = $parts[6]; 
+    }
+    
     /**
      * 
      * Get the cookie name.
@@ -184,14 +220,14 @@ class Cookie
     
     /**
      * 
-     * Get the cookie expires date.
+     * Get the cookie expiration date.
      * 
      * @return string
      * 
      */
     public function getExpire()
     {
-        return $this->expires;
+        return $this->expire;
     }
     
     /**
@@ -285,27 +321,42 @@ class Cookie
      */
     public function isExpired($expire_session_cookies = false)
     {
-        if (! $this->expires && $expire_session_cookies) {
+        if (! $this->expire && $expire_session_cookies) {
             return true;
-        } else if (! $this->expires) {
+        } else if (! $this->expire) {
             return false;
         }
 
-        return $this->expires < time();
+        return $this->expire < time();
     }
     
-    /**
-     * 
-     * Returns the cookie in name=value format.
-     * 
-     * @return string
-     * 
-     */
-    public function __toString()
+    public function toJarString()
+    {
+        $domain = $this->getDomain();
+        $expire = $this->getExpire();
+        $path   = $this->getPath();
+        
+        if ($this->getHttpOnly()) {
+            $domain = '#HttpOnly_' . $domain;
+        }
+        
+        return sprintf(
+            "%s\t%s\t%s\t%s\t%s\t%s\t%s",
+            $domain,
+            ('.' == $this->getDomain()[0]) ? 'TRUE' : 'FALSE',
+            $path ?: '/',
+            $this->getSecure() ? 'TRUE' : 'FALSE',
+            $expire ?: '0',
+            $this->getName(),
+            $this->getValue()
+        );
+    }
+    
+    public function toRequestHeaderString()
     {
         return urlencode($this->name) . '=' . urlencode($this->value);
     }
-
+    
     /**
      *
      * Try to match a $domain to this cookies domain.
@@ -335,7 +386,7 @@ class Cookie
 
     /**
      * 
-     * Check a siring to see if it could be a unix time stamp.
+     * Check a string to see if it could be a unix time stamp.
      * 
      * @param string $timestamp
      * 
@@ -364,7 +415,7 @@ class Cookie
     {
         $this->httponly = false;
         $this->path     = '/';
-        $this->expires  = '0';
+        $this->expire  = '0';
 
         $defaults     = parse_url($default_url);
         $this->secure = (isset($defaults['scheme']) && 

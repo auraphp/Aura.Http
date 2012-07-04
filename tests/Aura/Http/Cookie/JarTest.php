@@ -2,7 +2,6 @@
 namespace Aura\Http\Cookie;
 
 use Aura\Http\Cookie\Factory as CookieFactory;
-use Aura\Http\Cookie\Jar as CookieJar;
 use Aura\Http\Cookie\JarFactory as CookieJarFactory;
 use Aura\Http\Message\Factory as MessageFactory;
 use Aura\Http\Message\Response\StackBuilder;

@@ -24,4 +24,10 @@ class PhpFuncTest extends \PHPUnit_Framework_TestCase
         $actual = ob_get_clean();
         $this->assertSame($expect, $actual);
     }
+    
+    public function testHeadersSent()
+    {
+        // why the hell is this true?
+        $this->assertTrue($this->phpfunc->headers_sent($file, $line));
+    }
 }

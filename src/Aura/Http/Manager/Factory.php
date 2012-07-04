@@ -31,7 +31,7 @@ class Factory
                 new StackBuilder(new MessageFactory)
             );
         } elseif ($type == 'stream') {
-            return new StreamAdapter(
+            $adapter = new AdapterStream(
                 new StackBuilder(new MessageFactory),
                 new FormData(new PartFactory),
                 new CookieJarFactory

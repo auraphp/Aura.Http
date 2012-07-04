@@ -96,8 +96,7 @@ class Curl implements AdapterInterface
         
         // did we save the response to a file?
         if ($this->save) {
-            // rewind and retain the file handle
-            rewind($this->save);
+            // retain the file handle
             $this->content = $this->save;
         } else {
             // the content is the response text
@@ -133,8 +132,8 @@ class Curl implements AdapterInterface
         // cookie jar: read from and save to this file
         $cookie_jar = $this->options->cookie_jar;
         if ($cookie_jar) {
-            curl_setopt($this->ch, CURLOPT_COOKIEJAR,  $cookie_jar);
-            curl_setopt($this->ch, CURLOPT_COOKIEFILE, $cookie_jar);
+            curl_setopt($this->curl, CURLOPT_COOKIEJAR,  $cookie_jar);
+            curl_setopt($this->curl, CURLOPT_COOKIEFILE, $cookie_jar);
         }
         
         // property-name => curlopt-constant
@@ -215,6 +214,9 @@ class Curl implements AdapterInterface
                 break;
             case Request::METHOD_PUT:
                 curl_setopt($this->curl, CURLOPT_PUT, true);
+                break;
+            case Request::METHOD_HEAD:
+                curl_setopt($this->curl, CURLOPT_NOBODY, true);
                 break;
             default:
                 curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->request->method);

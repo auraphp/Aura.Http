@@ -39,11 +39,6 @@ class Stream implements AdapterInterface
         FormData $form_data,
         JarFactory $cookie_jar_factory
     ) {
-        if (! ini_get('allow_url_fopen')) {
-            $msg = "PHP setting 'allow_url_fopen' is off.";
-            throw new Exception($msg);
-        }
-
         $this->stack_builder      = $stack_builder;
         $this->form_data          = $form_data;
         $this->cookie_jar_factory = $cookie_jar_factory;
@@ -89,10 +84,10 @@ class Stream implements AdapterInterface
         }
 
         // save to file?
-        $file = $this->request->getSaveToStream();
-        if ($file) {
-            file_put_contents($file, $this->content);
-            $this->content = fopen($file, 'rb');
+        $stream = $this->request->getSaveToStream();
+        if ($stream) {
+            fwrite($stream, $this->content);
+            $this->content = $stream;
         }
 
         // build a stack
@@ -114,7 +109,10 @@ class Stream implements AdapterInterface
         // set cookies from the jar. we do this here because we may
         // open two connections, and want to retain them each time.
         if ($this->cookie_jar) {
-            $this->request->cookies->setAllFromJar($this->cookie_jar);
+            $this->request->cookies->setAllFromJar(
+                $this->cookie_jar,
+                $this->request->url
+            );
         }
 
         // set the context, including authentication
@@ -134,7 +132,7 @@ class Stream implements AdapterInterface
             if (empty($http_response_header)) {
                 // no server response, must be some other error
                 $info = error_get_last();
-                throw new Exception\ConnectionFailed($info);
+                throw new Exception\ConnectionFailed($info['message']);
             }
 
             // server responded, but there's no content

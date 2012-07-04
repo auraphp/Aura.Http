@@ -10,7 +10,7 @@ namespace Aura\Http\Cookie;
 
 use Aura\Http\Cookie;
 use Aura\Http\Cookie\Factory as CookieFactory;
-use Aura\Http\Exception as Exception;
+use Aura\Http\Exception;
 use Aura\Http\Message\Response\Stack as ResponseStack;
 
 /**
@@ -48,14 +48,12 @@ class Jar
         $storage
     ) {
         $this->factory = $factory;
-        if (is_string($storage)) {
-            $this->stream = fopen($storage, 'r+');
-            $this->close = true;
-        } elseif (is_resource($storage)) {
+        if (is_resource($storage)) {
             $this->stream = $storage;
             $this->close = false;
         } else {
-            throw new Exception('Unknown storage type.');
+            $this->stream = fopen($storage, 'w+');
+            $this->close = true;
         }
         
         // load from the storage stream
@@ -79,7 +77,9 @@ class Jar
         ];
         
         foreach ($this->list as $cookie) {
-            $text[] = $cookie->toJarString();
+            if (! $cookie->isExpired()) {
+                $text[] = $cookie->toJarString();
+            }
         }
         
         return implode(PHP_EOL, $text);
@@ -92,7 +92,7 @@ class Jar
         while (! feof($this->stream)) {
             $lines .= fread($this->stream, 8192);
         }
-        $lines = explode("\n", $lines);
+        $lines = explode(PHP_EOL, $lines);
 
         foreach ($lines as $line) {
             
@@ -107,17 +107,27 @@ class Jar
                 continue;
             }
             
-            // create the cookie
-            $cookie = $this->factory->newInstance();
-            $cookie->setFromJar($line);
-            
-            // skip if expired
-            if ($cookie->isExpired()) {
-                continue;
+            try {
+                // create the cookie
+                $cookie = $this->factory->newInstance();
+                $cookie->setFromJar($line);
+                
+                // retain
+                $this->add($cookie);
+                
+            } catch (Exception\MalformedCookie $e) {
+                // ignore
             }
             
-            // retain
-            $this->add($cookie);
+        }
+    }
+    
+    public function expireSessionCookies()
+    {
+        foreach ($this->list as $key => $cookie) {
+            if ($cookie->isExpired(true)) {
+                unset($this->list[$key]);
+            }
         }
     }
     
@@ -135,6 +145,8 @@ class Jar
         $this->list[$key] = $cookie;
     }
     
+    // @todo This needs to make sure cookies are attached to the right host
+    // and path when there are Location headers (redirects) in the stack.
     public function addFromResponseStack(ResponseStack $stack)
     {
         foreach ($stack as $response) {
@@ -154,8 +166,15 @@ class Jar
      */
     public function save()
     {
+        // rewind to beginning
         rewind($this->stream);
-        fwrite($this->stream, $this->__toString());
+        
+        // overwrite the stream
+        $text = $this->__toString();
+        fwrite($this->stream, $text);
+        
+        // truncate remainder to remove old data
+        ftruncate($this->stream, strlen($text));
     }
 
     /**

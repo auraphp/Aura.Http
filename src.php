@@ -20,6 +20,7 @@ require_once __DIR__ . '/src/Aura/Http/Exception/HeadersSent.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/InvalidUsername.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/MalformedCookie.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/NotWriteable.php';
+require_once __DIR__ . '/src/Aura/Http/Exception/UnknownAdapterType.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownAuthType.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMessageType.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMethod.php';
@@ -31,6 +32,7 @@ require_once __DIR__ . '/src/Aura/Http/Header/Collection.php';
 require_once __DIR__ . '/src/Aura/Http/Header/Factory.php';
 
 require_once __DIR__ . '/src/Aura/Http/Manager.php';
+require_once __DIR__ . '/src/Aura/Http/Manager/Factory.php';
 
 require_once __DIR__ . '/src/Aura/Http/Message.php';
 require_once __DIR__ . '/src/Aura/Http/Message/Factory.php';

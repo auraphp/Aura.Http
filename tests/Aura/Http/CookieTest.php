@@ -78,14 +78,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         
         // malformed line
         $cookie = $this->newCookie();
+        $this->setExpectedException('Aura\Http\Exception\MalformedCookie');
         $cookie->setFromJar($lines[2]);
-        $this->assertNull($cookie->httponly);
-        $this->assertNull($cookie->domain);
-        $this->assertNull($cookie->path);
-        $this->assertNull($cookie->secure); 
-        $this->assertNull($cookie->expire); 
-        $this->assertNull($cookie->name);
-        $this->assertNull($cookie->value);
     }
     
     public function testToJarString()

@@ -8,6 +8,8 @@
  */
 namespace Aura\Http;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * A class representing a single cookie.
@@ -175,7 +177,7 @@ class Cookie
 
         // Malformed line
         if (7 != count($parts)) {
-            return;
+            throw new Exception\MalformedCookie($line);
         }
 
         // part 0

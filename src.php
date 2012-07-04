@@ -15,13 +15,14 @@ require_once __DIR__ . '/src/Aura/Http/Cookie/JarFactory.php';
 
 require_once __DIR__ . '/src/Aura/Http/Exception.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/ConnectionFailed.php';
-require_once __DIR__ . '/src/Aura/Http/Exception/InvalidUsername.php';
-require_once __DIR__ . '/src/Aura/Http/Exception/NotWriteable.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/FileDoesNotExist.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/HeadersSent.php';
+require_once __DIR__ . '/src/Aura/Http/Exception/InvalidUsername.php';
+require_once __DIR__ . '/src/Aura/Http/Exception/MalformedCookie.php';
+require_once __DIR__ . '/src/Aura/Http/Exception/NotWriteable.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownAuthType.php';
-require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMethod.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMessageType.php';
+require_once __DIR__ . '/src/Aura/Http/Exception/UnknownMethod.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownStatus.php';
 require_once __DIR__ . '/src/Aura/Http/Exception/UnknownVersion.php';
 

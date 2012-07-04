@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Adapter;
 
-use Aura\Http\Cookie\Jar\Factory as CookieJarFactory;
+use Aura\Http\Cookie\JarFactory as CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response\StackBuilder;
@@ -46,7 +46,7 @@ class Stream implements AdapterInterface
         
         $this->stack_builder      = $stack_builder;
         $this->form_data          = $form_data;
-        $this->cookie_jar_factory = $cookie_jar;
+        $this->cookie_jar_factory = $cookie_jar_factory;
     }
     
     /**

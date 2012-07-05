@@ -339,7 +339,7 @@ Making a custom POST request:
 
 ```php
 <?php
-$request->setUrl('http://example.com/submit.php')
+$request->setUrl('http://example.com/submit.php');
 $request->setMethod(Request::METHOD_POST);
 $request->setContent(json_encode(['hello' => 'world']));
 $request->headers->set('Content-Type', 'application/json');

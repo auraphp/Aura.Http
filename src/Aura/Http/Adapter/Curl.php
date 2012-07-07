@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Http
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Http\Adapter;
 
 use Aura\Http\Exception;
@@ -6,6 +15,13 @@ use Aura\Http\Message\Request;
 use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Transport\Options;
 
+/**
+ * 
+ * cURL adapter
+ * 
+ * @package Aura.Http
+ * 
+ */
 class Curl implements AdapterInterface
 {
     protected $stack_builder;
@@ -22,6 +38,10 @@ class Curl implements AdapterInterface
     
     protected $save;
     
+    /**
+     *
+     * @param StackBuilder $stack_builder 
+     */
     public function __construct(StackBuilder $stack_builder)
     {
         $this->stack_builder = $stack_builder;

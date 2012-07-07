@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -38,11 +40,31 @@ class Jar
      */
     protected $factory;
     
+    /**
+     *
+     * @var resource 
+     * 
+     */
     protected $stream;
     
-    // mark as true if we opened the file ourselves
+    /**
+     *
+     * mark as true if we opened the file ourselves
+     * 
+     * @var bool 
+     * 
+     */
     protected $close = false;
     
+    /**
+     *
+     * Constructor and load cookies from storage
+     * 
+     * @param CookieFactory $factory
+     * 
+     * @param resource $storage 
+     * 
+     */
     public function __construct(
         CookieFactory $factory,
         $storage
@@ -60,6 +82,13 @@ class Jar
         $this->load();
     }
     
+    /**
+     * 
+     * Destructor, close resource
+     * 
+     * @return void
+     * 
+     */
     public function __destruct()
     {
         if ($this->close) {
@@ -67,6 +96,12 @@ class Jar
         }
     }
     
+    /**
+     *
+     * A string of all all cookies
+     * 
+     * @return string 
+     */
     public function __toString()
     {
         $text = [
@@ -85,6 +120,13 @@ class Jar
         return implode(PHP_EOL, $text);
     }
     
+    /**
+     * 
+     * Open a cookie and add cookies
+     * 
+     * @return void
+     * 
+     */
     protected function load()
     {
         rewind($this->stream);
@@ -122,6 +164,13 @@ class Jar
         }
     }
     
+    /**
+     * 
+     * Remove cookies which are expired
+     * 
+     * @return void
+     * 
+     */
     public function expireSessionCookies()
     {
         foreach ($this->list as $key => $cookie) {
@@ -144,9 +193,14 @@ class Jar
         $key = $cookie->getName() . $cookie->getDomain() . $cookie->getPath();
         $this->list[$key] = $cookie;
     }
-    
-    // @todo This needs to make sure cookies are attached to the right host
-    // and path when there are Location headers (redirects) in the stack.
+
+    /**
+     *
+     * @todo This needs to make sure cookies are attached to the right host
+     * and path when there are Location headers (redirects) in the stack.
+     * 
+     * @param ResponseStack $stack 
+     */
     public function addFromResponseStack(ResponseStack $stack)
     {
         foreach ($stack as $response) {

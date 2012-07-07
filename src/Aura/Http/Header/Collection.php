@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura Project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -37,6 +39,8 @@ class Collection implements \IteratorAggregate, \Countable
     protected $factory;
 
     /**
+     * 
+     * Constructor
      *
      * @param Aura\Http\Header\Factory $factory
      *
@@ -97,6 +101,13 @@ class Collection implements \IteratorAggregate, \Countable
         unset($this->list[$key]);
     }
     
+    /**
+     * 
+     * Creates a string from all the headers
+     * 
+     * @return string
+     * 
+     */
     public function __toString()
     {
         $list = [];

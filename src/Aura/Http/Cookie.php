@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -68,7 +70,16 @@ class Cookie
      */
     protected $httponly;
 
-
+    /**
+     *
+     * @param string $name
+     * @param string $value
+     * @param string $expire
+     * @param string $path
+     * @param string $domain
+     * @param bool $secure
+     * @param type $httponly 
+     */
     public function __construct(
         $name, 
         $value, 

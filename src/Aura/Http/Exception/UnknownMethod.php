@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * The HTTP request method is unknown.
+ * 
  * @package Aura.Http
  * 
  */

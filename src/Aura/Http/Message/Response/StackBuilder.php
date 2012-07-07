@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -19,8 +21,23 @@ use Aura\Http\Message\Factory as MessageFactory;
  */
 class StackBuilder
 {
+    /**
+     * 
+     * A factory to create message objects.
+     * 
+     * @var MessageFactory
+     * 
+     */
     protected $message_factory;
     
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param MessageFactory $message_factory A factory to create message
+     * objects.
+     * 
+     */
     public function __construct(MessageFactory $message_factory)
     {
         $this->message_factory = $message_factory;
@@ -30,7 +47,14 @@ class StackBuilder
      * 
      * Creates and returns a new Stack object with responses in it.
      * 
-     * @return \Aura\Http\Response\Stack
+     * @param array $headers The headers for the response stack.
+     * 
+     * @param string $content The content for the final response.
+     * 
+     * @param string $url The default URL for cookies (typically the request
+     * URL).
+     * 
+     * @return Stack
      * 
      */
     public function newInstance(array $headers, $content = null, $url = null)

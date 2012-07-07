@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * The authentication type is unknown.
+ * 
  * @package Aura.Http
  * 
  */

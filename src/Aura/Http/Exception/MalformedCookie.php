@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * A line in a cookie jar is malformed.
+ * 
  * @package Aura.Http
  * 
  */

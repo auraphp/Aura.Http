@@ -28,55 +28,121 @@ class Stream implements AdapterInterface
 {
     /**
      * 
-     * @var Aura\Http\Message\Response\StackBuilder
+     * Builds a stack of response messages.
+     * 
+     * @var StackBuilder
      * 
      */
     protected $stack_builder;
     
     /**
      * 
-     * @var Aura\Http\Cookie\JarFactory
+     * Creates a cookie jar.
+     * 
+     * @var JarFactory
      * 
      */
     protected $cookie_jar_factory;
 
     /**
      * 
-     * @var Aura\Http\Cookie\Jar
+     * A cookie jar.
+     * 
+     * @var Jar
      * 
      */
     protected $cookie_jar;
 
     /**
      * 
-     * @var Aura\Http\Message\Request
+     * The HTTP request to be sent.
+     * 
+     * @var Request
      * 
      */
     protected $request;
 
+    /**
+     * 
+     * The transport options.
+     * 
+     * @var Options
+     * 
+     */
     protected $options;
 
+    /**
+     * 
+     * 
+     * 
+     * @var 
+     * 
+     */
     protected $context;
 
+    /**
+     * 
+     * 
+     * 
+     * @var 
+     * 
+     */
     protected $context_content = null;
 
+    /**
+     * 
+     * Headers to be set into the stream context.
+     * 
+     * @var array
+     * 
+     */
     protected $context_headers = [];
 
+    /**
+     * 
+     * Options to be set into the stream context.
+     * 
+     * @var 
+     * 
+     */
     protected $context_options = [];
 
+    /**
+     * 
+     * A digest challenge sent by the remote host.
+     * 
+     * @var array
+     * 
+     */
     protected $challenge = [];
 
+    /**
+     * 
+     * Headers returned by the remote host.
+     * 
+     * @var array
+     * 
+     */
     protected $headers;
 
+    /**
+     * 
+     * Content returned by the remote host.
+     * 
+     * @var string
+     * 
+     */
     protected $content;
 
     /**
      * 
-     * @param StackBuilder $stack_builder
+     * Constructor.
      * 
-     * @param FormData $form_data
+     * @param StackBuilder $stack_builder Builds a stack of response messages.
      * 
-     * @param JarFactory $cookie_jar_factory
+     * @param FormData $form_data Used for building multipart/form-data.
+     * 
+     * @param JarFactory $cookie_jar_factory For creating a cookie jar.
      * 
      */
     public function __construct(
@@ -145,7 +211,14 @@ class Stream implements AdapterInterface
         // done!
         return $stack;
     }
-
+    
+    /**
+     * 
+     * Opens the stream connection to the remote host.
+     * 
+     * @return void
+     * 
+     */
     protected function openStream()
     {
         $this->headers = [];
@@ -184,7 +257,14 @@ class Stream implements AdapterInterface
             $this->headers = $http_response_header;
         }
     }
-
+    
+    /**
+     * 
+     * Reads from the stream connection to the remote host.
+     * 
+     * @return void
+     * 
+     */
     protected function readStream()
     {
         // get the response content
@@ -216,7 +296,14 @@ class Stream implements AdapterInterface
             $this->headers = $meta['wrapper_data'];
         }
     }
-
+    
+    /**
+     * 
+     * Sets the stream context.
+     * 
+     * @return void
+     * 
+     */
     protected function setContext()
     {
         // set content first so we can manipulate headers
@@ -236,7 +323,14 @@ class Stream implements AdapterInterface
             $url['scheme'] => $this->context_options,
         ]);
     }
-
+    
+    /**
+     * 
+     * Sets the content on the stream context.
+     * 
+     * @return void
+     * 
+     */
     protected function setContextContent()
     {
         // reset content
@@ -282,6 +376,13 @@ class Stream implements AdapterInterface
         $this->context_content = $content;
     }
 
+    /**
+     * 
+     * Sets the headers on the stream context
+     * 
+     * @return void
+     * 
+     */
     protected function setContextHeaders()
     {
         // reset headers
@@ -331,16 +432,9 @@ class Stream implements AdapterInterface
 
     /**
      *
-     * Builds the stream context from property options for _fetch().
+     * Sets the basic options into the stream context.
      *
-     * @param array $headers A sequential array of headers.
-     *
-     * @param string $content The body content.
-     *
-     * @return resource A stream context resource for "http" and "https"
-     * protocols.
-     *
-     * @see <http://php.net/manual/en/wrappers.http.php>
+     * @return void
      *
      */
     protected function setContextOptions()
@@ -379,6 +473,13 @@ class Stream implements AdapterInterface
         }
     }
 
+    /**
+     * 
+     * Sets the secure options into the stream context.
+     * 
+     * @return void
+     * 
+     */
     protected function setContextOptionsSecure()
     {
         $this->setOptions([
@@ -390,6 +491,16 @@ class Stream implements AdapterInterface
         ]);
     }
 
+    /**
+     * 
+     * A helper for setting stream options.
+     * 
+     * @param array $var_key An array of key-value pairs where the key is
+     * a request variable, and the value is a stream option name.
+     * 
+     * @return void
+     * 
+     */
     protected function setOptions($var_key)
     {
         foreach ($var_key as $var => $key) {
@@ -401,6 +512,14 @@ class Stream implements AdapterInterface
         }
     }
 
+    /**
+     * 
+     * A helper to determine if the remote response indicates authentication
+     * is required.
+     * 
+     * @return bool True if we must authenticate, false if not.
+     * 
+     */
     protected function mustAuthenticate()
     {
         preg_match('/HTTP\/(.+?) ([0-9]+)(.*)/i', $this->headers[0], $matches);
@@ -409,12 +528,13 @@ class Stream implements AdapterInterface
 
     /**
      *
-     * Check the response for a HTTP digest challenge.
+     * Checks the response for a HTTP digest challenge, and sets the
+     * `$challenge` property if so.
      *
-     * To return true the response must contain the HTTP status code 401
-     * and the WWW-Authenticate header.
+     * The response must contain the HTTP status code `401` and the 
+     * `WWW-Authenticate header` to set `$challenge`.
      *
-     * @return array
+     * @return void
      *
      */
     protected function setChallenge()
@@ -453,6 +573,13 @@ class Stream implements AdapterInterface
         }
     }
 
+    /**
+     * 
+     * Gets the digest credentials to send in an authentication header.
+     * 
+     * @return string
+     * 
+     */
     protected function getDigestCredentials()
     {
         $user    = $this->request->username;

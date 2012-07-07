@@ -26,9 +26,9 @@ interface AdapterInterface
      * 
      * Execute the request.
      * 
-     * @param Aura\Http\Request $request The request.
+     * @param Request $request The request.
      * 
-     * @param Aura\Http\Transport\Options $options The transport options.
+     * @param Options $options The transport options.
      * 
      * @return Aura\Http\Response\Stack A stack of responses.
      * 

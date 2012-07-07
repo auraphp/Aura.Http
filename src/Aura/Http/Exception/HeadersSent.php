@@ -12,7 +12,7 @@ namespace Aura\Http\Exception;
 
 /**
  * 
- * Throws HeaderSent exception
+ * Headers have already been sent, and cannot be sent again.
  * 
  * @package Aura.Http
  * 

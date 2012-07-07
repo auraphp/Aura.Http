@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * The message type is unknown.
+ * 
  * @package Aura.Http
  * 
  */

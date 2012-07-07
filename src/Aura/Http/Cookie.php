@@ -22,63 +22,85 @@ use Aura\Http\Exception;
 class Cookie
 {
     /**
+     * Cookie name.
      * 
-     * @var string Cookie name.
+     * @var string
      * 
      */
     protected $name;
 
     /**
      * 
-     * @var string Cookie value.
+     * Cookie value.
+     * 
+     * @var string
      * 
      */
     protected $value;
 
     /**
      * 
-     * @var string Cookie expiration date in unix epoch seconds.
+     * Cookie expiration date in unix epoch seconds.
+     * 
+     * @var string
      * 
      */
     protected $expire;
 
     /**
      * 
-     * @var string Cookie path.
+     * Cookie path.
+     * 
+     * @var string
      * 
      */
     protected $path;
 
     /**
      * 
-     * @var string Cookie domain.
+     * Cookie domain.
+     * 
+     * @var string
      * 
      */
     protected $domain;
 
     /**
      * 
-     * @var boolean Use SSL only
+     * Use SSL only.
+     * 
+     * @var boolean
      * 
      */
     protected $secure;
 
     /**
      * 
-     * @var boolean Use HTTP only.
+     * Use HTTP only.
+     * 
+     * @var boolean
      * 
      */
     protected $httponly;
 
     /**
-     *
-     * @param string $name
-     * @param string $value
-     * @param string $expire
-     * @param string $path
-     * @param string $domain
-     * @param bool $secure
-     * @param type $httponly 
+     * 
+     * Constructor.
+     * 
+     * @param string $name The cookie name.
+     * 
+     * @param string $value The cookie value.
+     * 
+     * @param string $expire The expiration time in Unix epoch seconds.
+     * 
+     * @param string $path The cookie path.
+     * 
+     * @param string $domain The cookie domain.
+     * 
+     * @param bool $secure Use SSL only?
+     * 
+     * @param type $httponly Use HTTP only?
+     * 
      */
     public function __construct(
         $name, 
@@ -87,8 +109,8 @@ class Cookie
         $path, 
         $domain, 
         $secure, 
-        $httponly)
-    {
+        $httponly
+    ) {
         $this->name     = $name;
         $this->value    = $value;
         $this->setExpire($expire);
@@ -104,6 +126,15 @@ class Cookie
         }
     }
     
+    /**
+     * 
+     * Sets the $expire value on the cookie.
+     * 
+     * @param mixed $expire The expiration time.
+     * 
+     * @return void
+     * 
+     */
     public function setExpire($expire)
     {
         $this->expire = null;
@@ -126,7 +157,7 @@ class Cookie
 
     /**
      * 
-     * Parses the value of the "Set-Cookie" header and sets it.
+     * Parses the value of a "Set-Cookie" header and sets the cookie from it.
      * 
      * @param string $text The Set-Cookie text string value.
      * 
@@ -139,8 +170,20 @@ class Cookie
     public function setFromHeader($text, $default_url)
     {
         // setup defaults
-        $this->setDefaults($default_url);
+        $this->httponly = false;
+        $this->path     = '/';
+        $this->expire  = '0';
 
+        $defaults     = parse_url($default_url);
+        $this->secure = (isset($defaults['scheme']) && 
+                         'https' == $defaults['scheme']);
+        $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
+
+        if (isset($defaults['path'])) { 
+            $this->path = substr($defaults['path'], 0,
+                                strrpos($defaults['path'], '/') + 1);
+        }
+        
         // get the list of elements
         $list = explode(';', $text);
         
@@ -181,6 +224,15 @@ class Cookie
         }
     }
 
+    /**
+     * 
+     * Parses a cookie jar line and sets the cookie from it.
+     * 
+     * @param string $line The line from the cookie jar.
+     * 
+     * @return void
+     * 
+     */
     public function setFromJar($line)
     {
         $line = trim($line);
@@ -271,7 +323,7 @@ class Cookie
      * 
      * Use SSL only.
      * 
-     * @return string
+     * @return bool
      * 
      */
     public function getSecure()
@@ -283,7 +335,7 @@ class Cookie
      * 
      * Use HTTP only.
      * 
-     * @return string
+     * @return bool
      * 
      */
     public function getHttpOnly()
@@ -325,7 +377,7 @@ class Cookie
 
     /**
      *
-     * Has this cookie expired
+     * Has this cookie expired?
      *
      * @param boolean $expire_session_cookies Expire Session cookies.
      *
@@ -365,6 +417,13 @@ class Cookie
         );
     }
     
+    /**
+     * 
+     * Returns this cookie as a request header string.
+     * 
+     * @return string
+     * 
+     */
     public function toRequestHeaderString()
     {
         return urlencode($this->name) . '=' . urlencode($this->value);
@@ -415,30 +474,4 @@ class Cookie
                ($timestamp <= PHP_INT_MAX) &&
                ($timestamp >= ~PHP_INT_MAX);
     }
-
-    /**
-     *
-     *
-     * @param 
-     *
-     * @return 
-     *
-     */
-    protected function setDefaults($default_url)
-    {
-        $this->httponly = false;
-        $this->path     = '/';
-        $this->expire  = '0';
-
-        $defaults     = parse_url($default_url);
-        $this->secure = (isset($defaults['scheme']) && 
-                         'https' == $defaults['scheme']);
-        $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
-
-        if (isset($defaults['path'])) { 
-            $this->path = substr($defaults['path'], 0,
-                                strrpos($defaults['path'], '/') + 1);
-        }
-    }
-    
 }

@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * A file does not exist.
+ * 
  * @package Aura.Http
  * 
  */

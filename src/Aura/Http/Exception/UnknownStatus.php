@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * The HTTP status code is unknown.
+ * 
  * @package Aura.Http
  * 
  */

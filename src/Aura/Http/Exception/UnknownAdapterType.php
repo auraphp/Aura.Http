@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * The request adapter type is unknown.
+ * 
  * @package Aura.Http
  * 
  */

@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * The response from an HTTP request was empty.
+ * 
  * @package Aura.Http
  * 
  */

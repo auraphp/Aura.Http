@@ -33,7 +33,9 @@ class Collection implements \IteratorAggregate, \Countable
     
     /**
      * 
-     * @var Aura\Http\Header\Factory
+     * A factory to create header objects.
+     * 
+     * @var HeaderFactory
      * 
      */
     protected $factory;
@@ -42,7 +44,7 @@ class Collection implements \IteratorAggregate, \Countable
      * 
      * Constructor
      *
-     * @param Aura\Http\Header\Factory $factory
+     * @param FFactory $factory A factory to create header objects.
      *
      */
     public function __construct(HeaderFactory $factory)

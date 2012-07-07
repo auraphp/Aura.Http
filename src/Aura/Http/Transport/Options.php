@@ -19,36 +19,141 @@ namespace Aura\Http\Transport;
  */
 class Options
 {
-    protected $cookie_jar       = null;
-    protected $max_redirects    = 10;
-    protected $timeout          = 10;
+    /**
+     * 
+     * The file where cookie jar storage is located.
+     * 
+     * @param string
+     * 
+     */
+    protected $cookie_jar = null;
     
-    protected $proxy            = null;
-    protected $proxy_port       = null;
-    protected $proxy_username   = null;
-    protected $proxy_password   = null;
+    /**
+     * 
+     * The max number of redirects allowed.
+     * 
+     * @var int
+     * 
+     */
+    protected $max_redirects = 10;
     
-    protected $ssl_cafile       = null;
-    protected $ssl_capath       = null;
-    protected $ssl_local_cert   = null;
-    protected $ssl_passphrase   = null;
-    protected $ssl_verify_peer  = null;
+    /**
+     * 
+     * The connection timeout in seconds.
+     * 
+     * @var float
+     * 
+     */
+    protected $timeout = 10;
+    
+    /**
+     * 
+     * The proxy hostname.
+     * 
+     * @var string
+     * 
+     */
+    protected $proxy = null;
+    
+    /**
+     * 
+     * The proxy port number.
+     * 
+     * @var int
+     * 
+     */
+    protected $proxy_port = null;
+    
+    /**
+     * 
+     * The proxy username.
+     * 
+     * @var string
+     * 
+     */
+    protected $proxy_username = null;
+    
+    /**
+     * 
+     * The proxy password.
+     * 
+     * @var string
+     * 
+     */
+    protected $proxy_password = null;
+    
+    /**
+     * 
+     * The SSL certificate authority file.
+     * 
+     * @var string
+     * 
+     */
+    protected $ssl_cafile = null;
+    
+    /**
+     * 
+     * The SSL certificate authority path.
+     * 
+     * @var string
+     * 
+     */
+    protected $ssl_capath = null;
+    
+    /**
+     * 
+     * The SSL local certificate.
+     * 
+     * @var string
+     * 
+     */
+    protected $ssl_local_cert = null;
+    
+    /**
+     * 
+     * The passphrase for the local certificate.
+     * 
+     * @var string
+     * 
+     */
+    protected $ssl_passphrase = null;
+    
+    /**
+     * 
+     * Require verification of the certificate?
+     * 
+     * @var bool
+     * 
+     */
+    protected $ssl_verify_peer = null;
     
     /**
      *
-     * Magic
+     * Magic get to return property values.
      * 
      * @param string $key
+     * 
      * @return mixed 
+     * 
      */
     public function __get($key)
     {
         return $this->$key;
     }
     
+    /**
+     * 
+     * Sets the cookie jar property.
+     * 
+     * @param string
+     * 
+     * @return Options This object.
+     * 
+     */
     public function setCookieJar($cookie_jar)
     {
         $this->cookie_jar = $cookie_jar;
+        return $this;
     }
     
     /**
@@ -58,7 +163,7 @@ class Options
      * @param int $max The max number of redirects to allow. If false the
      * default number of max_redirects is set.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setMaxRedirects($max_redirects)
@@ -71,10 +176,9 @@ class Options
      * 
      * Sets the request timeout in seconds.
      * 
-     * @param float $time The timeout in seconds. If false the default timeout
-     * is set.
+     * @param float $timeout The timeout in seconds.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setTimeout($timeout)
@@ -87,23 +191,39 @@ class Options
      * 
      * Send all requests through this proxy server.
      * 
-     * @param string $spec The URL for the proxy server.
+     * @param string $proxy The hostname for the proxy server.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setProxy($proxy)
     {
-        $this->proxy  = $proxy;
+        $this->proxy = $proxy;
         return $this;
     }
     
+    /**
+     * 
+     * Set the proxy port number.
+     * 
+     * @param int $proxy_port The proxy port number.
+     * 
+     * @return Options This object.
+     * 
+     */
     public function setProxyPort($proxy_port)
     {
         $this->proxy_port = $proxy_port;
         return $this;
     }
     
+    /**
+     * 
+     * Gets the proxy host and port.
+     * 
+     * @return string
+     * 
+     */
     public function getProxyHostAndPort()
     {
         $proxy = $this->proxy;
@@ -113,18 +233,43 @@ class Options
         return $proxy;
     }
     
+    /**
+     * 
+     * Set the proxy port username.
+     * 
+     * @param string $proxy_username The proxy username.
+     * 
+     * @return Options This object.
+     * 
+     */
     public function setProxyUsername($proxy_username)
     {
         $this->proxy_username = $proxy_username;
         return $this;
     }
     
+    /**
+     * 
+     * Set the proxy password.
+     * 
+     * @param string $proxy_password The proxy password.
+     * 
+     * @return Options This object.
+     * 
+     */
     public function setProxyPassword($proxy_password)
     {
         $this->proxy_password = $proxy_password;
         return $this;
     }
     
+    /**
+     * 
+     * Gets the proxy "username:password" credentials.
+     * 
+     * @return string
+     * 
+     */
     public function getProxyCredentials()
     {
         if ($this->proxy_username || $this->proxy_password) {
@@ -138,7 +283,7 @@ class Options
      * 
      * @param bool $flag True or false.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setSslVerifyPeer($flag)
@@ -155,7 +300,7 @@ class Options
      * 
      * @param string $val The CA file.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setSslCafile($val)
@@ -173,7 +318,7 @@ class Options
      * 
      * @param string $val The CA path.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setSslCapath($val)
@@ -190,7 +335,7 @@ class Options
      * 
      * @param string $val The local certificate file path.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setSslLocalCert($val)
@@ -205,7 +350,7 @@ class Options
      * 
      * @param string $val The passphrase.
      * 
-     * @return Aura\Http\Transport\Options This object.
+     * @return Options This object.
      * 
      */
     public function setSslPassphrase($val)

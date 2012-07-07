@@ -18,20 +18,48 @@ use Aura\Http\Message\Response;
 
 /**
  * 
- * A Transport class
+ * Transports HTTP requests and responses.
  * 
  * @package Aura.Http
  * 
  */
 class Transport implements TransportInterface
 {
-    // used so we can intercept native php function calls for testing
+    /**
+     * 
+     * An object for calling PHP functions; used mostly so we can intercept
+     * calls during tests.
+     * 
+     * @var PhpFunc
+     * 
+     */
     protected $phpfunc;
     
+    /**
+     * 
+     * An HTTP request adapter.
+     * 
+     * @var AdapterInterface
+     * 
+     */
     protected $adapter;
     
+    /**
+     * 
+     * A set of option for this transport instance.
+     * 
+     * @var Options
+     * 
+     */
     protected $options;
     
+    /**
+     * 
+     * Whether or not this transport should send responses as if in CGI mode.
+     * 
+     * @var bool
+     * 
+     */
     protected $cgi;
     
     /**
@@ -39,8 +67,11 @@ class Transport implements TransportInterface
      * Constructor
      *
      * @param PhpFunc $phpfunc
+     * 
      * @param Options $options
+     * 
      * @param AdapterInterface $adapter 
+     * 
      */
     public function __construct(
         PhpFunc             $phpfunc,
@@ -57,7 +88,11 @@ class Transport implements TransportInterface
     
     /**
      * 
-     * Magic get.
+     * Magic get to return property values.
+     * 
+     * @param string $key The property to return.
+     * 
+     * @return mixed
      * 
      */
     public function __get($key)
@@ -92,11 +127,30 @@ class Transport implements TransportInterface
         return (bool) $this->cgi;
     }
     
+    /**
+     * 
+     * Sends a request through the adapter and returns a response message 
+     * stack.
+     * 
+     * @param Request $request The request to send.
+     * 
+     * @return Message\Stack
+     * 
+     */
     public function sendRequest(Request $request)
     {
         return $this->adapter->exec($request, $this->options);
     }
     
+    /**
+     * 
+     * Sends a response using PHP functions.
+     * 
+     * @param Response $request The response to send.
+     * 
+     * @return void
+     * 
+     */
     public function sendResponse(Response $response)
     {
         if ($this->phpfunc->headers_sent($file, $line)) {

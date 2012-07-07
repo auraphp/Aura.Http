@@ -28,28 +28,34 @@ class Jar
 {
     /**
      * 
-     * @var array The list of cookies.
+     * The list of cookies.
+     * 
+     * @var array
      * 
      */
     protected $list = [];
 
     /**
      * 
-     * @var Aura\Http\Cookie\Factory
+     * A factory to create cookies.
+     * 
+     * @var CookieFactory
      * 
      */
     protected $factory;
     
     /**
-     *
+     * 
+     * A stream resource for cookie storage.
+     * 
      * @var resource 
      * 
      */
-    protected $stream;
+    protected $storage;
     
     /**
-     *
-     * mark as true if we opened the file ourselves
+     * 
+     * Mark as true if we opened the stream ourselves.
      * 
      * @var bool 
      * 
@@ -58,11 +64,12 @@ class Jar
     
     /**
      *
-     * Constructor and load cookies from storage
+     * Constructor; loads cookies from storage.
      * 
-     * @param CookieFactory $factory
+     * @param CookieFactory $factory A factory to create cookies.
      * 
-     * @param resource $storage 
+     * @param string|resource $storage A string file name, or a stream
+     * resource, for cookie storage.
      * 
      */
     public function __construct(
@@ -71,10 +78,10 @@ class Jar
     ) {
         $this->factory = $factory;
         if (is_resource($storage)) {
-            $this->stream = $storage;
+            $this->storage = $storage;
             $this->close = false;
         } else {
-            $this->stream = fopen($storage, 'w+');
+            $this->storage = fopen($storage, 'w+');
             $this->close = true;
         }
         
@@ -92,7 +99,7 @@ class Jar
     public function __destruct()
     {
         if ($this->close) {
-            fclose($this->stream);
+            fclose($this->storage);
         }
     }
     
@@ -122,17 +129,17 @@ class Jar
     
     /**
      * 
-     * Open a cookie and add cookies
+     * Open storage and add cookies from it.
      * 
      * @return void
      * 
      */
     protected function load()
     {
-        rewind($this->stream);
+        rewind($this->storage);
         $lines = null;
-        while (! feof($this->stream)) {
-            $lines .= fread($this->stream, 8192);
+        while (! feof($this->storage)) {
+            $lines .= fread($this->storage, 8192);
         }
         $lines = explode(PHP_EOL, $lines);
 
@@ -166,7 +173,7 @@ class Jar
     
     /**
      * 
-     * Remove cookies which are expired
+     * Remove cookies which are expired.
      * 
      * @return void
      * 
@@ -182,10 +189,10 @@ class Jar
     
     /**
      *
-     * Add a Aura\Http\Cookie to the cookiejar. The cookie will not be written 
+     * Add a cookie to the jar. The cookie will not be written 
      * until `save()` is called.
      * 
-     * @param Aura\Http\Cookie $cookie
+     * @param Cookie $cookie The cookie to be added.
      *
      */
     public function add(Cookie $cookie)
@@ -196,6 +203,8 @@ class Jar
 
     /**
      *
+     * Add cookies from a stack of response messages.
+     * 
      * @todo This needs to make sure cookies are attached to the right host
      * and path when there are Location headers (redirects) in the stack.
      * 
@@ -221,14 +230,14 @@ class Jar
     public function save()
     {
         // rewind to beginning
-        rewind($this->stream);
+        rewind($this->storage);
         
         // overwrite the stream
         $text = $this->__toString();
-        fwrite($this->stream, $text);
+        fwrite($this->storage, $text);
         
         // truncate remainder to remove old data
-        ftruncate($this->stream, strlen($text));
+        ftruncate($this->storage, strlen($text));
     }
 
     /**

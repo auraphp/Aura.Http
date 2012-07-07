@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * Indicates an HTTP connection failed.
+ * 
  * @package Aura.Http
  * 
  */

@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * A file is not writable.
+ * 
  * @package Aura.Http
  * 
  */

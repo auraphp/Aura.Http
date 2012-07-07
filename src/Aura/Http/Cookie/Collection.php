@@ -34,14 +34,18 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * 
-     * @var Aura\Http\Cookie\Factory
+     * Creates cookie objects.
+     * 
+     * @var CookieFactory
      * 
      */
     protected $factory;
 
     /**
-     *
-     * @param Aura\Http\Cookie\Factory $factory
+     * 
+     * Constructor.
+     * 
+     * @param CookieFactory $factory Creates cookie objects.
      *
      */
     public function __construct(CookieFactory $factory)
@@ -151,6 +155,18 @@ class Collection implements \IteratorAggregate, \Countable
         $this->list[$cookie->getName()] = $cookie;
     }
     
+    /**
+     * 
+     * Sets the entire collection from a cookie jar.
+     * 
+     * @param CookieJar $jar The cookie jar to set from.
+     * 
+     * @param string $url The URL to use when setting the secure,
+     * host, and path property defaults.
+     * 
+     * @return void
+     * 
+     */
     public function setAllFromJar(CookieJar $jar, $url)
     {
         $cookies = $jar->getAll($url);
@@ -163,10 +179,10 @@ class Collection implements \IteratorAggregate, \Countable
      * 
      * Parses the value of the "Set-Cookie" header and sets it.
      * 
-     * @param string $text The Set-Cookie text string value.
+     * @param string $str The Set-Cookie text string value.
      * 
      * @param string $url The URL to use when setting the secure,
-     * host and path property defaults.
+     * host, and path property defaults.
      * 
      * @return void
      * 

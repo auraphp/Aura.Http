@@ -19,8 +19,18 @@ namespace Aura\Http\Cookie;
  */
 class JarFactory
 {
-    public function newInstance($file)
+    /**
+     * 
+     * Creates a new jar instance.
+     * 
+     * @param resource|string $storage A string file name, or a stream
+     * resource, for cookie storage.
+     * 
+     * @return Jar
+     * 
+     */
+    public function newInstance($storage)
     {
-        return new Jar(new Factory, $file);
+        return new Jar(new Factory, $storage);
     }
 }

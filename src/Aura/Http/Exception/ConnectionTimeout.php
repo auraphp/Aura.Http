@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * Indicates an HTTP connection timed out.
+ * 
  * @package Aura.Http
  * 
  */

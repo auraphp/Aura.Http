@@ -24,23 +24,75 @@ use Aura\Http\Transport\Options;
  */
 class Curl implements AdapterInterface
 {
+    /**
+     * 
+     * Builds a stack of response messages.
+     * 
+     * @var StackBuilder
+     * 
+     */
     protected $stack_builder;
     
+    /**
+     * 
+     * The HTTP request to be sent.
+     * 
+     * @var Request
+     * 
+     */
     protected $request;
     
+    /**
+     * 
+     * The transport options.
+     * 
+     * @var Options
+     * 
+     */
     protected $options;
     
+    /**
+     * 
+     * The response headers.
+     * 
+     * @var array
+     * 
+     */
     protected $headers;
     
+    /**
+     * 
+     * The response content.
+     * 
+     * @var string
+     * 
+     */
     protected $content;
     
+    /**
+     * 
+     * The curl handle for request/response communication.
+     * 
+     * @var resource
+     * 
+     */
     protected $curl;
     
+    /**
+     * 
+     * File handle for saving content.
+     * 
+     * @var resource
+     * 
+     */
     protected $save;
     
     /**
      *
-     * @param StackBuilder $stack_builder 
+     * Constructor.
+     * 
+     * @param StackBuilder $stack_builder Builds a stack of response messages.
+     * 
      */
     public function __construct(StackBuilder $stack_builder)
     {
@@ -49,13 +101,13 @@ class Curl implements AdapterInterface
     
     /**
      * 
-     * Make the request, then return an array of headers and content.
+     * Executes the request and assembles the response stack.
      * 
      * @param Request $request The request to send.
      * 
      * @param Options $options The transport options.
      * 
-     * @return Aura\Http\Response\Stack
+     * @return Aura\Http\Response\Message\Stack
      * 
      * @todo Implement an exception for timeouts.
      * 
@@ -80,6 +132,13 @@ class Curl implements AdapterInterface
         return $stack;
     }
     
+    /**
+     * 
+     * Sets the curl handle and its options.
+     * 
+     * @return void
+     * 
+     */
     protected function setCurl()
     {
         $this->curl = curl_init($this->request->url);
@@ -94,6 +153,13 @@ class Curl implements AdapterInterface
         $this->curlSave();
     }
     
+    /**
+     * 
+     * Makes the curl connection, then retrieves headers and content.
+     * 
+     * @return void
+     * 
+     */
     protected function connect()
     {
         // send the request via curl and retain the response
@@ -124,6 +190,13 @@ class Curl implements AdapterInterface
         }
     }
     
+    /**
+     * 
+     * Sets basic options on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlBasicOptions()
     {
         // automatically set the Referer: field in requests where it
@@ -163,6 +236,16 @@ class Curl implements AdapterInterface
         ]);
     }
     
+    /**
+     * 
+     * Helper method to set curl options.
+     * 
+     * @param array $var_opt An array of key-value pairs where the key is
+     * a request variable, and the value is a curl option constant.
+     * 
+     * @return void
+     * 
+     */
     protected function curlSetopt($var_opt)
     {
         foreach ($var_opt as $var => $opt) {
@@ -174,6 +257,13 @@ class Curl implements AdapterInterface
         }
     }
     
+    /**
+     * 
+     * Sets proxy options on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlProxyOptions()
     {
         if (! $this->options->proxy) {
@@ -196,6 +286,13 @@ class Curl implements AdapterInterface
         }
     }
     
+    /**
+     * 
+     * Sets secure/ssl/tls options on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlSecureOptions()
     {
         $this->curlSetopt([
@@ -207,6 +304,13 @@ class Curl implements AdapterInterface
         ]);
     }
     
+    /**
+     * 
+     * Sets the HTTP version on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlHttpVersion()
     {
         switch ($this->request->version) {
@@ -223,6 +327,13 @@ class Curl implements AdapterInterface
         }
     }
     
+    /**
+     * 
+     * Sets the HTTP method on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlMethod()
     {
         switch ($this->request->method) {
@@ -244,6 +355,13 @@ class Curl implements AdapterInterface
         }
     }
     
+    /**
+     * 
+     * Sets authorization options on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlAuth()
     {
         $auth = $this->request->auth;
@@ -267,6 +385,13 @@ class Curl implements AdapterInterface
         curl_setopt($this->curl, CURLOPT_USERPWD, $credentials);
     }
     
+    /**
+     * 
+     * Sets headers and cookies on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlHeaders()
     {
         $headers = [];
@@ -294,6 +419,13 @@ class Curl implements AdapterInterface
         }
     }
     
+    /**
+     * 
+     * Sets content on the curl handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlContent()
     {
         // get the content
@@ -322,6 +454,14 @@ class Curl implements AdapterInterface
         }
     }
     
+    /**
+     * 
+     * Sets a "writefunction" callback on the curl handle to stream response
+     * content to a file handle.
+     * 
+     * @return void
+     * 
+     */
     protected function curlSave()
     {
         $this->save = $this->request->getSaveToStream();
@@ -337,12 +477,34 @@ class Curl implements AdapterInterface
         );
     }
     
+    /**
+     * 
+     * A callback to retain headers in the $headers property.
+     * 
+     * @param resource $curl The curl handle.
+     * 
+     * @param string $data The header string to be retained.
+     * 
+     * @return void
+     * 
+     */
     public function saveHeaders($curl, $data)
     {
         $this->headers .= $data;
         return strlen($data);
     }
     
+    /**
+     * 
+     * A callback to save content to the $save file handle.
+     * 
+     * @param resource $curl The curl handle.
+     * 
+     * @param string $data The content to be saved.
+     * 
+     * @return void
+     * 
+     */
     public function saveContent($curl, $data)
     {
         fwrite($this->save, $data);

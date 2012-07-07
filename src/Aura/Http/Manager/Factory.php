@@ -32,7 +32,16 @@ use Aura\Http\Transport\Options as TransportOptions;
  */
 class Factory
 {
-    public function newInstance($type = null)
+    /**
+     * 
+     * Creates a new manager instance.
+     * 
+     * @param string $type The adapter type to use: `'curl'` or `'stream'`.
+     * 
+     * @return Manager
+     * 
+     */
+    public function newInstance($type)
     {
         if ($type == 'curl') {
             $adapter = new AdapterCurl(

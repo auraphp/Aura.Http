@@ -70,12 +70,40 @@ class Request extends Message
      */
     protected $url;
     
+    /**
+     * 
+     * The type of authentication to use.
+     * 
+     * @var string
+     * 
+     */
     protected $auth;
     
+    /**
+     * 
+     * The username for authentication.
+     * 
+     * @var string
+     * 
+     */
     protected $username;
     
+    /**
+     * 
+     * The password for authentication.
+     * 
+     * @var string
+     * 
+     */
     protected $password;
     
+    /**
+     * 
+     * Save the response to this stream resource.
+     * 
+     * @var resource
+     * 
+     */
     protected $save_to_stream;
     
     /**
@@ -120,6 +148,15 @@ class Request extends Message
         return $this;
     }
     
+    /**
+     * 
+     * Sets the authentication type.
+     * 
+     * @param string $auth A `Request::AUTH_*` constant.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setAuth($auth)
     {
         if (! $auth) {
@@ -137,8 +174,19 @@ class Request extends Message
         }
         
         $this->auth = $auth;
+        
+        return $this;
     }
     
+    /**
+     * 
+     * Sets the username for authentication.
+     * 
+     * @param string $username The username.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setUsername($username)
     {
         if (strpos($username, ':') !== false) {
@@ -147,25 +195,60 @@ class Request extends Message
         }
         
         $this->username = $username;
+        
+        return $this;
     }
     
+    /**
+     * 
+     * Sets the password for authentication.
+     * 
+     * @param string $password The password.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setPassword($password)
     {
         $this->password = $password;
+        return $this;
     }
     
+    /**
+     * 
+     * Returns the "username:password" credentials.
+     * 
+     * @return string
+     * 
+     */
     public function getCredentials()
     {
         return $this->username . ':' . $this->password;
     }
     
-    // transport should save response content to this stream
+    /**
+     * 
+     * The response content from the request should be saved to this stream
+     * resource.
+     * 
+     * @param resource $stream The stream resource to save to.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setSaveToStream($stream)
     {
         $this->save_to_stream = $stream;
+        return $this;
     }
     
-    // the stream where response content should be saved to
+    /**
+     * 
+     * Returns the stream resource where response content should be saved to.
+     * 
+     * @return resource
+     * 
+     */
     public function getSaveToStream()
     {
         return $this->save_to_stream;

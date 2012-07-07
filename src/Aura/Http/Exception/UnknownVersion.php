@@ -12,6 +12,8 @@ namespace Aura\Http\Exception;
 
 /**
  * 
+ * The HTTP version is unknown.
+ * 
  * @package Aura.Http
  * 
  */

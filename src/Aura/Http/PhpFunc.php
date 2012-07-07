@@ -20,17 +20,48 @@ namespace Aura\Http;
  */
 class PhpFunc
 {
+    /**
+     * 
+     * Forwards all calls to PHP functions.
+     * 
+     * @param string $func The PHP function name.
+     * 
+     * @param array $args The arguments to pass to the function.
+     * 
+     * @return mixed
+     * 
+     */
     public function __call($func, $args)
     {
         return call_user_func_array($func, $args);
     }
     
-    // not a php function; used in place of `echo` and `print`
+    /**
+     * 
+     * A replacement function to use instead of `echo` and `print` (since
+     * they are keywords, not functions per se).
+     * 
+     * @param string $text The text to echo/print.
+     * 
+     * @return void
+     * 
+     */
     public function output($text)
     {
         echo $text;
     }
     
+    /**
+     * 
+     * Override for `headers_sent()` since it needs parameter references.
+     * 
+     * @param string &$file The file where headers were sent.
+     * 
+     * @param int &$line The line in that file where headers were sent.
+     * 
+     * @return bool
+     * 
+     */
     public function headers_sent(&$file, &$line)
     {
         return headers_sent($file, $line);

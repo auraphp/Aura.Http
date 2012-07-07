@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Http
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Http;
 
 use Aura\Http\Adapter\AdapterInterface;
@@ -7,6 +16,13 @@ use Aura\Http\Transport\TransportInterface;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
 
+/**
+ * 
+ * A Transport class
+ * 
+ * @package Aura.Http
+ * 
+ */
 class Transport implements TransportInterface
 {
     // used so we can intercept native php function calls for testing
@@ -18,6 +34,14 @@ class Transport implements TransportInterface
     
     protected $cgi;
     
+    /**
+     * 
+     * Constructor
+     *
+     * @param PhpFunc $phpfunc
+     * @param Options $options
+     * @param AdapterInterface $adapter 
+     */
     public function __construct(
         PhpFunc             $phpfunc,
         Options             $options,
@@ -31,6 +55,11 @@ class Transport implements TransportInterface
         $this->setCgi($cgi);
     }
     
+    /**
+     * 
+     * Magic get.
+     * 
+     */
     public function __get($key)
     {
         return $this->$key;

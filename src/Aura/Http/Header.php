@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -126,7 +128,7 @@ class Header
      * 
      * Sets the header value after sanitizing it.
      * 
-     * @param string $label The header value.
+     * @param string $value The header value.
      * 
      * @return void
      * 

@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Http
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Http\Adapter;
 
 use Aura\Http\Cookie\JarFactory;
@@ -8,14 +17,41 @@ use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Multipart\FormData;
 use Aura\Http\Transport\Options;
 
+/**
+ * 
+ * cURL adapter
+ * 
+ * @package Aura.Http
+ * 
+ */
 class Stream implements AdapterInterface
 {
+    /**
+     * 
+     * @var Aura\Http\Message\Response\StackBuilder
+     * 
+     */
     protected $stack_builder;
-
+    
+    /**
+     * 
+     * @var Aura\Http\Cookie\JarFactory
+     * 
+     */
     protected $cookie_jar_factory;
 
+    /**
+     * 
+     * @var Aura\Http\Cookie\Jar
+     * 
+     */
     protected $cookie_jar;
 
+    /**
+     * 
+     * @var Aura\Http\Message\Request
+     * 
+     */
     protected $request;
 
     protected $options;
@@ -34,6 +70,15 @@ class Stream implements AdapterInterface
 
     protected $content;
 
+    /**
+     * 
+     * @param StackBuilder $stack_builder
+     * 
+     * @param FormData $form_data
+     * 
+     * @param JarFactory $cookie_jar_factory
+     * 
+     */
     public function __construct(
         StackBuilder $stack_builder,
         FormData $form_data,

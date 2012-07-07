@@ -1,6 +1,22 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura Project for PHP.
+ * 
+ * @package Aura.Http
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Http\Transport;
 
+/**
+ * 
+ * The Aura Response class.
+ * 
+ * @package Aura.Http
+ * 
+ */
 class Options
 {
     protected $cookie_jar       = null;
@@ -18,6 +34,13 @@ class Options
     protected $ssl_passphrase   = null;
     protected $ssl_verify_peer  = null;
     
+    /**
+     *
+     * Magic
+     * 
+     * @param string $key
+     * @return mixed 
+     */
     public function __get($key)
     {
         return $this->$key;

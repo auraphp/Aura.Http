@@ -1,14 +1,34 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura Project for PHP.
+ * 
+ * @package Aura.Http
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Http\Multipart;
 
 use Aura\Http\Multipart\PartFactory;
 
+/**
+ * 
+ * 
+ * @package Aura.Http
+ * 
+ */
 class FormData
 {
     protected $parts = [];
     
     protected $boundary;
     
+    /**
+     *
+     * @param PartFactory $part_factory 
+     * 
+     */
     public function __construct(PartFactory $part_factory)
     {
         $this->part_factory = $part_factory;

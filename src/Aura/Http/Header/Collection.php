@@ -44,7 +44,7 @@ class Collection implements \IteratorAggregate, \Countable
      * 
      * Constructor
      *
-     * @param FFactory $factory A factory to create header objects.
+     * @param Factory $factory A factory to create header objects.
      *
      */
     public function __construct(HeaderFactory $factory)

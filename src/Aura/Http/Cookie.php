@@ -147,7 +147,11 @@ class Cookie
     
     /**
      * 
-     * Magic get.
+     * Magic get to return property values.
+     * 
+     * @param string $key The property name.
+     * 
+     * @return mixed
      * 
      */
     public function __get($key)
@@ -395,6 +399,13 @@ class Cookie
         return $this->expire < time();
     }
     
+    /**
+     * 
+     * Converts this cookie to a line for a cookie jar.
+     * 
+     * @return string
+     * 
+     */
     public function toJarString()
     {
         $domain = $this->getDomain();

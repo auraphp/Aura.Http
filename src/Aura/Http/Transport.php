@@ -146,7 +146,7 @@ class Transport implements TransportInterface
      * 
      * Sends a response using PHP functions.
      * 
-     * @param Response $request The response to send.
+     * @param Response $response The response to send.
      * 
      * @return void
      * 

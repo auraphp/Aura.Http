@@ -160,8 +160,7 @@ class Options
      * 
      * When making the request, allow no more than this many redirects. 
      * 
-     * @param int $max The max number of redirects to allow. If false the
-     * default number of max_redirects is set.
+     * @param int $max_redirects The max number of redirects to allow.
      * 
      * @return Options This object.
      * 

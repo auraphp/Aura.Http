@@ -10,8 +10,9 @@
  */
 namespace Aura\Http;
 
-
 /**
+ * 
+ * Base package exception.
  * 
  * @package Aura.Http
  * 

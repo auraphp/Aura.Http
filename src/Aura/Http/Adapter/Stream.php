@@ -73,18 +73,18 @@ class Stream implements AdapterInterface
 
     /**
      * 
+     * The context used for the stream.
      * 
-     * 
-     * @var 
+     * @var resource
      * 
      */
     protected $context;
 
     /**
      * 
+     * The content used for the context.
      * 
-     * 
-     * @var 
+     * @var string
      * 
      */
     protected $context_content = null;
@@ -159,10 +159,11 @@ class Stream implements AdapterInterface
      *
      * Make the request, then return an array of headers and content.
      *
-     * @param Request The request to send.
+     * @param Request $request The request to send.
      *
-     * @return array A sequential array where element 0 is a sequential array of
-     * header lines, and element 1 is the body content.
+     * @param Options $options The transport options.
+     *
+     * @return Stack A stack of response messages.
      *
      * @todo Implement an exception for timeouts.
      *

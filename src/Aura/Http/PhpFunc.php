@@ -35,7 +35,7 @@ class PhpFunc
     {
         return call_user_func_array($func, $args);
     }
-    
+
     /**
      * 
      * A replacement function to use instead of `echo` and `print` (since
@@ -50,7 +50,8 @@ class PhpFunc
     {
         echo $text;
     }
-    
+
+    // FIXME Public method name "PhpFunc::headers_sent" is not in camel caps format
     /**
      * 
      * Override for `headers_sent()` since it needs parameter references.
@@ -67,3 +68,4 @@ class PhpFunc
         return headers_sent($file, $line);
     }
 }
+ 

@@ -36,7 +36,7 @@ class Factory
         'secure'   => false,
         'httponly' => true,
     ];
-    
+
     /**
      * 
      * Creates and returns a new Cookie object.
@@ -63,3 +63,4 @@ class Factory
         );
     }
 }
+ 

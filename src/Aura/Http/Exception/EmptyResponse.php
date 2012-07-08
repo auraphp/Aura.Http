@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * The response from an HTTP request was empty.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class EmptyResponse extends \Aura\Http\Exception {}
+class EmptyResponse extends Exception
+{
+}
+ 

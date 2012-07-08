@@ -35,3 +35,4 @@ interface AdapterInterface
      */
     public function exec(Request $request, Options $options);
 }
+ 

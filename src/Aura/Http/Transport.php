@@ -34,7 +34,7 @@ class Transport implements TransportInterface
      * 
      */
     protected $phpfunc;
-    
+
     /**
      * 
      * An HTTP request adapter.
@@ -43,7 +43,7 @@ class Transport implements TransportInterface
      * 
      */
     protected $adapter;
-    
+
     /**
      * 
      * A set of option for this transport instance.
@@ -52,7 +52,7 @@ class Transport implements TransportInterface
      * 
      */
     protected $options;
-    
+
     /**
      * 
      * Whether or not this transport should send responses as if in CGI mode.
@@ -61,7 +61,7 @@ class Transport implements TransportInterface
      * 
      */
     protected $cgi;
-    
+
     /**
      * 
      * Constructor
@@ -81,11 +81,11 @@ class Transport implements TransportInterface
         $this->phpfunc = $phpfunc;
         $this->options = $options;
         $this->adapter = $adapter;
-        
+
         $cgi = (strpos(php_sapi_name(), 'cgi') !== false);
         $this->setCgi($cgi);
     }
-    
+
     /**
      * 
      * Magic get to return property values.
@@ -99,7 +99,7 @@ class Transport implements TransportInterface
     {
         return $this->$key;
     }
-    
+
     /**
      * 
      * Optionally send responses as if in CGI mode. (This changes how the 
@@ -114,7 +114,7 @@ class Transport implements TransportInterface
     {
         $this->cgi = (bool) $cgi;
     }
-    
+
     /**
      * 
      * Is the transport sending responses in CGI mode?
@@ -126,7 +126,7 @@ class Transport implements TransportInterface
     {
         return (bool) $this->cgi;
     }
-    
+
     /**
      * 
      * Sends a request through the adapter and returns a response message 
@@ -141,7 +141,7 @@ class Transport implements TransportInterface
     {
         return $this->adapter->exec($request, $this->options);
     }
-    
+
     /**
      * 
      * Sends a response using PHP functions.
@@ -156,7 +156,7 @@ class Transport implements TransportInterface
         if ($this->phpfunc->headers_sent($file, $line)) {
             throw new Exception\HeadersSent($file, $line);
         }
-        
+
         // determine status header type
         // cf. <http://www.php.net/manual/en/function.header.php>
         if ($this->isCgi()) {
@@ -164,21 +164,21 @@ class Transport implements TransportInterface
         } else {
             $status = "HTTP/{$response->version} {$response->status_code}";
         }
-        
+
         // add status text
         $status_text = $response->getStatusText();
         if ($status_text) {
             $status .= " {$status_text}";
         }
-        
+
         // send the status
         $this->phpfunc->header($status, true, $response->status_code);
-        
+
         // send the headers
         foreach ($response->getHeaders() as $header) {
             $this->phpfunc->header($header->__toString());
         }
-        
+
         // send the cookies
         foreach ($response->getCookies() as $cookie) {
             $this->phpfunc->setcookie(
@@ -191,7 +191,7 @@ class Transport implements TransportInterface
                 $cookie->getHttpOnly()
             );
         }
-        
+
         // send the content
         $content = $response->getContent();
         if (is_resource($content)) {
@@ -203,3 +203,4 @@ class Transport implements TransportInterface
         }
     }
 }
+ 

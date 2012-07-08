@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * The HTTP status code is unknown.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class UnknownStatus extends \Aura\Http\Exception {}
+class UnknownStatus extends Exception
+{
+}
+ 

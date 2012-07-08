@@ -56,7 +56,7 @@ class Factory
         } else {
             throw new Exception\UnknownAdapterType;
         }
-        
+
         return new Manager(
             new MessageFactory,
             new Transport(
@@ -67,3 +67,4 @@ class Factory
         );
     }
 }
+ 

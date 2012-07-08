@@ -27,7 +27,7 @@ class Options
      * 
      */
     protected $cookie_jar = null;
-    
+
     /**
      * 
      * The max number of redirects allowed.
@@ -36,7 +36,7 @@ class Options
      * 
      */
     protected $max_redirects = 10;
-    
+
     /**
      * 
      * The connection timeout in seconds.
@@ -45,7 +45,7 @@ class Options
      * 
      */
     protected $timeout = 10;
-    
+
     /**
      * 
      * The proxy hostname.
@@ -54,7 +54,7 @@ class Options
      * 
      */
     protected $proxy = null;
-    
+
     /**
      * 
      * The proxy port number.
@@ -63,7 +63,7 @@ class Options
      * 
      */
     protected $proxy_port = null;
-    
+
     /**
      * 
      * The proxy username.
@@ -72,7 +72,7 @@ class Options
      * 
      */
     protected $proxy_username = null;
-    
+
     /**
      * 
      * The proxy password.
@@ -81,7 +81,7 @@ class Options
      * 
      */
     protected $proxy_password = null;
-    
+
     /**
      * 
      * The SSL certificate authority file.
@@ -90,7 +90,7 @@ class Options
      * 
      */
     protected $ssl_cafile = null;
-    
+
     /**
      * 
      * The SSL certificate authority path.
@@ -99,7 +99,7 @@ class Options
      * 
      */
     protected $ssl_capath = null;
-    
+
     /**
      * 
      * The SSL local certificate.
@@ -108,7 +108,7 @@ class Options
      * 
      */
     protected $ssl_local_cert = null;
-    
+
     /**
      * 
      * The passphrase for the local certificate.
@@ -117,7 +117,7 @@ class Options
      * 
      */
     protected $ssl_passphrase = null;
-    
+
     /**
      * 
      * Require verification of the certificate?
@@ -126,7 +126,7 @@ class Options
      * 
      */
     protected $ssl_verify_peer = null;
-    
+
     /**
      *
      * Magic get to return property values.
@@ -140,7 +140,7 @@ class Options
     {
         return $this->$key;
     }
-    
+
     /**
      * 
      * Sets the cookie jar property.
@@ -155,7 +155,7 @@ class Options
         $this->cookie_jar = $cookie_jar;
         return $this;
     }
-    
+
     /**
      * 
      * When making the request, allow no more than this many redirects. 
@@ -170,7 +170,7 @@ class Options
         $this->max_redirects = (int) $max_redirects;
         return $this;
     }
-    
+
     /**
      * 
      * Sets the request timeout in seconds.
@@ -185,7 +185,7 @@ class Options
         $this->timeout = (float) $timeout;
         return $this;
     }
-    
+
     /**
      * 
      * Send all requests through this proxy server.
@@ -200,7 +200,7 @@ class Options
         $this->proxy = $proxy;
         return $this;
     }
-    
+
     /**
      * 
      * Set the proxy port number.
@@ -215,7 +215,7 @@ class Options
         $this->proxy_port = $proxy_port;
         return $this;
     }
-    
+
     /**
      * 
      * Gets the proxy host and port.
@@ -231,7 +231,7 @@ class Options
         }
         return $proxy;
     }
-    
+
     /**
      * 
      * Set the proxy port username.
@@ -246,7 +246,7 @@ class Options
         $this->proxy_username = $proxy_username;
         return $this;
     }
-    
+
     /**
      * 
      * Set the proxy password.
@@ -261,7 +261,7 @@ class Options
         $this->proxy_password = $proxy_password;
         return $this;
     }
-    
+
     /**
      * 
      * Gets the proxy "username:password" credentials.
@@ -275,7 +275,7 @@ class Options
             return $this->proxy_username . ':' . $this->proxy_password;
         }
     }
-    
+
     /**
      * 
      * Require verification of SSL certificate used?
@@ -290,7 +290,7 @@ class Options
         $this->ssl_verify_peer = (bool) $flag;
         return $this;
     }
-    
+
     /**
      * 
      * Location of Certificate Authority file on local filesystem which should
@@ -307,7 +307,7 @@ class Options
         $this->ssl_cafile = $val;
         return $this;
     }
-    
+
     /**
      * 
      * If $ssl_cafile is not specified or if the certificate is not
@@ -325,7 +325,7 @@ class Options
         $this->ssl_capath = $val;
         return $this;
     }
-    
+
     /**
      * 
      * Path to local certificate file on filesystem. This must be a PEM encoded
@@ -342,7 +342,7 @@ class Options
         $this->ssl_local_cert = $val;
         return $this;
     }
-    
+
     /**
      * 
      * Passphrase with which the $ssl_local_cert file was encoded.
@@ -358,3 +358,4 @@ class Options
         return $this;
     }
 }
+ 

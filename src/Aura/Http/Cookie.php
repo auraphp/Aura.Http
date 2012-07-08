@@ -103,12 +103,12 @@ class Cookie
      * 
      */
     public function __construct(
-        $name, 
-        $value, 
-        $expire, 
-        $path, 
-        $domain, 
-        $secure, 
+        $name,
+        $value,
+        $expire,
+        $path,
+        $domain,
+        $secure,
         $httponly
     ) {
         $this->name     = $name;
@@ -118,14 +118,14 @@ class Cookie
         $this->domain   = $domain;
         $this->secure   = $secure;
         $this->httponly = $httponly;
-        
-        if (! empty($expire)) {    
+
+        if (! empty($expire)) {
             $this->expire = $this->isValidTimeStamp($expire)
                           ? $expire
                           : strtotime($expire);
         }
     }
-    
+
     /**
      * 
      * Sets the $expire value on the cookie.
@@ -138,13 +138,13 @@ class Cookie
     public function setExpire($expire)
     {
         $this->expire = null;
-        if ($expire !== null) {    
+        if ($expire !== null) {
             $this->expire = $this->isValidTimeStamp($expire)
                           ? $expire
                           : strtotime($expire);
         }
     }
-    
+
     /**
      * 
      * Magic get to return property values.
@@ -179,51 +179,48 @@ class Cookie
         $this->expire  = '0';
 
         $defaults     = parse_url($default_url);
-        $this->secure = (isset($defaults['scheme']) && 
+        $this->secure = (isset($defaults['scheme']) &&
                          'https' == $defaults['scheme']);
         $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
 
-        if (isset($defaults['path'])) { 
+        if (isset($defaults['path'])) {
             $this->path = substr($defaults['path'], 0,
                                 strrpos($defaults['path'], '/') + 1);
         }
-        
+
         // get the list of elements
         $list = explode(';', $text);
-        
+
         // get the name and value
         list($this->name, $this->value) = explode('=', array_shift($list));
         $this->value                    = urldecode($this->value);
-        
+
         foreach ($list as $item) {
             $data    = explode('=', trim($item));
             $data[0] = strtolower($data[0]);
-            
+
             switch ($data[0]) {
                 case 'expires':
                     $this->expire = $this->isValidTimeStamp($data[1])
                                   ? $data[1]
                                   : strtotime($data[1]);
                     break;
-
                 case 'path':
                     $this->path = $data[1];
                     break;
-
                 case 'domain':
                     // prefix the domain with a dot to be consistent with Curl
                     $this->domain = ('.' == $data[1][0])
                                   ? $data[1]
                                   : ".{$data[1]}";
                     break;
-            
                 case 'secure':
                     $this->secure = true;
                     break;
-                
                 case 'httponly':
                     $this->httponly = true;
                     break;
+                // FIXME Don't we need a default case?
             }
         }
     }
@@ -254,15 +251,15 @@ class Cookie
         } else {
             $this->domain = $parts[0];
         }
-        
+
         // part 1 is ignored; remaining parts follow
-        $this->path     = $parts[2]; 
-        $this->secure   = ("TRUE" === $parts[3]) ? true : false; 
-        $this->setExpire($parts[4]); 
+        $this->path     = $parts[2];
+        $this->secure   = ("TRUE" === $parts[3]) ? true : false;
+        $this->setExpire($parts[4]);
         $this->name     = $parts[5];
-        $this->value    = $parts[6]; 
+        $this->value    = $parts[6];
     }
-    
+
     /**
      * 
      * Get the cookie name.
@@ -286,7 +283,7 @@ class Cookie
     {
         return $this->value;
     }
-    
+
     /**
      * 
      * Get the cookie expiration date.
@@ -298,7 +295,7 @@ class Cookie
     {
         return $this->expire;
     }
-    
+
     /**
      * 
      * Get the cookie path.
@@ -310,7 +307,7 @@ class Cookie
     {
         return $this->path;
     }
-    
+
     /**
      * 
      * Get the cookie domain.
@@ -322,7 +319,7 @@ class Cookie
     {
         return $this->domain;
     }
-    
+
     /**
      * 
      * Use SSL only.
@@ -334,7 +331,7 @@ class Cookie
     {
         return $this->secure;
     }
-    
+
     /**
      * 
      * Use HTTP only.
@@ -393,12 +390,13 @@ class Cookie
         if (! $this->expire && $expire_session_cookies) {
             return true;
         } else if (! $this->expire) {
+            // FIXME Usage of ELSE IF is discouraged; use ELSEIF instead
             return false;
         }
 
         return $this->expire < time();
     }
-    
+
     /**
      * 
      * Converts this cookie to a line for a cookie jar.
@@ -411,11 +409,11 @@ class Cookie
         $domain = $this->getDomain();
         $expire = $this->getExpire();
         $path   = $this->getPath();
-        
+
         if ($this->getHttpOnly()) {
             $domain = '#HttpOnly_' . $domain;
         }
-        
+
         return sprintf(
             "%s\t%s\t%s\t%s\t%s\t%s\t%s",
             $domain,
@@ -427,7 +425,7 @@ class Cookie
             $this->getValue()
         );
     }
-    
+
     /**
      * 
      * Returns this cookie as a request header string.
@@ -439,7 +437,7 @@ class Cookie
     {
         return urlencode($this->name) . '=' . urlencode($this->value);
     }
-    
+
     /**
      *
      * Try to match a $domain to this cookies domain.
@@ -455,7 +453,7 @@ class Cookie
         $host_domain   = strtolower($domain);
 
         if (! $cookie_domain) {
-            return false; 
+            return false;
         }
 
         if ('.' == $cookie_domain[0]) {
@@ -463,7 +461,7 @@ class Cookie
         }
 
         return ($cookie_domain == $host_domain ||
-                preg_match('/\.' . preg_quote($cookie_domain) . '$/', 
+                preg_match('/\.' . preg_quote($cookie_domain) . '$/',
                            $host_domain));
     }
 
@@ -486,3 +484,4 @@ class Cookie
                ($timestamp >= ~PHP_INT_MAX);
     }
 }
+ 

@@ -75,7 +75,7 @@ class Response extends Message
         '504' => 'Gateway Timeout',
         '505' => 'HTTP Version Not Supported',
     ];
-    
+
     /**
      * 
      * The HTTP status code of the message.
@@ -84,7 +84,7 @@ class Response extends Message
      * 
      */
     protected $status_code = 200;
-    
+
     /**
      * 
      * The HTTP status message of the message.
@@ -93,7 +93,7 @@ class Response extends Message
      * 
      */
     protected $status_text = 'OK';
-    
+
     /**
      * 
      * Sets the HTTP status code to for the response. Automatically resets the
@@ -109,16 +109,16 @@ class Response extends Message
             throw new Exception\UnknownStatus("Status code $code not recognized.");
         }
         $this->status_code = $code;
-        
+
         if (isset($this->status_text_default[$code])) {
             $this->setStatusText($this->status_text_default[$code]);
         } else {
             $this->setStatusText(null);
         }
-        
+
         return $this;
     }
-    
+
     /**
      * 
      * Returns the HTTP status code for the message.
@@ -130,7 +130,7 @@ class Response extends Message
     {
         return $this->status_code;
     }
-    
+
     /**
      * 
      * Sets the HTTP status text for the message.
@@ -146,7 +146,7 @@ class Response extends Message
         $this->status_text = $text;
         return $this;
     }
-    
+
     /**
      * 
      * Returns the HTTP status text for the message.
@@ -158,5 +158,5 @@ class Response extends Message
     {
         return $this->status_text;
     }
-    
 }
+ 

@@ -34,7 +34,7 @@ class Request extends Message
     const METHOD_POST       = 'POST';
     const METHOD_PUT        = 'PUT';
     const METHOD_TRACE      = 'TRACE';
-    
+
     /**
      * WebDAV method constants.
      */
@@ -45,13 +45,13 @@ class Request extends Message
     const METHOD_PROPFIND   = 'PROPFIND';
     const METHOD_PROPPATCH  = 'PROPPATCH';
     const METHOD_UNLOCK     = 'UNLOCK';
-    
+
     /**
      * Auth constants
      */
     const AUTH_BASIC      = 'BASIC';
     const AUTH_DIGEST     = 'DIGEST';
-    
+
     /**
      * 
      * HTTP request method to use.
@@ -60,7 +60,7 @@ class Request extends Message
      *
      */
     protected $method = self::METHOD_GET;
-    
+
     /**
      *
      * The URL to request.
@@ -69,7 +69,7 @@ class Request extends Message
      * 
      */
     protected $url;
-    
+
     /**
      * 
      * The type of authentication to use.
@@ -78,7 +78,7 @@ class Request extends Message
      * 
      */
     protected $auth;
-    
+
     /**
      * 
      * The username for authentication.
@@ -87,7 +87,7 @@ class Request extends Message
      * 
      */
     protected $username;
-    
+
     /**
      * 
      * The password for authentication.
@@ -96,7 +96,7 @@ class Request extends Message
      * 
      */
     protected $password;
-    
+
     /**
      * 
      * Save the response to this stream resource.
@@ -105,7 +105,7 @@ class Request extends Message
      * 
      */
     protected $save_to_stream;
-    
+
     /**
      * 
      * Sets the URL for the request.
@@ -142,12 +142,12 @@ class Request extends Message
         if (! defined($const)) {
             throw new Exception\UnknownMethod("Method '{$method}' is unknown");
         }
-        
+
         $this->method = $method;
-        
+
         return $this;
     }
-    
+
     /**
      * 
      * Sets the authentication type.
@@ -163,21 +163,21 @@ class Request extends Message
             $this->auth = null;
             return;
         }
-        
+
         $known = [
             self::AUTH_BASIC,
             self::AUTH_DIGEST
         ];
-        
+
         if (! in_array($auth, $known)) {
             throw new Exception\UnknownAuthType("Unknown auth type '$auth'");
         }
-        
+
         $this->auth = $auth;
-        
+
         return $this;
     }
-    
+
     /**
      * 
      * Sets the username for authentication.
@@ -193,12 +193,12 @@ class Request extends Message
             $text = 'The username may not contain a colon (:).';
             throw new Exception\InvalidUsername($text);
         }
-        
+
         $this->username = $username;
-        
+
         return $this;
     }
-    
+
     /**
      * 
      * Sets the password for authentication.
@@ -213,7 +213,7 @@ class Request extends Message
         $this->password = $password;
         return $this;
     }
-    
+
     /**
      * 
      * Returns the "username:password" credentials.
@@ -225,7 +225,7 @@ class Request extends Message
     {
         return $this->username . ':' . $this->password;
     }
-    
+
     /**
      * 
      * The response content from the request should be saved to this stream
@@ -241,7 +241,7 @@ class Request extends Message
         $this->save_to_stream = $stream;
         return $this;
     }
-    
+
     /**
      * 
      * Returns the stream resource where response content should be saved to.
@@ -254,3 +254,4 @@ class Request extends Message
         return $this->save_to_stream;
     }
 }
+ 

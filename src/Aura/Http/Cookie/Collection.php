@@ -66,7 +66,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return $this->list[$key];
     }
-    
+
     /**
      * 
      * Does a cookie exist.
@@ -80,7 +80,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return isset($this->list[$key]);
     }
-    
+
     /**
      * 
      * Unset a cookie.
@@ -94,7 +94,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         unset($this->list[$key]);
     }
-    
+
     /**
      * 
      * Returns the cookie collection as a string of `name=value` pairs.
@@ -110,7 +110,7 @@ class Collection implements \IteratorAggregate, \Countable
         }
         return implode(';', $list);
     }
-    
+
     /**
      * 
      * Count the number of cookies.
@@ -122,7 +122,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return count($this->list);
     }
-    
+
     /** 
      * 
      * Gets all cookies as an iterator.
@@ -134,7 +134,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return new \ArrayIterator($this->list);
     }
-    
+
     /**
      * 
      * Sets a single cookie by name.
@@ -154,7 +154,7 @@ class Collection implements \IteratorAggregate, \Countable
 
         $this->list[$cookie->getName()] = $cookie;
     }
-    
+
     /**
      * 
      * Sets the entire collection from a cookie jar.
@@ -174,7 +174,7 @@ class Collection implements \IteratorAggregate, \Countable
             $this->set($cookie);
         }
     }
-    
+
     /**
      * 
      * Parses the value of the "Set-Cookie" header and sets it.
@@ -193,7 +193,7 @@ class Collection implements \IteratorAggregate, \Countable
         $cookie->setFromHeader($str, $url);
         $this->list[$cookie->getName()] = $cookie;
     }
-    
+
     /** 
      * 
      * Gets all cookies.
@@ -205,7 +205,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return $this->list;
     }
-    
+
     /**
      * 
      * Sets all cookies at once removing all previous cookies.
@@ -224,3 +224,4 @@ class Collection implements \IteratorAggregate, \Countable
         }
     }
 }
+ 

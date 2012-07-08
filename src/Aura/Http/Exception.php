@@ -17,4 +17,7 @@ namespace Aura\Http;
  * @package Aura.Http
  * 
  */
-class Exception extends \Exception {}
+class Exception extends \Exception
+{
+}
+ 

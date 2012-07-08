@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * The message type is unknown.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class UnknownMessageType extends \Aura\Http\Exception {}
+class UnknownMessageType extends Exception
+{
+}
+ 

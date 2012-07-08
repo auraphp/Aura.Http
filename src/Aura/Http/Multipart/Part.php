@@ -29,7 +29,7 @@ class Part
      * 
      */
     protected $headers;
-    
+
     /**
      * 
      * Content for this part.
@@ -38,7 +38,7 @@ class Part
      * 
      */
     protected $content;
-    
+
     /**
      * 
      * Constructor.
@@ -50,7 +50,7 @@ class Part
     {
         $this->headers = $headers;
     }
-    
+
     /**
      * 
      * Sets the content for this part.
@@ -62,7 +62,7 @@ class Part
     {
         $this->content = $content;
     }
-    
+
     /**
      * 
      * Gets the content for this part.
@@ -74,7 +74,7 @@ class Part
     {
         return $this->content;
     }
-    
+
     /**
      * 
      * Gets the headers for this part.
@@ -86,7 +86,7 @@ class Part
     {
         return $this->headers;
     }
-    
+
     /**
      * 
      * Sets the Content-Type header for this part.
@@ -105,7 +105,7 @@ class Part
         }
         $this->headers->set('Content-Type', $type);
     }
-    
+
     /**
      * 
      * Sets the Disposition header for this part.
@@ -132,7 +132,7 @@ class Part
         }
         $this->headers->set('Content-Disposition', $disposition);
     }
-    
+
     /**
      * 
      * Sets the Content-Encoding header for this part.
@@ -152,3 +152,4 @@ class Part
         $this->headers->set('Content-Encoding', $encoding);
     }
 }
+ 

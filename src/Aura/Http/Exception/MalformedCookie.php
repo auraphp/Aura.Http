@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * A line in a cookie jar is malformed.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class MalformedCookie extends \Aura\Http\Exception {}
+class MalformedCookie extends Exception
+{
+}
+ 

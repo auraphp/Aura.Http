@@ -21,7 +21,7 @@ use Aura\Http\Header;
  */
 class Factory
 {
-    
+
     /**
      * 
      * Creates and returns a new Header object.
@@ -38,3 +38,4 @@ class Factory
         return new Header($label, $value);
     }
 }
+ 

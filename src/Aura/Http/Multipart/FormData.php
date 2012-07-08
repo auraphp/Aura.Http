@@ -29,7 +29,7 @@ class FormData
      * 
      */
     protected $parts = [];
-    
+
     /**
      * 
      * The boundary used between parts.
@@ -38,7 +38,7 @@ class FormData
      * 
      */
     protected $boundary;
-    
+
     /**
      * 
      * A factory to create message parts.
@@ -47,7 +47,7 @@ class FormData
      * 
      */
     protected $part_factory;
-    
+
     /**
      * 
      * Consructor.
@@ -60,7 +60,7 @@ class FormData
         $this->part_factory = $part_factory;
         $this->boundary = uniqid(null, true);
     }
-    
+
     /**
      * 
      * Returns this object as a string suitable for message content.
@@ -81,7 +81,7 @@ class FormData
         $text .= "--{$this->boundary}--\r\n";
         return $text;
     }
-    
+
     /**
      * 
      * Returns the boundary used between message parts.
@@ -93,7 +93,7 @@ class FormData
     {
         return $this->boundary;
     }
-    
+
     /**
      * 
      * Returns the number of message parts.
@@ -105,7 +105,7 @@ class FormData
     {
         return count($this->parts);
     }
-    
+
     /**
      * 
      * Adds message parts from an array of key-value pairs; recursively
@@ -122,12 +122,12 @@ class FormData
     public function addFromArray(array $array, $prefix = null)
     {
         foreach ($array as $name => $value) {
-            
+
             // prefix the name if needed
             if ($prefix) {
                 $name = $prefix . '[' . $name . ']';
             }
-            
+
             // add parts
             if (is_array($value)) {
                 // recursively descend
@@ -142,7 +142,7 @@ class FormData
             }
         }
     }
-    
+
     /**
      * 
      * Adds, and then returns, a new message part.
@@ -156,7 +156,7 @@ class FormData
         $this->parts[] = $part;
         return $part;
     }
-    
+
     /**
      * 
      * Adds, and then returns, a new message part for a string field and value.
@@ -175,7 +175,7 @@ class FormData
         $part->setContent($string);
         return $part;
     }
-    
+
     /**
      * 
      * Adds, and then returns, a new message part for a file upload.
@@ -196,3 +196,4 @@ class FormData
         return $part;
     }
 }
+ 

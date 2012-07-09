@@ -30,7 +30,7 @@ class Collection implements \IteratorAggregate, \Countable
      * 
      */
     protected $list = [];
-    
+
     /**
      * 
      * A factory to create header objects.
@@ -68,7 +68,7 @@ class Collection implements \IteratorAggregate, \Countable
 
         return $this->list[$key][0];
     }
-    
+
     /**
      * 
      * Does a header exist.
@@ -85,7 +85,7 @@ class Collection implements \IteratorAggregate, \Countable
 
         return isset($this->list[$key]);
     }
-    
+
     /**
      * 
      * Unset a header.
@@ -102,7 +102,7 @@ class Collection implements \IteratorAggregate, \Countable
 
         unset($this->list[$key]);
     }
-    
+
     /**
      * 
      * Creates a string from all the headers
@@ -120,7 +120,7 @@ class Collection implements \IteratorAggregate, \Countable
         }
         return implode("\r\n", $list);
     }
-    
+
     /**
      * 
      * Count the number of headers.
@@ -132,7 +132,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return count($this->list, COUNT_RECURSIVE) - count($this->list);
     }
-    
+
     /**
      * 
      * Returns a header.
@@ -147,7 +147,7 @@ class Collection implements \IteratorAggregate, \Countable
         // get a sanitized label
         $header = $this->factory->newInstance($label, null);
         $label  = $header->getLabel();
-        
+
         // return null, header, or array of headers
         if (! isset($this->list[$label])) {
             return null;
@@ -157,7 +157,7 @@ class Collection implements \IteratorAggregate, \Countable
             return $this->list[$label];
         }
     }
-    
+
     /**
      * 
      * Returns all the headers.
@@ -169,7 +169,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return $this->list;
     }
-    
+
     /**
      * 
      * Returns all the headers as an iterator.
@@ -187,7 +187,7 @@ class Collection implements \IteratorAggregate, \Countable
         }
         return new \ArrayIterator($flat);
     }
-    
+
     /**
      * 
      * Adds a header value to an existing header label; if there is more
@@ -210,7 +210,7 @@ class Collection implements \IteratorAggregate, \Countable
 
         $this->list[$header->getLabel()][] = $header;
     }
-    
+
     /**
      * 
      * Sets a header value, overwriting previous values.
@@ -232,7 +232,7 @@ class Collection implements \IteratorAggregate, \Countable
 
         $this->list[$header->getlabel()] = [$header];
     }
-    
+
     /**
      * 
      * Sets all the headers at once; replaces all previously existing headers.
@@ -252,3 +252,4 @@ class Collection implements \IteratorAggregate, \Countable
         }
     }
 }
+ 

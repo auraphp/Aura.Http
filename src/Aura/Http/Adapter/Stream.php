@@ -34,7 +34,7 @@ class Stream implements AdapterInterface
      * 
      */
     protected $stack_builder;
-    
+
     /**
      * 
      * Creates a cookie jar.
@@ -212,7 +212,7 @@ class Stream implements AdapterInterface
         // done!
         return $stack;
     }
-    
+
     /**
      * 
      * Opens the stream connection to the remote host.
@@ -258,7 +258,7 @@ class Stream implements AdapterInterface
             $this->headers = $http_response_header;
         }
     }
-    
+
     /**
      * 
      * Reads from the stream connection to the remote host.
@@ -297,7 +297,7 @@ class Stream implements AdapterInterface
             $this->headers = $meta['wrapper_data'];
         }
     }
-    
+
     /**
      * 
      * Sets the stream context.
@@ -324,7 +324,7 @@ class Stream implements AdapterInterface
             $url['scheme'] => $this->context_options,
         ]);
     }
-    
+
     /**
      * 
      * Sets the content on the stream context.
@@ -661,3 +661,4 @@ class Stream implements AdapterInterface
         );
     }
 }
+ 

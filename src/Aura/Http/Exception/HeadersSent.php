@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * Headers have already been sent, and cannot be sent again.
@@ -17,7 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class HeadersSent extends \Aura\Http\Exception
+class HeadersSent extends Exception
 {
     /**
      * 
@@ -34,3 +36,4 @@ class HeadersSent extends \Aura\Http\Exception
         parent::__construct($message);
     }
 }
+ 

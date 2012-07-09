@@ -30,7 +30,7 @@ class Message
      * 
      */
     protected $cookies;
-    
+
     /**
      * 
      * The content of this message.
@@ -39,7 +39,7 @@ class Message
      * 
      */
     protected $content;
-    
+
     /**
      * 
      * The headers for this message.
@@ -48,7 +48,7 @@ class Message
      * 
      */
     protected $headers;
-    
+
     /**
      * 
      * The HTTP version for this message.
@@ -57,7 +57,7 @@ class Message
      * 
      */
     protected $version = '1.1';
-    
+
     /**
      * 
      * Constructor.
@@ -72,7 +72,7 @@ class Message
         $this->headers = $headers;
         $this->cookies = $cookies;
     }
-    
+
     /**
      * 
      * Read-only access to properties.
@@ -86,7 +86,7 @@ class Message
     {
         return $this->$key;
     }
-    
+
     /** 
      * 
      * Sets the cookies for the message.
@@ -101,7 +101,7 @@ class Message
         $this->cookies = $cookies;
         return $this;
     }
-    
+
     /** 
      * 
      * Returns the $cookies object.
@@ -113,7 +113,7 @@ class Message
     {
         return $this->cookies;
     }
-    
+
     /**
      * 
      * Sets the content for the message.
@@ -128,7 +128,7 @@ class Message
         $this->content = $content;
         return $this;
     }
-    
+
     /**
      * 
      * Returns the $content object.
@@ -140,7 +140,7 @@ class Message
     {
         return $this->content;
     }
-    
+
     /**
      * 
      * Sets the headers for the message (not including cookies).
@@ -155,7 +155,7 @@ class Message
         $this->headers = $headers;
         return $this;
     }
-    
+
     /**
      * 
      * Returns the $headers object (not including cookies).
@@ -167,7 +167,7 @@ class Message
     {
         return $this->headers;
     }
-    
+
     /**
      * 
      * Sets the HTTP version for the message.
@@ -183,7 +183,7 @@ class Message
         $this->version = $version;
         return $this;
     }
-    
+
     /**
      * 
      * Returns the HTTP version for the message.
@@ -196,3 +196,4 @@ class Message
         return $this->version;
     }
 }
+ 

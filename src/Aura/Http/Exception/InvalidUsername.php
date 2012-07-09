@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * The username is not valid, probably because it has a ':' in it.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class InvalidUsername extends \Aura\Http\Exception {}
+class InvalidUsername extends Exception
+{
+}
+ 

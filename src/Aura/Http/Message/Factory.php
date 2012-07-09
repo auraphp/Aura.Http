@@ -43,7 +43,7 @@ class Factory
         $cookies = new Cookies(new CookieFactory);
         return new Message($headers, $cookies);
     }
-    
+
     /**
      *
      * Creates an object of Aura\Http\Message\Request
@@ -56,7 +56,7 @@ class Factory
         $cookies = new Cookies(new CookieFactory);
         return new Request($headers, $cookies);
     }
-    
+
     /**
      * 
      * Creates object of Aura\Http\Message\Response
@@ -70,3 +70,4 @@ class Factory
         return new Response($headers, $cookies);
     }
 }
+ 

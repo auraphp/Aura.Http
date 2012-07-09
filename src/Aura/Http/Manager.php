@@ -31,7 +31,7 @@ class Manager
      *  
      */
     protected $message_factory;
-    
+
     /**
      * An object of type Aura\Http\Transport\TransportInterface
      * 
@@ -39,7 +39,7 @@ class Manager
      * 
      */
     protected $transport;
-    
+
     /**
      * 
      * Constructor
@@ -56,7 +56,7 @@ class Manager
         $this->message_factory = $message_factory;
         $this->transport = $transport;
     }
-    
+
     /**
      * 
      * Magic method
@@ -70,7 +70,7 @@ class Manager
     {
         return $this->$key;
     }
-    
+
     /**
      * 
      * Return object of type Aura\Http\Message\Request
@@ -82,7 +82,7 @@ class Manager
     {
         return $this->message_factory->newRequest();
     }
-    
+
     /**
      * 
      * Return Aura\Http\Message\Response object
@@ -94,7 +94,7 @@ class Manager
     {
         return $this->message_factory->newResponse();
     }
-    
+
     /**
      * 
      * Send Request or Response depending on the transport
@@ -109,11 +109,12 @@ class Manager
         if ($message instanceof Request) {
             return $this->transport->sendRequest($message);
         }
-        
+
         if ($message instanceof Response) {
             return $this->transport->sendResponse($message);
         }
-        
+
         throw new Exception\UnknownMessageType;
     }
 }
+ 

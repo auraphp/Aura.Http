@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * A file does not exist.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class FileDoesNotExist extends \Aura\Http\Exception {}
+class FileDoesNotExist extends Exception
+{
+}
+ 

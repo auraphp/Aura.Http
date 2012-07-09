@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * The authentication type is unknown.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class UnknownAuthType extends \Aura\Http\Exception {}
+class UnknownAuthType extends Exception
+{
+}
+ 

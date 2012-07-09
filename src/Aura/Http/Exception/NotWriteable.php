@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * A file is not writable.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class NotWriteable extends \Aura\Http\Exception {}
+class NotWriteable extends Exception
+{
+}
+ 

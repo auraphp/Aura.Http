@@ -28,7 +28,7 @@ interface TransportInterface
      * 
      */
     public function sendRequest(Request $request);
-    
+
     /**
      * 
      * Aura\Http\Message\Response object
@@ -38,3 +38,4 @@ interface TransportInterface
      */
     public function sendResponse(Response $response);
 }
+ 

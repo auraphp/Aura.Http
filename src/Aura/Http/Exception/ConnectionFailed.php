@@ -10,6 +10,8 @@
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
  * Indicates an HTTP connection failed.
@@ -17,4 +19,7 @@ namespace Aura\Http\Exception;
  * @package Aura.Http
  * 
  */
-class ConnectionFailed extends \Aura\Http\Exception {}
+class ConnectionFailed extends Exception
+{
+}
+ 

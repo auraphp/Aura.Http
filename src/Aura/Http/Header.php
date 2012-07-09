@@ -51,7 +51,7 @@ class Header
         $this->setLabel($label);
         $this->setValue($value);
     }
-    
+
     /**
      * 
      * Magic get for label and value.
@@ -66,12 +66,12 @@ class Header
         if ($key == 'label') {
             return $this->getLabel();
         }
-        
+
         if ($key == 'value') {
             return $this->getValue();
         }
     }
-    
+
     /**
      * 
      * Returns this header object as a "label: value" string.
@@ -85,7 +85,7 @@ class Header
         $value = $this->getValue();
         return "{$label}: {$value}";
     }
-    
+
     /**
      * 
      * Sets the header label after sanitizing and normalizing it.
@@ -99,7 +99,7 @@ class Header
     {
         // sanitize
         $label = preg_replace('/[^a-zA-Z0-9_-]/', '', $label);
-        
+
         // normalize
         $label = ucwords(
             strtolower(
@@ -107,11 +107,11 @@ class Header
             )
         );
         $label = str_replace(' ', '-', $label);
-        
+
         // set
         $this->label = $label;
     }
-    
+
     /**
      * 
      * Gets the header label.
@@ -137,7 +137,7 @@ class Header
     {
         $this->value = str_replace(["\r", "\n"], "", $value);
     }
-    
+
     /**
      * 
      * Gets the header value.
@@ -150,3 +150,4 @@ class Header
         return $this->value;
     }
 }
+ 

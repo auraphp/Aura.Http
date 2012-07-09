@@ -1,1 +1,5 @@
-- no changes, making a release only so that automated docs get updated
+- Now includes Request, Adapter, and Transport mechanisms, making it a full-
+  fledged HTTP library.
+
+- Cookies and Headers are now represented by objects, not arrays.
+

@@ -1,1 +1,1 @@
-The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.
+The Aura HTTP package provides objects to build and send HTTP requests and responses.

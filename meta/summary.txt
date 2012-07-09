@@ -1,1 +1,1 @@
-Build and send HTTP responses
+Build and send HTTP requests and responses

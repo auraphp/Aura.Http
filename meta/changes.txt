@@ -3,3 +3,4 @@
 
 - Cookies and Headers are now represented by objects, not arrays.
 
+- Modified for PSR-1 and 2 compliance.

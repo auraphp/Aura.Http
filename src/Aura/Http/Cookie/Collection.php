@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura Project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -32,14 +34,18 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * 
-     * @var Aura\Http\Cookie\Factory
+     * Creates cookie objects.
+     * 
+     * @var CookieFactory
      * 
      */
     protected $factory;
 
     /**
-     *
-     * @param Aura\Http\Cookie\Factory $factory
+     * 
+     * Constructor.
+     * 
+     * @param CookieFactory $factory Creates cookie objects.
      *
      */
     public function __construct(CookieFactory $factory)
@@ -60,7 +66,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return $this->list[$key];
     }
-    
+
     /**
      * 
      * Does a cookie exist.
@@ -74,7 +80,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return isset($this->list[$key]);
     }
-    
+
     /**
      * 
      * Unset a cookie.
@@ -88,7 +94,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         unset($this->list[$key]);
     }
-    
+
     /**
      * 
      * Returns the cookie collection as a string of `name=value` pairs.
@@ -104,7 +110,7 @@ class Collection implements \IteratorAggregate, \Countable
         }
         return implode(';', $list);
     }
-    
+
     /**
      * 
      * Count the number of cookies.
@@ -116,7 +122,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return count($this->list);
     }
-    
+
     /** 
      * 
      * Gets all cookies as an iterator.
@@ -128,7 +134,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return new \ArrayIterator($this->list);
     }
-    
+
     /**
      * 
      * Sets a single cookie by name.
@@ -148,7 +154,19 @@ class Collection implements \IteratorAggregate, \Countable
 
         $this->list[$cookie->getName()] = $cookie;
     }
-    
+
+    /**
+     * 
+     * Sets the entire collection from a cookie jar.
+     * 
+     * @param CookieJar $jar The cookie jar to set from.
+     * 
+     * @param string $url The URL to use when setting the secure,
+     * host, and path property defaults.
+     * 
+     * @return void
+     * 
+     */
     public function setAllFromJar(CookieJar $jar, $url)
     {
         $cookies = $jar->getAll($url);
@@ -156,15 +174,15 @@ class Collection implements \IteratorAggregate, \Countable
             $this->set($cookie);
         }
     }
-    
+
     /**
      * 
      * Parses the value of the "Set-Cookie" header and sets it.
      * 
-     * @param string $text The Set-Cookie text string value.
+     * @param string $str The Set-Cookie text string value.
      * 
      * @param string $url The URL to use when setting the secure,
-     * host and path property defaults.
+     * host, and path property defaults.
      * 
      * @return void
      * 
@@ -175,7 +193,7 @@ class Collection implements \IteratorAggregate, \Countable
         $cookie->setFromHeader($str, $url);
         $this->list[$cookie->getName()] = $cookie;
     }
-    
+
     /** 
      * 
      * Gets all cookies.
@@ -187,7 +205,7 @@ class Collection implements \IteratorAggregate, \Countable
     {
         return $this->list;
     }
-    
+
     /**
      * 
      * Sets all cookies at once removing all previous cookies.
@@ -206,3 +224,4 @@ class Collection implements \IteratorAggregate, \Countable
         }
     }
 }
+ 

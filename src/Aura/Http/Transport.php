@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Http
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Http;
 
 use Aura\Http\Adapter\AdapterInterface;
@@ -7,17 +16,63 @@ use Aura\Http\Transport\TransportInterface;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
 
+/**
+ * 
+ * Transports HTTP requests and responses.
+ * 
+ * @package Aura.Http
+ * 
+ */
 class Transport implements TransportInterface
 {
-    // used so we can intercept native php function calls for testing
+    /**
+     * 
+     * An object for calling PHP functions; used mostly so we can intercept
+     * calls during tests.
+     * 
+     * @var PhpFunc
+     * 
+     */
     protected $phpfunc;
-    
+
+    /**
+     * 
+     * An HTTP request adapter.
+     * 
+     * @var AdapterInterface
+     * 
+     */
     protected $adapter;
-    
+
+    /**
+     * 
+     * A set of option for this transport instance.
+     * 
+     * @var Options
+     * 
+     */
     protected $options;
-    
+
+    /**
+     * 
+     * Whether or not this transport should send responses as if in CGI mode.
+     * 
+     * @var bool
+     * 
+     */
     protected $cgi;
-    
+
+    /**
+     * 
+     * Constructor
+     *
+     * @param PhpFunc $phpfunc
+     * 
+     * @param Options $options
+     * 
+     * @param AdapterInterface $adapter 
+     * 
+     */
     public function __construct(
         PhpFunc             $phpfunc,
         Options             $options,
@@ -26,16 +81,25 @@ class Transport implements TransportInterface
         $this->phpfunc = $phpfunc;
         $this->options = $options;
         $this->adapter = $adapter;
-        
+
         $cgi = (strpos(php_sapi_name(), 'cgi') !== false);
         $this->setCgi($cgi);
     }
-    
+
+    /**
+     * 
+     * Magic get to return property values.
+     * 
+     * @param string $key The property to return.
+     * 
+     * @return mixed
+     * 
+     */
     public function __get($key)
     {
         return $this->$key;
     }
-    
+
     /**
      * 
      * Optionally send responses as if in CGI mode. (This changes how the 
@@ -50,7 +114,7 @@ class Transport implements TransportInterface
     {
         $this->cgi = (bool) $cgi;
     }
-    
+
     /**
      * 
      * Is the transport sending responses in CGI mode?
@@ -62,18 +126,37 @@ class Transport implements TransportInterface
     {
         return (bool) $this->cgi;
     }
-    
+
+    /**
+     * 
+     * Sends a request through the adapter and returns a response message 
+     * stack.
+     * 
+     * @param Request $request The request to send.
+     * 
+     * @return Message\Stack
+     * 
+     */
     public function sendRequest(Request $request)
     {
         return $this->adapter->exec($request, $this->options);
     }
-    
+
+    /**
+     * 
+     * Sends a response using PHP functions.
+     * 
+     * @param Response $response The response to send.
+     * 
+     * @return void
+     * 
+     */
     public function sendResponse(Response $response)
     {
         if ($this->phpfunc->headers_sent($file, $line)) {
             throw new Exception\HeadersSent($file, $line);
         }
-        
+
         // determine status header type
         // cf. <http://www.php.net/manual/en/function.header.php>
         if ($this->isCgi()) {
@@ -81,21 +164,21 @@ class Transport implements TransportInterface
         } else {
             $status = "HTTP/{$response->version} {$response->status_code}";
         }
-        
+
         // add status text
         $status_text = $response->getStatusText();
         if ($status_text) {
             $status .= " {$status_text}";
         }
-        
+
         // send the status
         $this->phpfunc->header($status, true, $response->status_code);
-        
+
         // send the headers
         foreach ($response->getHeaders() as $header) {
             $this->phpfunc->header($header->__toString());
         }
-        
+
         // send the cookies
         foreach ($response->getCookies() as $cookie) {
             $this->phpfunc->setcookie(
@@ -108,7 +191,7 @@ class Transport implements TransportInterface
                 $cookie->getHttpOnly()
             );
         }
-        
+
         // send the content
         $content = $response->getContent();
         if (is_resource($content)) {
@@ -120,3 +203,4 @@ class Transport implements TransportInterface
         }
     }
 }
+ 

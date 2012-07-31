@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -20,64 +22,95 @@ use Aura\Http\Exception;
 class Cookie
 {
     /**
+     * Cookie name.
      * 
-     * @var string Cookie name.
+     * @var string
      * 
      */
     protected $name;
 
     /**
      * 
-     * @var string Cookie value.
+     * Cookie value.
+     * 
+     * @var string
      * 
      */
     protected $value;
 
     /**
      * 
-     * @var string Cookie expiration date in unix epoch seconds.
+     * Cookie expiration date in unix epoch seconds.
+     * 
+     * @var string
      * 
      */
     protected $expire;
 
     /**
      * 
-     * @var string Cookie path.
+     * Cookie path.
+     * 
+     * @var string
      * 
      */
     protected $path;
 
     /**
      * 
-     * @var string Cookie domain.
+     * Cookie domain.
+     * 
+     * @var string
      * 
      */
     protected $domain;
 
     /**
      * 
-     * @var boolean Use SSL only
+     * Use SSL only.
+     * 
+     * @var boolean
      * 
      */
     protected $secure;
 
     /**
      * 
-     * @var boolean Use HTTP only.
+     * Use HTTP only.
+     * 
+     * @var boolean
      * 
      */
     protected $httponly;
 
-
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param string $name The cookie name.
+     * 
+     * @param string $value The cookie value.
+     * 
+     * @param string $expire The expiration time in Unix epoch seconds.
+     * 
+     * @param string $path The cookie path.
+     * 
+     * @param string $domain The cookie domain.
+     * 
+     * @param bool $secure Use SSL only?
+     * 
+     * @param type $httponly Use HTTP only?
+     * 
+     */
     public function __construct(
-        $name, 
-        $value, 
-        $expire, 
-        $path, 
-        $domain, 
-        $secure, 
-        $httponly)
-    {
+        $name,
+        $value,
+        $expire,
+        $path,
+        $domain,
+        $secure,
+        $httponly
+    ) {
         $this->name     = $name;
         $this->value    = $value;
         $this->setExpire($expire);
@@ -85,27 +118,40 @@ class Cookie
         $this->domain   = $domain;
         $this->secure   = $secure;
         $this->httponly = $httponly;
-        
-        if (! empty($expire)) {    
+
+        if (! empty($expire)) {
             $this->expire = $this->isValidTimeStamp($expire)
                           ? $expire
                           : strtotime($expire);
         }
     }
-    
+
+    /**
+     * 
+     * Sets the $expire value on the cookie.
+     * 
+     * @param mixed $expire The expiration time.
+     * 
+     * @return void
+     * 
+     */
     public function setExpire($expire)
     {
         $this->expire = null;
-        if ($expire !== null) {    
+        if ($expire !== null) {
             $this->expire = $this->isValidTimeStamp($expire)
                           ? $expire
                           : strtotime($expire);
         }
     }
-    
+
     /**
      * 
-     * Magic get.
+     * Magic get to return property values.
+     * 
+     * @param string $key The property name.
+     * 
+     * @return mixed
      * 
      */
     public function __get($key)
@@ -115,7 +161,7 @@ class Cookie
 
     /**
      * 
-     * Parses the value of the "Set-Cookie" header and sets it.
+     * Parses the value of a "Set-Cookie" header and sets the cookie from it.
      * 
      * @param string $text The Set-Cookie text string value.
      * 
@@ -128,48 +174,66 @@ class Cookie
     public function setFromHeader($text, $default_url)
     {
         // setup defaults
-        $this->setDefaults($default_url);
+        $this->httponly = false;
+        $this->path     = '/';
+        $this->expire  = '0';
+
+        $defaults     = parse_url($default_url);
+        $this->secure = (isset($defaults['scheme']) &&
+                         'https' == $defaults['scheme']);
+        $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
+
+        if (isset($defaults['path'])) {
+            $this->path = substr($defaults['path'], 0,
+                                strrpos($defaults['path'], '/') + 1);
+        }
 
         // get the list of elements
         $list = explode(';', $text);
-        
+
         // get the name and value
         list($this->name, $this->value) = explode('=', array_shift($list));
         $this->value                    = urldecode($this->value);
-        
+
         foreach ($list as $item) {
             $data    = explode('=', trim($item));
             $data[0] = strtolower($data[0]);
-            
+
             switch ($data[0]) {
                 case 'expires':
                     $this->expire = $this->isValidTimeStamp($data[1])
                                   ? $data[1]
                                   : strtotime($data[1]);
                     break;
-
                 case 'path':
                     $this->path = $data[1];
                     break;
-
                 case 'domain':
                     // prefix the domain with a dot to be consistent with Curl
                     $this->domain = ('.' == $data[1][0])
                                   ? $data[1]
                                   : ".{$data[1]}";
                     break;
-            
                 case 'secure':
                     $this->secure = true;
                     break;
-                
                 case 'httponly':
                     $this->httponly = true;
                     break;
+                // FIXME Don't we need a default case?
             }
         }
     }
 
+    /**
+     * 
+     * Parses a cookie jar line and sets the cookie from it.
+     * 
+     * @param string $line The line from the cookie jar.
+     * 
+     * @return void
+     * 
+     */
     public function setFromJar($line)
     {
         $line = trim($line);
@@ -187,15 +251,15 @@ class Cookie
         } else {
             $this->domain = $parts[0];
         }
-        
+
         // part 1 is ignored; remaining parts follow
-        $this->path     = $parts[2]; 
-        $this->secure   = ("TRUE" === $parts[3]) ? true : false; 
-        $this->setExpire($parts[4]); 
+        $this->path     = $parts[2];
+        $this->secure   = ("TRUE" === $parts[3]) ? true : false;
+        $this->setExpire($parts[4]);
         $this->name     = $parts[5];
-        $this->value    = $parts[6]; 
+        $this->value    = $parts[6];
     }
-    
+
     /**
      * 
      * Get the cookie name.
@@ -219,7 +283,7 @@ class Cookie
     {
         return $this->value;
     }
-    
+
     /**
      * 
      * Get the cookie expiration date.
@@ -231,7 +295,7 @@ class Cookie
     {
         return $this->expire;
     }
-    
+
     /**
      * 
      * Get the cookie path.
@@ -243,7 +307,7 @@ class Cookie
     {
         return $this->path;
     }
-    
+
     /**
      * 
      * Get the cookie domain.
@@ -255,24 +319,24 @@ class Cookie
     {
         return $this->domain;
     }
-    
+
     /**
      * 
      * Use SSL only.
      * 
-     * @return string
+     * @return bool
      * 
      */
     public function getSecure()
     {
         return $this->secure;
     }
-    
+
     /**
      * 
      * Use HTTP only.
      * 
-     * @return string
+     * @return bool
      * 
      */
     public function getHttpOnly()
@@ -314,7 +378,7 @@ class Cookie
 
     /**
      *
-     * Has this cookie expired
+     * Has this cookie expired?
      *
      * @param boolean $expire_session_cookies Expire Session cookies.
      *
@@ -326,22 +390,30 @@ class Cookie
         if (! $this->expire && $expire_session_cookies) {
             return true;
         } else if (! $this->expire) {
+            // FIXME Usage of ELSE IF is discouraged; use ELSEIF instead
             return false;
         }
 
         return $this->expire < time();
     }
-    
+
+    /**
+     * 
+     * Converts this cookie to a line for a cookie jar.
+     * 
+     * @return string
+     * 
+     */
     public function toJarString()
     {
         $domain = $this->getDomain();
         $expire = $this->getExpire();
         $path   = $this->getPath();
-        
+
         if ($this->getHttpOnly()) {
             $domain = '#HttpOnly_' . $domain;
         }
-        
+
         return sprintf(
             "%s\t%s\t%s\t%s\t%s\t%s\t%s",
             $domain,
@@ -353,12 +425,19 @@ class Cookie
             $this->getValue()
         );
     }
-    
+
+    /**
+     * 
+     * Returns this cookie as a request header string.
+     * 
+     * @return string
+     * 
+     */
     public function toRequestHeaderString()
     {
         return urlencode($this->name) . '=' . urlencode($this->value);
     }
-    
+
     /**
      *
      * Try to match a $domain to this cookies domain.
@@ -374,7 +453,7 @@ class Cookie
         $host_domain   = strtolower($domain);
 
         if (! $cookie_domain) {
-            return false; 
+            return false;
         }
 
         if ('.' == $cookie_domain[0]) {
@@ -382,7 +461,7 @@ class Cookie
         }
 
         return ($cookie_domain == $host_domain ||
-                preg_match('/\.' . preg_quote($cookie_domain) . '$/', 
+                preg_match('/\.' . preg_quote($cookie_domain) . '$/',
                            $host_domain));
     }
 
@@ -404,30 +483,5 @@ class Cookie
                ($timestamp <= PHP_INT_MAX) &&
                ($timestamp >= ~PHP_INT_MAX);
     }
-
-    /**
-     *
-     *
-     * @param 
-     *
-     * @return 
-     *
-     */
-    protected function setDefaults($default_url)
-    {
-        $this->httponly = false;
-        $this->path     = '/';
-        $this->expire  = '0';
-
-        $defaults     = parse_url($default_url);
-        $this->secure = (isset($defaults['scheme']) && 
-                         'https' == $defaults['scheme']);
-        $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
-
-        if (isset($defaults['path'])) { 
-            $this->path = substr($defaults['path'], 0,
-                                strrpos($defaults['path'], '/') + 1);
-        }
-    }
-    
 }
+ 

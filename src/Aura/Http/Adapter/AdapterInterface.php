@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -24,12 +26,13 @@ interface AdapterInterface
      * 
      * Execute the request.
      * 
-     * @param Aura\Http\Request $request The request.
+     * @param Request $request The request.
      * 
-     * @param Aura\Http\Transport\Options $options The transport options.
+     * @param Options $options The transport options.
      * 
      * @return Aura\Http\Response\Stack A stack of responses.
      * 
      */
     public function exec(Request $request, Options $options);
 }
+ 

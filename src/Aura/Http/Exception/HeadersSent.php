@@ -3,19 +3,23 @@
  * 
  * This file is part of the Aura Project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
 namespace Aura\Http\Exception;
 
+use Aura\Http\Exception;
+
 /**
  * 
- * Throws HeaderSent exception
+ * Headers have already been sent, and cannot be sent again.
  * 
  * @package Aura.Http
  * 
  */
-class HeadersSent extends \Aura\Http\Exception
+class HeadersSent extends Exception
 {
     /**
      * 
@@ -32,3 +36,4 @@ class HeadersSent extends \Aura\Http\Exception
         parent::__construct($message);
     }
 }
+ 

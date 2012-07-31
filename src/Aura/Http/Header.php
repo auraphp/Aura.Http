@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -49,7 +51,7 @@ class Header
         $this->setLabel($label);
         $this->setValue($value);
     }
-    
+
     /**
      * 
      * Magic get for label and value.
@@ -64,12 +66,12 @@ class Header
         if ($key == 'label') {
             return $this->getLabel();
         }
-        
+
         if ($key == 'value') {
             return $this->getValue();
         }
     }
-    
+
     /**
      * 
      * Returns this header object as a "label: value" string.
@@ -83,7 +85,7 @@ class Header
         $value = $this->getValue();
         return "{$label}: {$value}";
     }
-    
+
     /**
      * 
      * Sets the header label after sanitizing and normalizing it.
@@ -97,7 +99,7 @@ class Header
     {
         // sanitize
         $label = preg_replace('/[^a-zA-Z0-9_-]/', '', $label);
-        
+
         // normalize
         $label = ucwords(
             strtolower(
@@ -105,11 +107,11 @@ class Header
             )
         );
         $label = str_replace(' ', '-', $label);
-        
+
         // set
         $this->label = $label;
     }
-    
+
     /**
      * 
      * Gets the header label.
@@ -126,7 +128,7 @@ class Header
      * 
      * Sets the header value after sanitizing it.
      * 
-     * @param string $label The header value.
+     * @param string $value The header value.
      * 
      * @return void
      * 
@@ -135,7 +137,7 @@ class Header
     {
         $this->value = str_replace(["\r", "\n"], "", $value);
     }
-    
+
     /**
      * 
      * Gets the header value.
@@ -148,3 +150,4 @@ class Header
         return $this->value;
     }
 }
+ 

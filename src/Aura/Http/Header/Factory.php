@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -19,7 +21,7 @@ use Aura\Http\Header;
  */
 class Factory
 {
-    
+
     /**
      * 
      * Creates and returns a new Header object.
@@ -36,3 +38,4 @@ class Factory
         return new Header($label, $value);
     }
 }
+ 

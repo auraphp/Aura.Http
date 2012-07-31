@@ -1,23 +1,51 @@
 {
-    "name": "Aura/Http",
+    "name": "aura/http",
     "type": "library",
-    "description": "The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.",
+    "description": "The Aura HTTP package provides objects to build and send HTTP requests and responses.",
     "keywords": [
         "http",
         "http response",
-        "response"
+        "response",
+        "http request",
+        "request",
+        "http client",
+        "client",
+        "http transport",
+        "transport"
     ],
     "homepage": "http://auraphp.github.com/Aura.Http",
-    "version": "1.0.0-dev",
+    "version": "1.0.0-beta3",
+    "time": "2012-07-30",
     "license": "BSD",
     "authors": [
         {
-            "name": "Aura Contributors",
+            "name": "Aura.Http Contributors",
             "homepage": "https://github.com/auraphp/Aura.Http/contributors"
+        },
+        {
+            "name": "Paul M. Jones",
+            "email": "pmjones88@gmail.com",
+            "homepage": "http://paul-m-jones.com"
+        },
+        {
+            "name": "Galactic Void",
+            "email": "",
+            "homepage": "https://github.com/galactic-void"
+        },
+        {
+            "name": "Hari KT",
+            "email": "kthari85@gmail.com",
+            "homepage": "http://harikt.com"
         }
     ],
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Aura\\Http": "src/"
+        }
     }
 }

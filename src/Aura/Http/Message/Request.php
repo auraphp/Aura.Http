@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Http
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -32,7 +34,7 @@ class Request extends Message
     const METHOD_POST       = 'POST';
     const METHOD_PUT        = 'PUT';
     const METHOD_TRACE      = 'TRACE';
-    
+
     /**
      * WebDAV method constants.
      */
@@ -43,13 +45,13 @@ class Request extends Message
     const METHOD_PROPFIND   = 'PROPFIND';
     const METHOD_PROPPATCH  = 'PROPPATCH';
     const METHOD_UNLOCK     = 'UNLOCK';
-    
+
     /**
      * Auth constants
      */
     const AUTH_BASIC      = 'BASIC';
     const AUTH_DIGEST     = 'DIGEST';
-    
+
     /**
      * 
      * HTTP request method to use.
@@ -58,7 +60,7 @@ class Request extends Message
      *
      */
     protected $method = self::METHOD_GET;
-    
+
     /**
      *
      * The URL to request.
@@ -67,15 +69,43 @@ class Request extends Message
      * 
      */
     protected $url;
-    
+
+    /**
+     * 
+     * The type of authentication to use.
+     * 
+     * @var string
+     * 
+     */
     protected $auth;
-    
+
+    /**
+     * 
+     * The username for authentication.
+     * 
+     * @var string
+     * 
+     */
     protected $username;
-    
+
+    /**
+     * 
+     * The password for authentication.
+     * 
+     * @var string
+     * 
+     */
     protected $password;
-    
+
+    /**
+     * 
+     * Save the response to this stream resource.
+     * 
+     * @var resource
+     * 
+     */
     protected $save_to_stream;
-    
+
     /**
      * 
      * Sets the URL for the request.
@@ -112,60 +142,116 @@ class Request extends Message
         if (! defined($const)) {
             throw new Exception\UnknownMethod("Method '{$method}' is unknown");
         }
-        
+
         $this->method = $method;
-        
+
         return $this;
     }
-    
+
+    /**
+     * 
+     * Sets the authentication type.
+     * 
+     * @param string $auth A `Request::AUTH_*` constant.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setAuth($auth)
     {
         if (! $auth) {
             $this->auth = null;
             return;
         }
-        
+
         $known = [
             self::AUTH_BASIC,
             self::AUTH_DIGEST
         ];
-        
+
         if (! in_array($auth, $known)) {
             throw new Exception\UnknownAuthType("Unknown auth type '$auth'");
         }
-        
+
         $this->auth = $auth;
+
+        return $this;
     }
-    
+
+    /**
+     * 
+     * Sets the username for authentication.
+     * 
+     * @param string $username The username.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setUsername($username)
     {
         if (strpos($username, ':') !== false) {
             $text = 'The username may not contain a colon (:).';
             throw new Exception\InvalidUsername($text);
         }
-        
+
         $this->username = $username;
+
+        return $this;
     }
-    
+
+    /**
+     * 
+     * Sets the password for authentication.
+     * 
+     * @param string $password The password.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setPassword($password)
     {
         $this->password = $password;
+        return $this;
     }
-    
+
+    /**
+     * 
+     * Returns the "username:password" credentials.
+     * 
+     * @return string
+     * 
+     */
     public function getCredentials()
     {
         return $this->username . ':' . $this->password;
     }
-    
-    // transport should save response content to this stream
+
+    /**
+     * 
+     * The response content from the request should be saved to this stream
+     * resource.
+     * 
+     * @param resource $stream The stream resource to save to.
+     * 
+     * @return Aura\Http\Request This object.
+     * 
+     */
     public function setSaveToStream($stream)
     {
         $this->save_to_stream = $stream;
+        return $this;
     }
-    
-    // the stream where response content should be saved to
+
+    /**
+     * 
+     * Returns the stream resource where response content should be saved to.
+     * 
+     * @return resource
+     * 
+     */
     public function getSaveToStream()
     {
         return $this->save_to_stream;
     }
 }
+ 

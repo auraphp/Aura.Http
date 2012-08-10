@@ -1,6 +1,6 @@
 {
     "name": "Aura/Http",
-    "type": "library",
+    "type": "aura-package",
     "description": "The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.",
     "keywords": [
         "http",

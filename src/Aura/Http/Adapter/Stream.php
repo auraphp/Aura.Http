@@ -320,9 +320,11 @@ class Stream implements AdapterInterface
         }
 
         // set context
-        $this->context = stream_context_create([
+        $this->context = stream_context_create(
+            [
             $url['scheme'] => $this->context_options,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -447,10 +449,12 @@ class Stream implements AdapterInterface
         ];
 
         // general options
-        $this->setOptions([
+        $this->setOptions(
+            [
             'max_redirects' => 'max_redirects',
             'timeout'       => 'timeout',
-        ]);
+            ]
+        );
 
         // proxy options
         if ($this->options->proxy) {
@@ -483,13 +487,15 @@ class Stream implements AdapterInterface
      */
     protected function setContextOptionsSecure()
     {
-        $this->setOptions([
+        $this->setOptions(
+            [
             'ssl_verify_peer' => 'verify_peer',
             'ssl_cafile'      => 'cafile',
             'ssl_capath'      => 'capath',
             'ssl_local_cert'  => 'local_cert',
             'ssl_passphrase'  => 'passphrase',
-        ]);
+            ]
+        );
     }
 
     /**
@@ -546,7 +552,7 @@ class Stream implements AdapterInterface
         foreach ($this->headers as $header) {
             if (false !== strpos($header, 'WWW-Authenticate')) {
                 // Get the auth value and remove the double quotes
-                $auth = str_replace('"', '', trim(substr($header,18)));
+                $auth = str_replace('"', '', trim(substr($header, 18)));
                 break;
             }
         }

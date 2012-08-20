@@ -225,15 +225,17 @@ class Curl implements AdapterInterface
         // cookie jar: read from and save to this file
         $cookie_jar = $this->options->cookie_jar;
         if ($cookie_jar) {
-            curl_setopt($this->curl, CURLOPT_COOKIEJAR,  $cookie_jar);
+            curl_setopt($this->curl, CURLOPT_COOKIEJAR, $cookie_jar);
             curl_setopt($this->curl, CURLOPT_COOKIEFILE, $cookie_jar);
         }
 
         // property-name => curlopt-constant
-        $this->curlSetopt([
+        $this->curlSetopt(
+            [
             'max_redirects' => CURLOPT_MAXREDIRS,
             'timeout'       => CURLOPT_TIMEOUT,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -271,10 +273,12 @@ class Curl implements AdapterInterface
         }
 
         curl_setopt($this->curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
-        $this->curlSetopt([
+        $this->curlSetopt(
+            [
             'proxy'         => CURLOPT_PROXY,
             'proxy_port'    => CURLOPT_PROXYPORT,
-        ]);
+            ]
+        );
 
         $credentials = $this->options->getProxyCredentials();
         if ($credentials) {
@@ -295,13 +299,15 @@ class Curl implements AdapterInterface
      */
     protected function curlSecureOptions()
     {
-        $this->curlSetopt([
+        $this->curlSetopt(
+            [
             'ssl_verify_peer' => CURLOPT_SSL_VERIFYPEER,
             'ssl_cafile'      => CURLOPT_CAINFO,
             'ssl_capath'      => CURLOPT_CAPATH,
             'ssl_local_cert'  => CURLOPT_SSLCERT,
             'ssl_passphrase'  => CURLOPT_SSLCERTPASSWD,
-        ]);
+            ]
+        );
     }
 
     /**

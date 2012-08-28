@@ -38,4 +38,3 @@ interface TransportInterface
      */
     public function sendResponse(Response $response);
 }
- 

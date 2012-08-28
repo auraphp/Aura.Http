@@ -70,4 +70,3 @@ class Factory
         return new Response($headers, $cookies);
     }
 }
- 

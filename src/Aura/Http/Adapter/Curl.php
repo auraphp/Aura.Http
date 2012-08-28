@@ -511,4 +511,3 @@ class Curl implements AdapterInterface
         return strlen($data);
     }
 }
- 

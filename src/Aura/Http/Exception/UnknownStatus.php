@@ -22,4 +22,3 @@ use Aura\Http\Exception;
 class UnknownStatus extends Exception
 {
 }
- 

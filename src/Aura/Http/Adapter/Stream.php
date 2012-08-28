@@ -661,4 +661,3 @@ class Stream implements AdapterInterface
         );
     }
 }
- 

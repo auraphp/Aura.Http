@@ -484,4 +484,3 @@ class Cookie
                ($timestamp >= ~PHP_INT_MAX);
     }
 }
- 

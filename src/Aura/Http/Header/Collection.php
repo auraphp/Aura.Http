@@ -252,4 +252,3 @@ class Collection implements \IteratorAggregate, \Countable
         }
     }
 }
- 

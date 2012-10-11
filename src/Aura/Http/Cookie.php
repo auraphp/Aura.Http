@@ -184,8 +184,11 @@ class Cookie
         $this->domain = isset($defaults['host']) ? $defaults['host'] : null;
 
         if (isset($defaults['path'])) {
-            $this->path = substr($defaults['path'], 0,
-                                strrpos($defaults['path'], '/') + 1);
+            $this->path = substr(
+                $defaults['path'],
+                0,
+                strrpos($defaults['path'], '/') + 1
+            );
         }
 
         // get the list of elements
@@ -389,7 +392,7 @@ class Cookie
     {
         if (! $this->expire && $expire_session_cookies) {
             return true;
-        } else if (! $this->expire) {
+        } elseif (! $this->expire) {
             // FIXME Usage of ELSE IF is discouraged; use ELSEIF instead
             return false;
         }
@@ -461,8 +464,11 @@ class Cookie
         }
 
         return ($cookie_domain == $host_domain ||
-                preg_match('/\.' . preg_quote($cookie_domain) . '$/',
-                           $host_domain));
+                preg_match(
+                    '/\.' . preg_quote($cookie_domain) . '$/',
+                    $host_domain
+                )
+            );
     }
 
     /**

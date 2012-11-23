@@ -2,6 +2,7 @@
 namespace Aura\Http\Multipart;
 
 use Aura\Http\Multipart\PartFactory;
+use org\bovigo\vfs\vfsStream;
 
 class FormDataTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,6 +11,12 @@ class FormDataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->form_data = new FormData(new PartFactory);
+    }
+    
+    public function getVfsFile()
+    {
+        $structure = array('resource.txt' => 'Hello Resource');
+        $this->root = vfsStream::setup('root', null, $structure);
     }
     
     public function testGetBoundary()
@@ -50,10 +57,8 @@ class FormDataTest extends \PHPUnit_Framework_TestCase
     
     public function testAddFile()
     {
-        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
-              . '_files' . DIRECTORY_SEPARATOR
-              . 'resource.txt';
-        
+        $this->getVfsFile();
+        $file = vfsStream::url('root/resource.txt');
         $part = $this->form_data->addFile('field_name', $file);
         
         // check the disposition
@@ -69,10 +74,8 @@ class FormDataTest extends \PHPUnit_Framework_TestCase
     
     public function test__toString()
     {
-        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
-              . '_files' . DIRECTORY_SEPARATOR
-              . 'resource.txt';
-        
+        $this->getVfsFile();
+        $file = vfsStream::url('root/resource.txt');
         // add two data fields and a file upload
         $this->form_data->addString('foo', 'bar');
         $this->form_data->addString('baz', 'dib');
@@ -103,10 +106,8 @@ class FormDataTest extends \PHPUnit_Framework_TestCase
     
     public function testAddFromArray()
     {
-        $file = dirname(__DIR__) . DIRECTORY_SEPARATOR
-              . '_files' . DIRECTORY_SEPARATOR
-              . 'resource.txt';
-        
+        $this->getVfsFile();
+        $file = vfsStream::url('root/resource.txt');
         $array = [
             'foo' => array('bar', 'baz'),
             'dib' => array(

@@ -2,6 +2,7 @@
 namespace Aura\Http\Integration;
 
 use Aura\Http\Message\Request;
+use org\bovigo\vfs\vfsStream;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -89,7 +90,10 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         $request->setUrl('http://example.com');
         $request->setMethod(Request::METHOD_PUT);
         
-        $storage = fopen('php://memory', 'w+');
+        $structure = array('resource.txt' => 'Hello Resource');
+        $root = vfsStream::setup('root', null, $structure);
+        $file = vfsStream::url('root/resource.txt');
+        $storage = fopen($file, 'w+');
         fwrite($storage, 'foobar');
         rewind($storage);
         $request->setContent($storage);
@@ -130,7 +134,10 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->manager->newRequest();
         $request->setUrl('http://example.com');
-        $stream = fopen('php://memory', 'w+');
+        $structure = array('resource.txt' => 'Hello Resource');
+        $root = vfsStream::setup('root', null, $structure);
+        $file = vfsStream::url('root/resource.txt');
+        $stream = fopen($file, 'w+');
         $request->setSaveToStream($stream);
         $stack = $this->manager->send($request);
         $content = $stack[0]->content;

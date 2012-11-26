@@ -4,6 +4,7 @@ namespace Aura\Http;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Cookie\JarFactory as CookieJarFactory;
+use org\bovigo\vfs\vfsStream;
 
 /**
  * Test class for Cookies.
@@ -159,7 +160,11 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
     
     public function testSetAllFromJar()
     {
-        $storage = fopen('php://memory', 'r+');
+        $structure = array('resource.txt' => '');
+        $root = vfsStream::setup('root', null, $structure);
+        $file = vfsStream::url('root/resource.txt');
+        
+        $storage = fopen($file, 'r+');
         $text = implode(PHP_EOL, [
             "# Netscape HTTP Cookie File",
             "# http://curl.haxx.se/rfc/cookie_spec.html",

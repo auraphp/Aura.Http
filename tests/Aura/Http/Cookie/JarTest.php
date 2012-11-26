@@ -5,6 +5,7 @@ use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\JarFactory as CookieJarFactory;
 use Aura\Http\Message\Factory as MessageFactory;
 use Aura\Http\Message\Response\StackBuilder;
+use org\bovigo\vfs\vfsStream;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,7 +66,11 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         if ($this->storage) {
             fclose($this->storage);
         }
-        $this->storage = fopen('php://memory', 'r+');
+        $structure = array('resource.txt' => '');
+        $root = vfsStream::setup('root', null, $structure);
+        $file = vfsStream::url('root/resource.txt');
+        
+        $this->storage = fopen($file, 'r+');
         fwrite($this->storage, $this->jars[$jar_key]);
         return $this->jar_factory->newInstance($this->storage);
     }

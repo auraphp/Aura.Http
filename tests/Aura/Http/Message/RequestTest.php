@@ -6,6 +6,7 @@ use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\MessageTest;
+use org\bovigo\vfs\vfsStream;
 
 class RequestTest extends MessageTest
 {
@@ -101,7 +102,10 @@ class RequestTest extends MessageTest
     
     public function testSetAndGetSaveToStream()
     {
-        $stream = fopen('php://memory', 'wb+');
+        $structure = array('resource.txt' => 'Hello Resource');
+        $root = vfsStream::setup('root', null, $structure);
+        $file = vfsStream::url('root/resource.txt');
+        $stream = fopen($file, 'wb+');
         $this->message->setSaveToStream($stream);
         $actual = $this->message->getSaveToStream();
         $this->assertSame($stream, $actual);

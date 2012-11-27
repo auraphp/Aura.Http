@@ -5,7 +5,7 @@
     "keywords": [ "http", "http response", "response" ],
     "homepage": "http://auraphp.github.com/Aura.Http",
     "version": "1.0.0-dev",
-    "license": "BSD",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Aura Contributors",

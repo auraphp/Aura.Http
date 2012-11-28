@@ -13,7 +13,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->headers->set('User-Agent', 'aura-test');
         $request->headers->set('Referer', 'http://auraphp.github.com');
         $request->headers->set('X-Foo', 'bar');
@@ -32,7 +32,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_connectionFailed()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://no-such-host.example.com');
+        $request->setUrl('http://no-such-host.localhost');
         $this->setExpectedException('Aura\Http\Exception\ConnectionFailed');
         $stack = $this->manager->send($request);
     }
@@ -40,7 +40,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_version10()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->setVersion('1.0');
         $stack = $this->manager->send($request);
         $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
@@ -51,7 +51,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_noVersion()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->setVersion(null);
         $stack = $this->manager->send($request);
         $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
@@ -62,7 +62,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_post()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->setMethod(Request::METHOD_POST);
         $request->setContent(['foo' => 'bar']);
         $stack = $this->manager->send($request);
@@ -74,7 +74,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_head()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->setMethod(Request::METHOD_HEAD);
         $stack = $this->manager->send($request);
         $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
@@ -87,7 +87,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_putFile()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->setMethod(Request::METHOD_PUT);
         
         $structure = array('resource.txt' => 'Hello Resource');
@@ -108,7 +108,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_putString()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->setMethod(Request::METHOD_PUT);
         $request->setContent('foobar');
         
@@ -122,7 +122,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_custom()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $request->setMethod(Request::METHOD_TRACE);
         $stack = $this->manager->send($request);
         $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
@@ -133,7 +133,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_saveToFile()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $structure = array('resource.txt' => 'Hello Resource');
         $root = vfsStream::setup('root', null, $structure);
         $file = vfsStream::url('root/resource.txt');
@@ -147,7 +147,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testExec_cookiejar()
     {
         $request = $this->manager->newRequest();
-        $request->setUrl('http://example.com');
+        $request->setUrl('http://localhost');
         $file = sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5(uniqid());
         $this->manager->transport->options->setCookieJar($file);
         $stack = $this->manager->send($request);

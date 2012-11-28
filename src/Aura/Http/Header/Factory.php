@@ -38,4 +38,3 @@ class Factory
         return new Header($label, $value);
     }
 }
- 

@@ -152,4 +152,3 @@ class Part
         $this->headers->set('Content-Encoding', $encoding);
     }
 }
- 

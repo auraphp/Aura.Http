@@ -1,6 +1,5 @@
-- Now includes Request, Adapter, and Transport mechanisms, making it a full-
-  fledged HTTP library.
+- [FIX] #11; scripts/instance.php now returns an instance.
 
-- Cookies and Headers are now represented by objects, not arrays.
+- Update tests to use VfsStream and localhost (instead of actual files
+  and example.com)
 
-- Modified for PSR-1 and 2 compliance.

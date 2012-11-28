@@ -68,4 +68,3 @@ class PhpFunc
         return headers_sent($file, $line);
     }
 }
- 

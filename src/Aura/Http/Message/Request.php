@@ -254,4 +254,3 @@ class Request extends Message
         return $this->save_to_stream;
     }
 }
- 

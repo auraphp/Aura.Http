@@ -117,4 +117,3 @@ class Manager
         throw new Exception\UnknownMessageType;
     }
 }
- 

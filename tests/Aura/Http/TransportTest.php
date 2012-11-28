@@ -10,6 +10,7 @@ use Aura\Http\Message\Response;
 use Aura\Http\MockAdapter as MockAdapter;
 use Aura\Http\MockPhpFunc as MockPhpFunc;
 use Aura\Http\Transport\Options;
+use org\bovigo\vfs\vfsStream;
 
 class TransportTest extends \PHPUnit_Framework_TestCase
 {
@@ -151,9 +152,9 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->newResponse();
         
-        $file = __DIR__ . DIRECTORY_SEPARATOR
-              . '_files' . DIRECTORY_SEPARATOR
-              . 'resource.txt';
+        $structure = array('resource.txt' => 'Hello Resource');
+        $root = vfsStream::setup('root', null, $structure);
+        $file = vfsStream::url('root/resource.txt');
         
         $fh = fopen($file, 'r');
         $response->setContent($fh);

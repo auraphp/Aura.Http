@@ -212,7 +212,7 @@ resource, it will be streamed out with `fread()`.
 
 HTTP Requests
 =============
- 
+
 Instantiation
 -------------
 

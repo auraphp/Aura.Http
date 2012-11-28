@@ -22,4 +22,3 @@ use Aura\Http\Exception;
 class NotWriteable extends Exception
 {
 }
- 

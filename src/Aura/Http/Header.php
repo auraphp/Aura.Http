@@ -150,4 +150,3 @@ class Header
         return $this->value;
     }
 }
- 

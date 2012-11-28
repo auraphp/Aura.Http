@@ -159,4 +159,3 @@ class Response extends Message
         return $this->status_text;
     }
 }
- 

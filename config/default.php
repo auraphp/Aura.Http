@@ -53,10 +53,5 @@ $di->params['Aura\Http\Transport'] = [
  * Dependency services.
  */
 
-$di->set('http_transport', function() use ($di) {
-    return $di->newInstance('Aura\Http\Transport');
-});
-
-$di->set('http_manager', function () use ($di) {
-    return $di->newInstance('Aura\Http\Manager');
-});
+$di->set('http_transport', $di->lazyNew('Aura\Http\Transport'));
+$di->set('http_manager', $di->lazyNew('Aura\Http\Manager'));

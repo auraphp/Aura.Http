@@ -196,4 +196,3 @@ class Message
         return $this->version;
     }
 }
- 

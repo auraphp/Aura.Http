@@ -279,4 +279,3 @@ class Jar
         return $return;
     }
 }
- 

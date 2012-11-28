@@ -11,3 +11,15 @@ spl_autoload_register(function($class) {
         require $file;
     }
 });
+
+// set up globals for URL information
+$base = __DIR__ . DIRECTORY_SEPARATOR . 'globals';
+if (file_exists("$base.php")) {
+    // user-defined globals.php
+    require_once "$base.php";
+    echo "Testing globals read from $base.php" . PHP_EOL;
+} else {
+    // default globals-dist.php
+    require_once "$base-dist.php";
+    echo "Testing globals read from $base-dist.php" . PHP_EOL;
+}

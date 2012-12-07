@@ -112,10 +112,10 @@ use the `get()` method.
 ```php
 <?php
 // set a header
-$reponse->headers->set('Content-Type', 'text/plain');
+$response->headers->set('Content-Type', 'text/plain');
 
 // get a header
-$header = $reponse->headers->get('Content-Type');
+$header = $response->headers->get('Content-Type');
 
 // $header->label is 'Content-Type'
 // $header->value is 'text/plain'

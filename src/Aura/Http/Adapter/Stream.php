@@ -281,7 +281,7 @@ class Stream implements AdapterInterface
 
         // did it time out?
         if ($meta['timed_out']) {
-            throw new Exception\ConnectionTimeout($url);
+            throw new Exception\ConnectionTimeout($this->request->url);
         }
 
         // if php was compiled with --with-curlwrappers, then the field
@@ -414,7 +414,7 @@ class Stream implements AdapterInterface
         $credentials = $this->options->getProxyCredentials();
         if ($credentials) {
             $credentials = base64_encode($credentials);
-            $this->headers[] = 'Proxy-Authorization: Basic {$credentials}';
+            $this->headers[] = "Proxy-Authorization: Basic {$credentials}";
         }
 
         // authentication

@@ -50,7 +50,7 @@ class FormData
 
     /**
      * 
-     * Consructor.
+     * Constructor.
      * 
      * @param PartFactory $part_factory A factory to create message parts.
      * 

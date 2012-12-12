@@ -285,11 +285,12 @@ To set the URL and method, do the following:
 
 ```php
 <?php
+use Aura\Http\Message\Request;
 $request->setUrl('http://example.com');
 $request->setMethod(Request::METHOD_POST);
 ```
 
-(By default, all requests use a `Request::METHOD_GET` method to begin with.)
+(By default, all requests use a `Aura\Http\Message\Request::METHOD_GET` method to begin with.)
 
 
 Setting Authentication
@@ -300,13 +301,14 @@ a username and password.
 
 ```php
 <?php
+use Aura\Http\Message\Request;
 $request->setAuth(Request::AUTH_BASIC);
 $request->setUsername('username');
 $request->setPassword('password');
 ```
 
-Available authentication types are `Request::AUTH_BASIC` and
-`Request::AUTH_DIGEST`.
+Available authentication types are `Aura\Http\Message\Request::AUTH_BASIC` and
+`Aura\Http\Message\Request::AUTH_DIGEST`.
 
 
 Sending the Request
@@ -345,6 +347,7 @@ Making a custom POST request:
 
 ```php
 <?php
+use Aura\Http\Message\Request;
 $request->setUrl('http://example.com/submit.php');
 $request->setMethod(Request::METHOD_POST);
 $request->setContent(json_encode(['hello' => 'world']));

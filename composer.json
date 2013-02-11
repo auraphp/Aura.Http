@@ -4,7 +4,6 @@
     "description": "The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.",
     "keywords": [ "http", "http response", "response" ],
     "homepage": "http://auraphp.github.com/Aura.Http",
-    "version": "1.0.0-dev",
     "license": "BSD-2-Clause",
     "authors": [
         {

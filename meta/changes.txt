@@ -1,5 +1,3 @@
-- [FIX] #11; scripts/instance.php now returns an instance.
+- [CHG] Varios typo fixes by HariKT and Pascal Borrelli.
 
-- Update tests to use VfsStream and localhost (instead of actual files
-  and example.com)
-
+- [FIX] In Adapter\Stream, send properly-formed Cookie header.

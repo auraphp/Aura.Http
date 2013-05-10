@@ -1,5 +1,6 @@
 {
     "name": "aura/http",
+    "version": "1.0.1",
     "type": "aura-package",
     "description": "The Aura HTTP package provides objects to build and send HTTP requests and responses.",
     "keywords": [
@@ -14,9 +15,8 @@
         "transport"
     ],
     "homepage": "http://auraphp.github.com/Aura.Http",
-    "version": "1.0.0",
-    "time": "2012-11-28",
-    "license": "BSD",
+    "time": "2013-05-10",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Aura.Http Contributors",
@@ -35,7 +35,13 @@
         {
             "name": "Hari KT",
             "email": "kthari85@gmail.com",
-            "homepage": "http://harikt.com"
+            "homepage": "http://harikt.com",
+            "": ""
+        },
+        {
+            "name": "Pascal Borrelli",
+            "email": "pascal@borreli.com",
+            "homepage": ""
         }
     ],
     "require": {

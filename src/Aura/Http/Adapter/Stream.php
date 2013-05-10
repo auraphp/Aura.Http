@@ -19,7 +19,7 @@ use Aura\Http\Transport\Options;
 
 /**
  * 
- * cURL adapter
+ * Stream adapter.
  * 
  * @package Aura.Http
  * 
@@ -407,7 +407,7 @@ class Stream implements AdapterInterface
         // cookies
         $cookies = $this->request->getCookies()->__toString();
         if ($cookies) {
-            $this->context_headers[] = $cookies;
+            $this->context_headers[] = "Cookie: {$cookies}";
         }
 
         // proxy authentication

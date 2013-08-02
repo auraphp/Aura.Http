@@ -191,6 +191,11 @@ class Transport implements TransportInterface
                 $cookie->getHttpOnly()
             );
         }
+        
+        // Include a "close" header. Required per rfc2616 14.10
+        // To-Do: make this configurable for apps that support persistent
+        // connections.
+        $this->phpfunc->header('Connection: close');
 
         // send the content
         $content = $response->getContent();

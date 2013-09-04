@@ -1,2 +1,2 @@
 <?php
-$GLOBALS['Aura\Http\Integration\AbstractTest']['url'] = 'http://example.com';
+$GLOBALS['Aura\Http\Integration\AbstractTest']['url'] = 'http://localhost';

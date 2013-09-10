@@ -2,5 +2,4 @@
   benchmarking issue and brings the library up to HTTP spec.
 
 - [DOC] Added PHP 5.5 to Travis build, Travis now installs Apache for 
-  localhost testing.
-
+  localhost testing, updated docblocks.

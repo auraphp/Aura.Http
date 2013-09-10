@@ -56,9 +56,9 @@ class PhpFunc
      * 
      * Override for `headers_sent()` since it needs parameter references.
      * 
-     * @param string &$file The file where headers were sent.
+     * @param string $file The file where headers were sent.
      * 
-     * @param int &$line The line in that file where headers were sent.
+     * @param int $line The line in that file where headers were sent.
      * 
      * @return bool
      * 

@@ -46,7 +46,7 @@ class Factory
      * @param array $params An array of key-value pairs corresponding to
      * the remaining Cookies constructor params.
      * 
-     * @return Aura\Http\Cookie
+     * @return Cookie
      * 
      */
     public function newInstance($name = null, array $params = array())

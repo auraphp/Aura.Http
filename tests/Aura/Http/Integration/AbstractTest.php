@@ -12,7 +12,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->url = $GLOBALS[__CLASS__]['url'];
+        $this->url = 'http://localhost';
     }
     
     // yes, i know it should not touch the network. let me know if you 

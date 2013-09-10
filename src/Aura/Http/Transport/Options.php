@@ -145,9 +145,9 @@ class Options
      * 
      * Sets the cookie jar property.
      * 
-     * @param string
+     * @param string $cookie_jar The file where cookie jar storage is located.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setCookieJar($cookie_jar)
@@ -162,7 +162,7 @@ class Options
      * 
      * @param int $max_redirects The max number of redirects to allow.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setMaxRedirects($max_redirects)
@@ -177,7 +177,7 @@ class Options
      * 
      * @param float $timeout The timeout in seconds.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setTimeout($timeout)
@@ -192,7 +192,7 @@ class Options
      * 
      * @param string $proxy The hostname for the proxy server.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setProxy($proxy)
@@ -207,7 +207,7 @@ class Options
      * 
      * @param int $proxy_port The proxy port number.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setProxyPort($proxy_port)
@@ -238,7 +238,7 @@ class Options
      * 
      * @param string $proxy_username The proxy username.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setProxyUsername($proxy_username)
@@ -253,7 +253,7 @@ class Options
      * 
      * @param string $proxy_password The proxy password.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setProxyPassword($proxy_password)
@@ -282,7 +282,7 @@ class Options
      * 
      * @param bool $flag True or false.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setSslVerifyPeer($flag)
@@ -299,7 +299,7 @@ class Options
      * 
      * @param string $val The CA file.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setSslCafile($val)
@@ -317,7 +317,7 @@ class Options
      * 
      * @param string $val The CA path.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setSslCapath($val)
@@ -334,7 +334,7 @@ class Options
      * 
      * @param string $val The local certificate file path.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setSslLocalCert($val)
@@ -349,7 +349,7 @@ class Options
      * 
      * @param string $val The passphrase.
      * 
-     * @return Options This object.
+     * @return self
      * 
      */
     public function setSslPassphrase($val)

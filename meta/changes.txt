@@ -1,3 +1,5 @@
-- [CHG] Varios typo fixes by HariKT and Pascal Borrelli.
+- [FIX] Transport now adds a 'Close' header; this resolves an Apache Bench
+  benchmarking issue and brings the library up to HTTP spec.
 
-- [FIX] In Adapter\Stream, send properly-formed Cookie header.
+- [DOC] Added PHP 5.5 to Travis build, Travis now installs Apache for 
+  localhost testing, updated docblocks.

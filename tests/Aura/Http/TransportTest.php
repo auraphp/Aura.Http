@@ -87,6 +87,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             0 => 'HTTP/1.1 200 OK',
             1 => 'Foo: hello world',
             2 => 'Bar: hello world 2',
+            3 => 'Connection: close',
         ];
         $this->assertSame($expect, $actual);
         
@@ -121,6 +122,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
             0 => 'Status: 200 OK',
             1 => 'Foo: hello world',
             2 => 'Bar: hello world 2',
+            3 => 'Connection: close',
         ];
         $this->assertSame($expect, $actual);
         

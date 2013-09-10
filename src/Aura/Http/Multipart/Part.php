@@ -55,7 +55,9 @@ class Part
      * 
      * Sets the content for this part.
      * 
-     * @param string
+     * @param string $content
+     * 
+     * @return void
      * 
      */
     public function setContent($content)

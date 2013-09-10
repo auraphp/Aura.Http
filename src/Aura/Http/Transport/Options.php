@@ -145,7 +145,7 @@ class Options
      * 
      * Sets the cookie jar property.
      * 
-     * @param string
+     * @param string The file where cookie jar storage is located.
      * 
      * @return Options This object.
      * 

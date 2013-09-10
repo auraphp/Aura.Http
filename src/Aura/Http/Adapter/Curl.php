@@ -107,7 +107,7 @@ class Curl implements AdapterInterface
      * 
      * @param Options $options The transport options.
      * 
-     * @return Aura\Http\Response\Message\Stack
+     * @return Response\Message\Stack
      * 
      * @todo Implement an exception for timeouts.
      * 

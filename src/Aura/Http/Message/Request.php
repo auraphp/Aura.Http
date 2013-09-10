@@ -112,7 +112,7 @@ class Request extends Message
      * 
      * @param string $url The URL for the request.
      * 
-     * @return Aura\Http\Request This object.
+     * @return self
      * 
      */
     public function setUrl($url)
@@ -131,7 +131,7 @@ class Request extends Message
      * 
      * @param string $method The method to use for the request.
      * 
-     * @return Aura\Http\Request This object.
+     * @return self
      * 
      * @throws Aura\Http\Exception\UnknownMethod 
      * 
@@ -154,7 +154,7 @@ class Request extends Message
      * 
      * @param string $auth A `Request::AUTH_*` constant.
      * 
-     * @return Aura\Http\Request This object.
+     * @return self
      * 
      */
     public function setAuth($auth)
@@ -184,7 +184,7 @@ class Request extends Message
      * 
      * @param string $username The username.
      * 
-     * @return Aura\Http\Request This object.
+     * @return self
      * 
      */
     public function setUsername($username)
@@ -205,7 +205,7 @@ class Request extends Message
      * 
      * @param string $password The password.
      * 
-     * @return Aura\Http\Request This object.
+     * @return self
      * 
      */
     public function setPassword($password)
@@ -233,7 +233,7 @@ class Request extends Message
      * 
      * @param resource $stream The stream resource to save to.
      * 
-     * @return Aura\Http\Request This object.
+     * @return self
      * 
      */
     public function setSaveToStream($stream)

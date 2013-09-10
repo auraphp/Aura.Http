@@ -99,7 +99,7 @@ class Cookie
      * 
      * @param bool $secure Use SSL only?
      * 
-     * @param type $httponly Use HTTP only?
+     * @param bool $httponly Use HTTP only?
      * 
      */
     public function __construct(

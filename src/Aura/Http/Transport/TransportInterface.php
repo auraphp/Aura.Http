@@ -15,6 +15,7 @@ use Aura\Http\Message\Response;
 
 /**
  * 
+ * Transports HTTP requests and responses.
  * 
  * @package Aura.Http
  * 
@@ -23,18 +24,22 @@ interface TransportInterface
 {
     /**
      * 
-     * Aura\Http\Message\Request object
+     * Sends an HTTP request and gets back a response stack.
      * 
-     * @param Request $request Aura\Http\Message\Response
+     * @param Request $request An HTTP request message.
+     * 
+     * @return Response An HTTP response message stack.
      * 
      */
     public function sendRequest(Request $request);
 
     /**
      * 
-     * Aura\Http\Message\Response object
+     * Sends an HTTP response.
      * 
-     * @param Response $response Aura\Http\Message\Response
+     * @param Response $response Response
+     * 
+     * @return void
      * 
      */
     public function sendResponse(Response $response);

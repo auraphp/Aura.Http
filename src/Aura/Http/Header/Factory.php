@@ -30,7 +30,7 @@ class Factory
      * 
      * @param string $value Header value.
      * 
-     * @return Aura\Http\Header
+     * @return Header
      * 
      */
     public function newInstance($label, $value)

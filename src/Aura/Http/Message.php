@@ -118,7 +118,7 @@ class Message
      * 
      * Sets the content for the message.
      * 
-     * @param mixed The content for the message.
+     * @param mixed $content The content for the message.
      * 
      * @return void
      * 

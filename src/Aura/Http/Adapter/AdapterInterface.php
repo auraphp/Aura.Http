@@ -30,7 +30,7 @@ interface AdapterInterface
      * 
      * @param Options $options The transport options.
      * 
-     * @return Aura\Http\Response\Stack A stack of responses.
+     * @return Response\Stack A stack of responses.
      * 
      */
     public function exec(Request $request, Options $options);

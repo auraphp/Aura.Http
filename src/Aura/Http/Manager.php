@@ -75,7 +75,7 @@ class Manager
      * 
      * Return object of type Aura\Http\Message\Request
      *
-     * @return Aura\Http\Message\Request
+     * @return Message\Request
      * 
      */
     public function newRequest()
@@ -85,9 +85,9 @@ class Manager
 
     /**
      * 
-     * Return Aura\Http\Message\Response object
+     * Returns a new Message\Response object
      *
-     * @return Aura\Http\Message\Response 
+     * @return Message\Response 
      * 
      */
     public function newResponse()
@@ -101,7 +101,7 @@ class Manager
      *
      * @param Message $message
      * 
-     * @return type 
+     * @return Message\Stack
      * 
      */
     public function send(Message $message)

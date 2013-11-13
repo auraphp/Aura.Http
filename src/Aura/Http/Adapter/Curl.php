@@ -116,6 +116,7 @@ class Curl implements AdapterInterface
     {
         $this->request = $request;
         $this->options = $options;
+        $this->headers = '';
 
         // create the handle, then connect and read
         $this->setCurl();

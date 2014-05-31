@@ -1,5 +1,1 @@
-- [FIX] Transport now adds a 'Close' header; this resolves an Apache Bench
-  benchmarking issue and brings the library up to HTTP spec.
-
-- [DOC] Added PHP 5.5 to Travis build, Travis now installs Apache for 
-  localhost testing, updated docblocks.
+Hygiene release; point travis status badge to develop branch.

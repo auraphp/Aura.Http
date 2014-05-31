@@ -1,19 +1,55 @@
 {
     "name": "aura/http",
+    "version": "1.0.3",
     "type": "aura-package",
-    "description": "The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.",
-    "keywords": [ "http", "http response", "response" ],
-    "homepage": "http://auraphp.github.com/Aura.Http",
+    "description": "The Aura HTTP package provides objects to build and send HTTP requests and responses.",
+    "keywords": [
+        "http",
+        "http response",
+        "response",
+        "http request",
+        "request",
+        "http client",
+        "client",
+        "http transport",
+        "transport"
+    ],
+    "homepage": "http://auraphp.com/Aura.Http",
+    "time": "2014-05-31",
     "license": "BSD-2-Clause",
     "authors": [
         {
-            "name": "Aura Contributors",
+            "name": "Aura.Http Contributors",
             "homepage": "https://github.com/auraphp/Aura.Http/contributors"
+        },
+        {
+            "name": "Paul M. Jones",
+            "email": "pmjones88@gmail.com",
+            "homepage": "http://paul-m-jones.com"
+        },
+        {
+            "name": "Galactic Void",
+            "email": "galacticvoid+git@gmail.com",
+            "homepage": "https://github.com/galactic-void"
+        },
+        {
+            "name": "Hari KT",
+            "email": "kthari85@gmail.com",
+            "homepage": "http://harikt.com"
+        },
+        {
+            "name": "Pascal Borrelli",
+            "email": "pascal@borreli.com"
+        },
+        {
+            "name": "Brandon Savage",
+            "email": "brandon@brandonsavage.net",
+            "homepage": "http://brandonsavage.net"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/installer-default": "1.0.0"
+        "aura/installer-default": "1.0.*"
     },
     "autoload": {
         "psr-0": {

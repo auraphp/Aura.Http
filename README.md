@@ -338,6 +338,7 @@ Making a GET request to the Github API to list Aura's repositories:
 ```php
 <?php
 $request->setUrl('https://api.github.com/orgs/auraphp/repos');
+$request->getHeaders()->add('User-Agent', 'Aura Bot v1');
 $stack = $http->send($request);
 $repos = json_decode($stack[0]->content);
 foreach ($repos as $repo) {

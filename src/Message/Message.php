@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Http;
+namespace Aura\Http\Message;
 
 use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\HeaderCollection;

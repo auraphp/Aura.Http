@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Message;
 
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Cookie\CookieCollection;

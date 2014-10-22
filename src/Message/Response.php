@@ -11,7 +11,6 @@
 namespace Aura\Http\Message;
 
 use Aura\Http\Exception;
-use Aura\Http\Message;
 
 /**
  *

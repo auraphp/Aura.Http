@@ -5,7 +5,7 @@ use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\HeaderCollection;
-use Aura\Http\MessageTest;
+use Aura\Http\Message\MessageTest;
 use org\bovigo\vfs\vfsStream;
 
 class RequestTest extends MessageTest

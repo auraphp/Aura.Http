@@ -12,6 +12,7 @@ namespace Aura\Http;
 
 use Aura\Http\Message\Factory as MessageFactory;
 use Aura\Http\Transport\TransportInterface;
+use Aura\Http\Message\Message;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
 

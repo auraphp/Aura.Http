@@ -1,1 +1,0 @@
-The Aura HTTP package provides objects to build and send HTTP requests and responses.

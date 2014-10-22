@@ -1,8 +1,8 @@
 {
     "name": "aura/http",
-    "type": "aura-package",
+    "type": "library",
     "description": "The Aura HTTP package provides objects to build and send HTTP responses from the server to the client.",
-    "keywords": [ "http", "http response", "response" ],
+    "keywords": [ "http", "http response", "response", "http request", "request", "http client", "client", "http transport", "transport" ],
     "homepage": "http://auraphp.github.com/Aura.Http",
     "license": "BSD-2-Clause",
     "authors": [
@@ -13,16 +13,18 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/installer-default": "1.0.0"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Aura\\Http": "src/"
         }
     },
     "extra": {
+        "aura": {
+            "type": "library"
+        },
         "branch-alias": {
-            "dev-develop": "1.0.x-dev"
+            "dev-develop-2": "2.0.x-dev"
         }
     }
 }

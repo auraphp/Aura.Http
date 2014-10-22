@@ -31,6 +31,6 @@ class JarFactory
      */
     public function newInstance($storage)
     {
-        return new Jar(new CookieFactory, $storage);
+        return new CookieJar(new CookieFactory, $storage);
     }
 }

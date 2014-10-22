@@ -23,7 +23,7 @@ use Aura\Http\Message\Response\Stack as ResponseStack;
  * @package Aura.Http
  *
  */
-class Jar
+class CookieJar
 {
     /**
      *

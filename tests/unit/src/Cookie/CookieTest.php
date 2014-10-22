@@ -1,15 +1,15 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Cookie;
 
 class CookieTest extends \PHPUnit_Framework_TestCase
 {
     protected function newCookie(
-        $name     = null, 
-        $value    = null, 
-        $expire   = null, 
-        $path     = null,  
-        $domain   = null, 
-        $secure   = null, 
+        $name     = null,
+        $value    = null,
+        $expire   = null,
+        $path     = null,
+        $domain   = null,
+        $secure   = null,
         $httponly = null
     ) {
         return new Cookie($name, $value, $expire, $path, $domain, $secure, $httponly);
@@ -55,33 +55,33 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             // malformed, only 6 parts
             "#HttpOnly_.example.com	TRUE	/	FALSE	1645033667	foo",
         ];
-        
+
         $cookie = $this->newCookie();
         $cookie->setFromJar($lines[0]);
         $this->assertSame(false, $cookie->httponly);
         $this->assertSame('www.example.com', $cookie->domain);
         $this->assertSame('/', $cookie->path);
-        $this->assertSame(false, $cookie->secure); 
-        $this->assertSame('1645033667', $cookie->expire); 
+        $this->assertSame(false, $cookie->secure);
+        $this->assertSame('1645033667', $cookie->expire);
         $this->assertSame('foo', $cookie->name);
         $this->assertSame('bar', $cookie->value);
-        
+
         $cookie = $this->newCookie();
         $cookie->setFromJar($lines[1]);
         $this->assertSame(true, $cookie->httponly);
         $this->assertSame('.example.com', $cookie->domain);
         $this->assertSame('/path', $cookie->path);
-        $this->assertSame(true, $cookie->secure); 
-        $this->assertSame('1645033667', $cookie->expire); 
+        $this->assertSame(true, $cookie->secure);
+        $this->assertSame('1645033667', $cookie->expire);
         $this->assertSame('bar', $cookie->name);
         $this->assertSame('foo', $cookie->value);
-        
+
         // malformed line
         $cookie = $this->newCookie();
         $this->setExpectedException('Aura\Http\Exception\MalformedCookie');
         $cookie->setFromJar($lines[2]);
     }
-    
+
     public function testToJarString()
     {
         // not httponly, not secure
@@ -94,11 +94,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        
+
         $actual = $cookie->toJarString();
         $expect = "www.example.com\tFALSE\t/\tFALSE\t1645033667\tfoo\tbar";
         $this->assertSame($expect, $actual);
-        
+
         // httponly, secure
         $cookie = $this->newCookie(
             'bar',
@@ -109,12 +109,12 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             true,
             true
         );
-        
+
         $actual = $cookie->toJarString();
         $expect = "#HttpOnly_.example.com\tTRUE\t/path\tTRUE\t1645033667\tbar\tfoo";
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testsetFromHeaderUsingDefault()
     {
         $cookie = $this->newCookie();
@@ -202,7 +202,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($cookie->isMatch('http', 'www.example.com', '/'));
     }
-    
+
     public function testIsExpired()
     {
         $cookie = $this->newCookie('cname', 'cvalue', time() + 1, '/path', '.example.com');
@@ -211,7 +211,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         sleep(2);
         $this->assertTrue($cookie->isExpired());
     }
-    
+
     public function testIsExpiredSessionCookie()
     {
         $cookie = $this->newCookie('cname', 'cvalue');

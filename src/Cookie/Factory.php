@@ -1,32 +1,32 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Cookie;
 
-use Aura\Http\Cookie;
+use Aura\Http\Cookie\Cookie;
 
 /**
- * 
+ *
  * Factory to create new Cookie objects.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Factory
 {
     /**
-     * 
+     *
      * Base values for a single cookie.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $params = [
         'value'    => null,
@@ -38,16 +38,16 @@ class Factory
     ];
 
     /**
-     * 
+     *
      * Creates and returns a new Cookie object.
-     * 
+     *
      * @param string $name Cookie name.
-     * 
+     *
      * @param array $params An array of key-value pairs corresponding to
      * the remaining Cookies constructor params.
-     * 
+     *
      * @return Cookie
-     * 
+     *
      */
     public function newInstance($name = null, array $params = array())
     {

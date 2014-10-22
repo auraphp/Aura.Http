@@ -1,76 +1,75 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Cookie;
 
-use Aura\Http\Cookie;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Response\Stack as ResponseStack;
 
 /**
- * 
+ *
  * Create and read a Netscape HTTP cookie file
- * 
+ *
  * @see http://curl.haxx.se/rfc/cookie_spec.html
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Jar
 {
     /**
-     * 
+     *
      * The list of cookies.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $list = [];
 
     /**
-     * 
+     *
      * A factory to create cookies.
-     * 
+     *
      * @var CookieFactory
-     * 
+     *
      */
     protected $factory;
 
     /**
-     * 
+     *
      * A stream resource for cookie storage.
-     * 
-     * @var resource 
-     * 
+     *
+     * @var resource
+     *
      */
     protected $storage;
 
     /**
-     * 
+     *
      * Mark as true if we opened the stream ourselves.
-     * 
-     * @var bool 
-     * 
+     *
+     * @var bool
+     *
      */
     protected $close = false;
 
     /**
      *
      * Constructor; loads cookies from storage.
-     * 
+     *
      * @param CookieFactory $factory A factory to create cookies.
-     * 
+     *
      * @param string|resource $storage A string file name, or a stream
      * resource, for cookie storage.
-     * 
+     *
      */
     public function __construct(
         CookieFactory $factory,
@@ -90,11 +89,11 @@ class Jar
     }
 
     /**
-     * 
+     *
      * Destructor, close resource
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function __destruct()
     {
@@ -106,8 +105,8 @@ class Jar
     /**
      *
      * A string of all all cookies
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function __toString()
     {
@@ -128,11 +127,11 @@ class Jar
     }
 
     /**
-     * 
+     *
      * Open storage and add cookies from it.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function load()
     {
@@ -172,11 +171,11 @@ class Jar
     }
 
     /**
-     * 
+     *
      * Remove cookies which are expired.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function expireSessionCookies()
     {
@@ -189,9 +188,9 @@ class Jar
 
     /**
      *
-     * Add a cookie to the jar. The cookie will not be written 
+     * Add a cookie to the jar. The cookie will not be written
      * until `save()` is called.
-     * 
+     *
      * @param Cookie $cookie The cookie to be added.
      *
      */
@@ -204,11 +203,11 @@ class Jar
     /**
      *
      * Add cookies from a stack of response messages.
-     * 
+     *
      * @todo This needs to make sure cookies are attached to the right host
      * and path when there are Location headers (redirects) in the stack.
-     * 
-     * @param ResponseStack $stack 
+     *
+     * @param ResponseStack $stack
      */
     public function addFromResponseStack(ResponseStack $stack)
     {
@@ -248,7 +247,7 @@ class Jar
      * @param string $matching_url
      *
      * @return array
-     * 
+     *
      * @throws Aura\Http\Exception If the matching URL does not contain a
      * scheme or domain.
      *

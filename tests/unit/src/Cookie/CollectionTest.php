@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Cookie;
 
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
@@ -28,22 +28,22 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
     }
 
     protected function newCookie(
-        $name, 
-        $value    = null, 
-        $expire   = null, 
-        $path     = null, 
-        $domain   = null, 
-        $secure   = false, 
+        $name,
+        $value    = null,
+        $expire   = null,
+        $path     = null,
+        $domain   = null,
+        $secure   = false,
         $httponly = true
     )
     {
         return new Cookie(
-            $name, 
-            $value, 
-            $expire, 
-            $path, 
-            $domain, 
-            $secure, 
+            $name,
+            $value,
+            $expire,
+            $path,
+            $domain,
+            $secure,
             $httponly
         );
     }
@@ -54,7 +54,7 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->newCookie('foo_bar'), $this->cookies->foo_bar);
     }
-    
+
     public function test__isset()
     {
         $this->cookies->set('foo_bar', array());
@@ -62,7 +62,7 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($this->cookies->foo_bar));
         $this->assertFalse(isset($this->cookies->Bar_Foo));
     }
-    
+
     public function test__unset()
     {
         $this->cookies->set('foo_bar', array());
@@ -73,7 +73,7 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse(isset($this->cookies->foo_bar));
     }
-    
+
     public function testCount()
     {
         $this->cookies->set('Foo', array());
@@ -81,7 +81,7 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(2, count($this->cookies));
     }
-    
+
     public function testGetIterator()
     {
         $this->assertInstanceOf('\IteratorAggregate', $this->cookies);
@@ -117,7 +117,7 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
                 'value' => '0987654321'
             ],
         ]);
-        
+
         $actual = $this->cookies->getAll();
         $expect = [
           'login' => $this->newCookie(
@@ -138,10 +138,10 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
             false,
             true),
         ];
-        
+
         $this->assertEquals($expect, $actual);
     }
-    
+
     public function test__toString()
     {
         $this->cookies->setAll([
@@ -152,18 +152,18 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
                 'value' => '0987654321'
             ],
         ]);
-        
+
         $actual = $this->cookies->__toString();
         $expect = "login=1234567890;usrid=0987654321";
         $this->assertSame($actual, $expect);
     }
-    
+
     public function testSetAllFromJar()
     {
         $structure = array('resource.txt' => '');
         $root = vfsStream::setup('root', null, $structure);
         $file = vfsStream::url('root/resource.txt');
-        
+
         $storage = fopen($file, 'r+');
         $text = implode(PHP_EOL, [
             "# Netscape HTTP Cookie File",
@@ -173,14 +173,14 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
             "#HttpOnly_.example.com\tTRUE\t/path\tTRUE\t1645033667\tbar\tfoo",
         ]);
         fwrite($storage, $text);
-        
+
         $jar_factory = new CookieJarFactory;
-        
+
         $jar = $jar_factory->newInstance($storage);
-        
+
         $this->cookies->setAllFromJar($jar, 'http://www.example.com');
         $actual = $this->cookies->__toString();
-        
+
         // @todo Shouldn't this actually show *both* cookies?
         $expect = 'foo=bar';
         $this->assertSame($expect, $actual);

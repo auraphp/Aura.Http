@@ -10,7 +10,6 @@
  */
 namespace Aura\Http\Cookie;
 
-use Aura\Http\Cookie;
 use Aura\Http\Cookie\Factory as CookieFactory;
 use Aura\Http\Cookie\Jar as CookieJar;
 

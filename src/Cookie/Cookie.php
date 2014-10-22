@@ -1,106 +1,106 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
-namespace Aura\Http;
+namespace Aura\Http\Cookie;
 
 use Aura\Http\Exception;
 
 /**
- * 
+ *
  * A class representing a single cookie.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Cookie
 {
     /**
      * Cookie name.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $name;
 
     /**
-     * 
+     *
      * Cookie value.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $value;
 
     /**
-     * 
+     *
      * Cookie expiration date in unix epoch seconds.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $expire;
 
     /**
-     * 
+     *
      * Cookie path.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $path;
 
     /**
-     * 
+     *
      * Cookie domain.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $domain;
 
     /**
-     * 
+     *
      * Use SSL only.
-     * 
+     *
      * @var boolean
-     * 
+     *
      */
     protected $secure;
 
     /**
-     * 
+     *
      * Use HTTP only.
-     * 
+     *
      * @var boolean
-     * 
+     *
      */
     protected $httponly;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param string $name The cookie name.
-     * 
+     *
      * @param string $value The cookie value.
-     * 
+     *
      * @param string $expire The expiration time in Unix epoch seconds.
-     * 
+     *
      * @param string $path The cookie path.
-     * 
+     *
      * @param string $domain The cookie domain.
-     * 
+     *
      * @param bool $secure Use SSL only?
-     * 
+     *
      * @param bool $httponly Use HTTP only?
-     * 
+     *
      */
     public function __construct(
         $name,
@@ -127,13 +127,13 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Sets the $expire value on the cookie.
-     * 
+     *
      * @param mixed $expire The expiration time.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setExpire($expire)
     {
@@ -146,13 +146,13 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Magic get to return property values.
-     * 
+     *
      * @param string $key The property name.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function __get($key)
     {
@@ -160,16 +160,16 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Parses the value of a "Set-Cookie" header and sets the cookie from it.
-     * 
+     *
      * @param string $text The Set-Cookie text string value.
-     * 
+     *
      * @param string $default_url The URL to use when setting the secure,
      * host and path property defaults.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setFromHeader($text, $default_url)
     {
@@ -229,13 +229,13 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Parses a cookie jar line and sets the cookie from it.
-     * 
+     *
      * @param string $line The line from the cookie jar.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setFromJar($line)
     {
@@ -264,11 +264,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Get the cookie name.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getName()
     {
@@ -276,11 +276,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Get the cookie value.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getValue()
     {
@@ -288,11 +288,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Get the cookie expiration date.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getExpire()
     {
@@ -300,11 +300,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Get the cookie path.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getPath()
     {
@@ -312,11 +312,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Get the cookie domain.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getDomain()
     {
@@ -324,11 +324,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Use SSL only.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function getSecure()
     {
@@ -336,11 +336,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Use HTTP only.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function getHttpOnly()
     {
@@ -348,7 +348,7 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Match a $scheme, $domain and $path to this cookie object.
      *
      * @param string $scheme
@@ -401,11 +401,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Converts this cookie to a line for a cookie jar.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function toJarString()
     {
@@ -430,11 +430,11 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Returns this cookie as a request header string.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function toRequestHeaderString()
     {
@@ -444,7 +444,7 @@ class Cookie
     /**
      *
      * Try to match a $domain to this cookies domain.
-     * 
+     *
      * @param string $domain
      *
      * @return boolean
@@ -472,15 +472,15 @@ class Cookie
     }
 
     /**
-     * 
+     *
      * Check a string to see if it could be a unix time stamp.
-     * 
+     *
      * @param string $timestamp
-     * 
+     *
      * @return boolean
-     * 
+     *
      * @see http://stackoverflow.com/questions/2524680/check-whether-the-string-is-a-unix-timestamp
-     * 
+     *
      */
     protected function isValidTimeStamp($timestamp)
     {

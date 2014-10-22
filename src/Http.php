@@ -17,7 +17,7 @@ use Aura\Http\Message\Response;
 
 /**
  *
- * A class to create request and response objects
+ * A class to create and send request and response objects.
  *
  * @package Aura.Http
  *

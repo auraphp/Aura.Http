@@ -1,50 +1,50 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
-namespace Aura\Http;
+namespace Aura\Http\Header;
 
 /**
- * 
+ *
  * A class representing a single header.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Header
 {
     /**
-     * 
+     *
      * The header label.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $label;
 
     /**
-     * 
+     *
      * The header value.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $value;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param string $label The header label.
-     * 
+     *
      * @param string $value The header value.
-     * 
+     *
      */
     public function __construct($label, $value)
     {
@@ -53,13 +53,13 @@ class Header
     }
 
     /**
-     * 
+     *
      * Magic get for label and value.
-     * 
+     *
      * @param string $key The property to get.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function __get($key)
     {
@@ -73,11 +73,11 @@ class Header
     }
 
     /**
-     * 
+     *
      * Returns this header object as a "label: value" string.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function __toString()
     {
@@ -87,13 +87,13 @@ class Header
     }
 
     /**
-     * 
+     *
      * Sets the header label after sanitizing and normalizing it.
-     * 
+     *
      * @param string $label The header label.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setLabel($label)
     {
@@ -113,11 +113,11 @@ class Header
     }
 
     /**
-     * 
+     *
      * Gets the header label.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getLabel()
     {
@@ -125,13 +125,13 @@ class Header
     }
 
     /**
-     * 
+     *
      * Sets the header value after sanitizing it.
-     * 
+     *
      * @param string $value The header value.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setValue($value)
     {
@@ -139,11 +139,11 @@ class Header
     }
 
     /**
-     * 
+     *
      * Gets the header value.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getValue()
     {

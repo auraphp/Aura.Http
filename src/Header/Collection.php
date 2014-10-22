@@ -11,7 +11,6 @@
 namespace Aura\Http\Header;
 
 use Aura\Http\Header\Factory as HeaderFactory;
-use Aura\Http\Header;
 
 /**
  *

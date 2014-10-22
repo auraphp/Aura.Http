@@ -1,8 +1,7 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Header;
 
 use Aura\Http\Header\Factory as HeaderFactory;
-use Aura\Http\Header as Header;
 use Aura\Http\Header\Collection as Headers;
 
 /**
@@ -39,7 +38,7 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $this->headers->{'Foo-Bar'});
     }
-    
+
     public function test__isset()
     {
         $this->headers->add('foo_bar', 'hi');
@@ -58,9 +57,9 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse(isset($this->headers->{'Foo-Bar'}));
     }
-    
+
     public function testCount()
-    {   
+    {
         $this->headers->set('foo_bar', 'hi');
         $this->headers->add('Foo', 'Bar');
         $this->headers->add('Foo', 'Powers');
@@ -120,32 +119,32 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
             "Foo\r\nBar" => 'foo header',
             "baz-dib_gir" => 'baz header',
         ]);
-        
+
         $actual = $this->headers->getAll();
         $expect = [
-          'Foobar' => 
+          'Foobar' =>
           [
             0 => $this->newHeader('Foobar', 'foo header'),
           ],
-          'Baz-Dib-Gir' => 
+          'Baz-Dib-Gir' =>
           [
             0 => $this->newHeader('Baz-Dib-Gir', 'baz header'),
           ],
         ];
-        
+
         $this->assertEquals($expect, $actual);
     }
-    
+
     public function testSetAndGet()
     {
         $actual = $this->headers->get('foo');
         $this->assertNull($actual);
-        
+
         $this->headers->add('foo', 'bar');
         $actual = $this->headers->get('foo');
         $this->assertSame($actual->label, 'Foo');
         $this->assertSame($actual->value, 'bar');
-        
+
         $this->headers->add('foo', 'zim');
         $actual = $this->headers->get('foo');
         $this->assertTrue(is_array($actual));
@@ -154,18 +153,18 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($actual[1]->label, 'Foo');
         $this->assertSame($actual[1]->value, 'zim');
     }
-    
+
     public function test__toString()
     {
         $this->headers->set('foo_bar', 'hi');
         $this->headers->add('Foo', 'Bar');
         $this->headers->add('Foo', 'Powers');
-        
+
         $actual = $this->headers->__toString();
         $expect = "Foo-Bar: hi\r\n"
                 . "Foo: Bar\r\n"
                 . "Foo: Powers";
-        
+
         $this->assertSame($actual, $expect);
     }
 }

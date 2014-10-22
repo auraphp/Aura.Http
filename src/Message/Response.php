@@ -1,12 +1,12 @@
 <?php
 /**
- * 
- * This file is part of the Aura Project for PHP.
- * 
+ *
+ * This file is part of Aura for PHP.
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Message;
 
@@ -14,20 +14,20 @@ use Aura\Http\Exception;
 use Aura\Http\Message;
 
 /**
- * 
+ *
  * The Aura Response class.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Response extends Message
 {
     /**
-     * 
+     *
      * List of default HTTP status messages.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $status_text_default = [
         '100' => 'Continue',
@@ -77,30 +77,30 @@ class Response extends Message
     ];
 
     /**
-     * 
+     *
      * The HTTP status code of the message.
-     * 
+     *
      * @var int
-     * 
+     *
      */
     protected $status_code = 200;
 
     /**
-     * 
+     *
      * The HTTP status message of the message.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $status_text = 'OK';
 
     /**
-     * 
+     *
      * Sets the HTTP status code to for the response. Automatically resets the
      * status text to the default for that code, if any.
-     * 
+     *
      * @param int $code An HTTP status code, such as 200, 302, 404, etc.
-     * 
+     *
      */
     public function setStatusCode($code)
     {
@@ -120,11 +120,11 @@ class Response extends Message
     }
 
     /**
-     * 
+     *
      * Returns the HTTP status code for the message.
-     * 
+     *
      * @return int
-     * 
+     *
      */
     public function getStatusCode()
     {
@@ -132,13 +132,13 @@ class Response extends Message
     }
 
     /**
-     * 
+     *
      * Sets the HTTP status text for the message.
-     * 
+     *
      * @param string $text The status text.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setStatusText($text)
     {
@@ -148,11 +148,11 @@ class Response extends Message
     }
 
     /**
-     * 
+     *
      * Returns the HTTP status text for the message.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getStatusText()
     {

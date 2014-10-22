@@ -1,59 +1,59 @@
 <?php
 /**
- * 
- * This file is part of the Aura Project for PHP.
- * 
+ *
+ * This file is part of Aura for PHP.
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Multipart;
 
 use Aura\Http\Multipart\PartFactory;
 
 /**
- * 
+ *
  * Builds multipart/form-data message content.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class FormData
 {
     /**
-     * 
+     *
      * The list of content parts.
-     * 
+     *
      * @param array
-     * 
+     *
      */
     protected $parts = [];
 
     /**
-     * 
+     *
      * The boundary used between parts.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $boundary;
 
     /**
-     * 
+     *
      * A factory to create message parts.
-     * 
+     *
      * @var PartFactory
-     * 
+     *
      */
     protected $part_factory;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param PartFactory $part_factory A factory to create message parts.
-     * 
+     *
      */
     public function __construct(PartFactory $part_factory)
     {
@@ -62,11 +62,11 @@ class FormData
     }
 
     /**
-     * 
+     *
      * Returns this object as a string suitable for message content.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function __toString()
     {
@@ -83,11 +83,11 @@ class FormData
     }
 
     /**
-     * 
+     *
      * Returns the boundary used between message parts.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getBoundary()
     {
@@ -95,11 +95,11 @@ class FormData
     }
 
     /**
-     * 
+     *
      * Returns the number of message parts.
-     * 
+     *
      * @return int
-     * 
+     *
      */
     public function count()
     {
@@ -107,17 +107,17 @@ class FormData
     }
 
     /**
-     * 
+     *
      * Adds message parts from an array of key-value pairs; recursively
      * descends into the array.
-     * 
+     *
      * @param array $array An array of key-value pairs where the key is the
      * field name and the value is the field value.
-     * 
+     *
      * @param string $prefix The prefix, if any, to use on the field name.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function addFromArray(array $array, $prefix = null)
     {
@@ -144,11 +144,11 @@ class FormData
     }
 
     /**
-     * 
+     *
      * Adds, and then returns, a new message part.
-     * 
+     *
      * @return Part
-     * 
+     *
      */
     public function add()
     {
@@ -158,15 +158,15 @@ class FormData
     }
 
     /**
-     * 
+     *
      * Adds, and then returns, a new message part for a string field and value.
-     * 
+     *
      * @param string $name The field name.
-     * 
+     *
      * @param string $string The field value.
-     * 
+     *
      * @return Part
-     * 
+     *
      */
     public function addString($name, $string)
     {
@@ -177,15 +177,15 @@ class FormData
     }
 
     /**
-     * 
+     *
      * Adds, and then returns, a new message part for a file upload.
-     * 
+     *
      * @param string $name The field name.
-     * 
+     *
      * @param string $file The file name for upload.
-     * 
+     *
      * @return Part
-     * 
+     *
      */
     public function addFile($name, $file)
     {

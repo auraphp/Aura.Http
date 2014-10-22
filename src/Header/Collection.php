@@ -1,12 +1,12 @@
 <?php
 /**
- * 
- * This file is part of the Aura Project for PHP.
- * 
+ *
+ * This file is part of Aura for PHP.
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Header;
 
@@ -14,34 +14,34 @@ use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Header;
 
 /**
- * 
+ *
  * Collection of non-cookie HTTP headers.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Collection implements \IteratorAggregate, \Countable
 {
     /**
-     * 
+     *
      * The list of all headers.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $list = [];
 
     /**
-     * 
+     *
      * A factory to create header objects.
-     * 
+     *
      * @var HeaderFactory
-     * 
+     *
      */
     protected $factory;
 
     /**
-     * 
+     *
      * Constructor
      *
      * @param Factory $factory A factory to create header objects.
@@ -53,13 +53,13 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Get a header. If a header has multiple values the first value is returned.
-     * 
-     * @param string $key 
-     * 
+     *
+     * @param string $key
+     *
      * @return mixed
-     * 
+     *
      */
     public function __get($key)
     {
@@ -70,13 +70,13 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Does a header exist.
-     * 
-     * @param string $key 
-     * 
+     *
+     * @param string $key
+     *
      * @return bool
-     * 
+     *
      */
     public function __isset($key)
     {
@@ -87,13 +87,13 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Unset a header.
-     * 
-     * @param string $key 
-     * 
+     *
+     * @param string $key
+     *
      * @return void
-     * 
+     *
      */
     public function __unset($key)
     {
@@ -104,11 +104,11 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Creates a string from all the headers
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function __toString()
     {
@@ -122,11 +122,11 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Count the number of headers.
-     * 
+     *
      * @return integer
-     * 
+     *
      */
     public function count()
     {
@@ -134,13 +134,13 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Returns a header.
-     * 
+     *
      * @param string $label
-     * 
+     *
      * @return null|Aura\Http\Header|array
-     * 
+     *
      */
     public function get($label)
     {
@@ -159,11 +159,11 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Returns all the headers.
-     * 
+     *
      * @return array
-     * 
+     *
      */
     public function getAll()
     {
@@ -171,11 +171,11 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Returns all the headers as an iterator.
-     * 
+     *
      * @return \ArrayIterator
-     * 
+     *
      */
     public function getIterator()
     {
@@ -189,16 +189,16 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Adds a header value to an existing header label; if there is more
      * than one, it will append the new value.
-     * 
+     *
      * @param string $label The header label.
-     * 
+     *
      * @param string $value The header value.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function add($label, $value)
     {
@@ -212,15 +212,15 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Sets a header value, overwriting previous values.
-     * 
+     *
      * @param string $label The header label.
-     * 
+     *
      * @param string $value The header value.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function set($label, $value)
     {
@@ -234,14 +234,14 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * 
+     *
      * Sets all the headers at once; replaces all previously existing headers.
-     * 
+     *
      * @param array $headers An array of headers where the key is the header
      * label, and the value is the header value (multiple values are allowed).
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setAll(array $headers = [])
     {

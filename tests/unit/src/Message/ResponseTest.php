@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Message;
 
-use Aura\Http\Cookie\Factory as CookieFactory;
+use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Cookie\Collection as Cookies;
 use Aura\Http\Header\Collection as Headers;
@@ -16,26 +16,26 @@ class ResponseTest extends MessageTest
             new Cookies(new CookieFactory)
         );
     }
-    
+
     public function testSetAndGetStatusCode()
     {
         $this->assertSame(200, $this->message->getStatusCode());
-        
+
         $this->message->setStatusCode(101);
         $this->assertSame(101, $this->message->getStatusCode());
         $this->assertSame(101, $this->message->status_code);
     }
-    
+
     public function testSetStatusCodeNoDefaultText()
     {
         $this->message->setStatusCode(569);
         $this->assertSame(569, $this->message->getStatusCode());
         $this->assertSame(569, $this->message->status_code);
-        
+
         $this->assertSame('', $this->message->getStatusText());
         $this->assertSame('', $this->message->status_text);
     }
-    
+
     public function testSetStatusCodeExceptionLessThan100()
     {
         $this->setExpectedException('Aura\Http\Exception');
@@ -51,7 +51,7 @@ class ResponseTest extends MessageTest
     public function testSetAndGetStatusText()
     {
         $this->assertSame('OK', $this->message->getStatusText());
-        
+
         $this->message->setStatusText("I'm a teapot");
         $this->assertSame("I'm a teapot", $this->message->getStatusText());
         $this->assertSame("I'm a teapot", $this->message->status_text);

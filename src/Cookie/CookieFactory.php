@@ -19,7 +19,7 @@ use Aura\Http\Cookie\Cookie;
  * @package Aura.Http
  *
  */
-class Factory
+class CookieFactory
 {
     /**
      *

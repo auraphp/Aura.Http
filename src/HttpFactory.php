@@ -12,7 +12,7 @@ namespace Aura\Http;
 
 use Aura\Http\Adapter\CurlAdapter;
 use Aura\Http\Adapter\StreamAdapter;
-use Aura\Http\Cookie\JarFactory as CookieJarFactory;
+use Aura\Http\Cookie\CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Factory as MessageFactory;
 use Aura\Http\Message\Response\StackBuilder;

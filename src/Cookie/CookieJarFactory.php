@@ -12,12 +12,12 @@ namespace Aura\Http\Cookie;
 
 /**
  *
- * A factory class to create new Aura\Http\Cookie\Jar
+ * A factory class to create new Aura\Http\Cookie\CookieJar
  *
  * @package Aura.Http
  *
  */
-class JarFactory
+class CookieJarFactory
 {
     /**
      *

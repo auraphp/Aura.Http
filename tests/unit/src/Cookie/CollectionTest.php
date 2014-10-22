@@ -3,7 +3,7 @@ namespace Aura\Http\Cookie;
 
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Cookie\Collection as Cookies;
-use Aura\Http\Cookie\JarFactory as CookieJarFactory;
+use Aura\Http\Cookie\CookieJarFactory;
 use org\bovigo\vfs\vfsStream;
 
 /**

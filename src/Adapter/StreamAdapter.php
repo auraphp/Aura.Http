@@ -10,7 +10,7 @@
  */
 namespace Aura\Http\Adapter;
 
-use Aura\Http\Cookie\JarFactory;
+use Aura\Http\Cookie\CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response\StackBuilder;
@@ -148,7 +148,7 @@ class StreamAdapter implements AdapterInterface
     public function __construct(
         StackBuilder $stack_builder,
         FormData $form_data,
-        JarFactory $cookie_jar_factory
+        CookieJarFactory $cookie_jar_factory
     ) {
         $this->stack_builder      = $stack_builder;
         $this->form_data          = $form_data;

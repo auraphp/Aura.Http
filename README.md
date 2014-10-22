@@ -1,18 +1,48 @@
 Aura HTTP
 =========
 
-[![Build Status](https://travis-ci.org/auraphp/Aura.Http.png?branch=develop)](https://travis-ci.org/auraphp/Aura.Http)
-
 The Aura HTTP package provides objects to build and send HTTP requests and
 responses, including `multipart/form-data` requests, with streaming of file
 resources when using the `curl` adapter.
 
-This package is compliant with [PSR-0][], [PSR-1][], and [PSR-2][]. If you
-notice compliance oversights, please send a patch via pull request.
+## Foreword
 
-[PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
+### Installation
+
+This library requires PHP 5.3 or later with `curl` and/or `stream` installed, and has no userland dependencies.
+
+It is installable and autoloadable via Composer as [aura/http](https://packagist.org/packages/aura/http).
+
+Alternatively, [download a release](https://github.com/auraphp/Aura.Http/releases) or clone this repository, then require or include its _autoload.php_ file.
+
+### Quality
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Http/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
+[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Http/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Http.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Html)
+
+To run the unit tests at the command line, issue `phpunit -c tests/unit/`. (This requires [PHPUnit][] to be available as `phpunit`.)
+
+[PHPUnit]: http://phpunit.de/manual/
+
+To run the [Aura.Di][] container configuration tests at the command line, go to the _tests/container_ directory and issue `./phpunit.sh`. (This requires [PHPUnit][] to be available as `phpunit` and [Composer][] to be available as `composer`.)
+
+[Aura.Di]: https://github.com/auraphp/Aura.Di
+[Composer]: http://getcomposer.org/
+
+This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
+you notice compliance oversights, please send a patch via pull request.
+
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
+[PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
+
+### Community
+
+To ask questions, provide feedback, or otherwise communicate with the Aura community, please join our [Google Group](http://groups.google.com/group/auraphp), follow [@auraphp on Twitter](http://twitter.com/auraphp), or chat with us on #auraphp on Freenode.
+
+
+## Getting Started
 
 Getting Started
 ===============
@@ -20,12 +50,16 @@ Getting Started
 Instantiation
 -------------
 
-The easiest way to get started is to use the `scripts/instance.php` script to
-instantiate an HTTP `Manager` object.
+The easiest way to instantiate _HTTP_ object is via _HttpFactory_.
 
 ```php
 <?php
-$http = include '/path/to/Aura.Http/scripts/instance.php';
+use Aura\Http\HttpFactory;
+
+$http_factory = new HttpFactory();
+$type = 'curl';
+// The adapter type to use: 'curl' or 'stream'.
+$http = $http_factory->newInstance($type);
 ```
 
 You can then create new `Request` and `Response` objects, and send them via

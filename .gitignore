@@ -1,2 +1,4 @@
 tests/tmp
 tests/globals.php
+tests/container/vendor/
+tests/container/composer.*

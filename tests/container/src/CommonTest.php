@@ -1,33 +1,37 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\_Config;
 
-use Aura\Framework\Test\WiringAssertionsTrait;
+use Aura\Di\_Config\AbstractContainerTest;
 
-class WiringTest extends \PHPUnit_Framework_TestCase
+class CommonTest extends AbstractContainerTest
 {
-    use WiringAssertionsTrait;
-
-    protected function setUp()
+    protected function getConfigClasses()
     {
-        $this->loadDi();
+        return array(
+            'Aura\Http\_Config\Common',
+        );
     }
 
-    public function testServices()
+    public function provideGet()
     {
-        $this->assertGet('http_transport', 'Aura\Http\Transport');
-        $this->assertGet('http_manager', 'Aura\Http\Manager');
+        return array(
+            array('aura/http:transport', 'Aura\Http\Transport'),
+            array('aura/http:http', 'Aura\Http\Http'),
+        );
     }
 
-    public function testInstances()
+    public function provideNewInstance()
     {
-        $this->assertNewInstance('Aura\Http\Adapter\CurlAdapter');
-        $this->assertNewInstance('Aura\Http\Adapter\StreamAdapter');
-        $this->assertNewInstance('Aura\Http\Cookie\CookieCollection');
-        $this->assertNewInstance('Aura\Http\Header\Collection');
-        $this->assertNewInstance('Aura\Http\Manager');
-        $this->assertNewInstance('Aura\Http\Message');
-        $this->assertNewInstance('Aura\Http\Message\Response\StackBuilder');
-        $this->assertNewInstance('Aura\Http\Multipart\FormData');
-        $this->assertNewInstance('Aura\Http\Transport');
+        return array(
+            array('Aura\Http\Adapter\CurlAdapter'),
+            array('Aura\Http\Adapter\StreamAdapter'),
+            array('Aura\Http\Cookie\CookieCollection'),
+            array('Aura\Http\Header\HeaderCollection'),
+            array('Aura\Http\Http'),
+            array('Aura\Http\Message\Message'),
+            array('Aura\Http\Message\Response\StackBuilder'),
+            array('Aura\Http\Multipart\FormData'),
+            array('Aura\Http\Transport'),
+        );
     }
 }

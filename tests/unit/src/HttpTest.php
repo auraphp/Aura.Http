@@ -3,25 +3,25 @@ namespace Aura\Http;
 
 use Aura\Http\Message\Factory as MessageFactory;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit_Framework_TestCase
 {
     protected $http;
-    
+
     protected $message_factory;
-    
+
     protected $transport;
-    
+
     protected function setUp()
     {
         $this->message_factory = new MessageFactory;
         $this->transport = new MockTransport;
-        
-        $this->http = new Manager(
+
+        $this->http = new Http(
             $this->message_factory,
             $this->transport
         );
     }
-    
+
     public function test_request()
     {
         $request = $this->http->newRequest();
@@ -30,7 +30,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $transport = $this->http->transport;
         $this->assertSame($request, $transport->request);
     }
-    
+
     public function test_response()
     {
         $response = $this->http->newResponse();
@@ -39,7 +39,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $transport = $this->http->transport;
         $this->assertSame($response, $transport->response);
     }
-    
+
     public function test_unknown()
     {
         $message = $this->message_factory->newMessage();

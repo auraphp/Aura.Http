@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http;
 
@@ -16,38 +16,38 @@ use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
 
 /**
- * 
+ *
  * A class to create request and response objects
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
-class Manager
+class Http
 {
     /**
      * Aura\Http\Message\Factory object
-     * 
+     *
      * @var MessageFactory
-     *  
+     *
      */
     protected $message_factory;
 
     /**
      * An object of type Aura\Http\Transport\TransportInterface
-     * 
-     * @var Aura\Http\Transport\TransportInterface 
-     * 
+     *
+     * @var Aura\Http\Transport\TransportInterface
+     *
      */
     protected $transport;
 
     /**
-     * 
+     *
      * Constructor
      *
      * @param MessageFactory $message_factory MessageFactory object
-     * 
+     *
      * @param TransportInterface $transport A TransportInterface object
-     * 
+     *
      */
     public function __construct(
         MessageFactory $message_factory,
@@ -58,13 +58,13 @@ class Manager
     }
 
     /**
-     * 
+     *
      * Magic method
      *
      * @param string $key
-     * 
-     * @return mixed 
-     * 
+     *
+     * @return mixed
+     *
      */
     public function __get($key)
     {
@@ -72,11 +72,11 @@ class Manager
     }
 
     /**
-     * 
+     *
      * Return object of type Aura\Http\Message\Request
      *
      * @return Message\Request
-     * 
+     *
      */
     public function newRequest()
     {
@@ -84,11 +84,11 @@ class Manager
     }
 
     /**
-     * 
+     *
      * Returns a new Message\Response object
      *
-     * @return Message\Response 
-     * 
+     * @return Message\Response
+     *
      */
     public function newResponse()
     {
@@ -96,13 +96,13 @@ class Manager
     }
 
     /**
-     * 
+     *
      * Send Request or Response depending on the transport
      *
      * @param Message $message
-     * 
+     *
      * @return Message\Stack
-     * 
+     *
      */
     public function send(Message $message)
     {

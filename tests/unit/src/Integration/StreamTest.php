@@ -1,14 +1,14 @@
 <?php
 namespace Aura\Http\Integration;
 
-use Aura\Http\Manager\Factory;
+use Aura\Http\HttpFactory;
 
 class StreamTest extends AbstractTest
 {
     protected function setUp()
     {
         parent::setUp();
-        $factory = new Factory;
+        $factory = new HttpFactory;
         $this->manager = $factory->newInstance('stream');
     }
 }

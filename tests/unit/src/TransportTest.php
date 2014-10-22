@@ -3,7 +3,7 @@ namespace Aura\Http;
 
 use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Cookie\CookieFactory;
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
@@ -36,7 +36,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     protected function newResponse()
     {
         $response = new Response(
-            new Headers(new HeaderFactory),
+            new HeaderCollection(new HeaderFactory),
             new CookieCollection(new CookieFactory)
         );
 
@@ -57,7 +57,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     protected function newRequest()
     {
         $request = new Request(
-            new Headers(new HeaderFactory),
+            new HeaderCollection(new HeaderFactory),
             new CookieCollection(new CookieFactory)
         );
 

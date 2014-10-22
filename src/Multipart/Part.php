@@ -10,7 +10,7 @@
  */
 namespace Aura\Http\Multipart;
 
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\HeaderCollection;
 
 /**
  *
@@ -25,7 +25,7 @@ class Part
      *
      * Headers for this part.
      *
-     * @var Headers
+     * @var HeaderCollection
      *
      */
     protected $headers;
@@ -43,10 +43,10 @@ class Part
      *
      * Constructor.
      *
-     * @param Headers $headers Headers for this part.
+     * @param HeaderCollection $headers Headers for this part.
      *
      */
-    public function __construct(Headers $headers)
+    public function __construct(HeaderCollection $headers)
     {
         $this->headers = $headers;
     }
@@ -81,7 +81,7 @@ class Part
      *
      * Gets the headers for this part.
      *
-     * @return Headers
+     * @return HeaderCollection
      *
      */
     public function getHeaders()

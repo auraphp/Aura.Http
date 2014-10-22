@@ -10,7 +10,7 @@
  */
 namespace Aura\Http\Multipart;
 
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Header\HeaderFactory;
 
 /**
@@ -31,6 +31,6 @@ class PartFactory
      */
     public function newInstance()
     {
-        return new Part(new Headers(new HeaderFactory));
+        return new Part(new HeaderCollection(new HeaderFactory));
     }
 }

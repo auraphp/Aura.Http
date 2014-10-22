@@ -11,7 +11,7 @@
 namespace Aura\Http\Message;
 
 use Aura\Http\Cookie\CookieCollection;
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Message;
 use Aura\Http\Exception;
 

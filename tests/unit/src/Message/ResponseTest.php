@@ -4,7 +4,7 @@ namespace Aura\Http\Message;
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Cookie\CookieCollection;
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\HeaderCollection;
 use Aura\Http\MessageTest;
 
 class ResponseTest extends MessageTest
@@ -12,7 +12,7 @@ class ResponseTest extends MessageTest
     protected function setUp()
     {
         $this->message = new Response(
-            new Headers(new HeaderFactory),
+            new HeaderCollection(new HeaderFactory),
             new CookieCollection(new CookieFactory)
         );
     }

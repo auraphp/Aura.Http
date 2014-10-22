@@ -4,7 +4,7 @@ namespace Aura\Http;
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\HeaderFactory;
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\HeaderCollection;
 
 class MessageTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->message = new Message(
-            new Headers(new HeaderFactory),
+            new HeaderCollection(new HeaderFactory),
             new CookieCollection(new CookieFactory)
         );
     }
@@ -37,7 +37,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAndGetHeaders()
     {
-        $headers = new Headers(new HeaderFactory);
+        $headers = new HeaderCollection(new HeaderFactory);
         $this->message->setHeaders($headers);
 
         $this->assertSame($this->message->getHeaders(), $headers);

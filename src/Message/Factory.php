@@ -12,7 +12,7 @@ namespace Aura\Http\Message;
 
 use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Cookie\CookieFactory;
-use Aura\Http\Header\Collection as Headers;
+use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Message;
 use Aura\Http\Message\Request;
@@ -39,7 +39,7 @@ class Factory
      */
     public function newMessage()
     {
-        $headers = new Headers(new HeaderFactory);
+        $headers = new HeaderCollection(new HeaderFactory);
         $cookies = new CookieCollection(new CookieFactory);
         return new Message($headers, $cookies);
     }
@@ -52,7 +52,7 @@ class Factory
      */
     public function newRequest()
     {
-        $headers = new Headers(new HeaderFactory);
+        $headers = new HeaderCollection(new HeaderFactory);
         $cookies = new CookieCollection(new CookieFactory);
         return new Request($headers, $cookies);
     }
@@ -65,7 +65,7 @@ class Factory
      */
     public function newResponse()
     {
-        $headers = new Headers(new HeaderFactory);
+        $headers = new HeaderCollection(new HeaderFactory);
         $cookies = new CookieCollection(new CookieFactory);
         return new Response($headers, $cookies);
     }

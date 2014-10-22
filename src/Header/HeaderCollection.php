@@ -19,7 +19,7 @@ use Aura\Http\Header\HeaderFactory;
  * @package Aura.Http
  *
  */
-class Collection implements \IteratorAggregate, \Countable
+class HeaderCollection implements \IteratorAggregate, \Countable
 {
     /**
      *

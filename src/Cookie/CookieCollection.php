@@ -20,7 +20,7 @@ use Aura\Http\Cookie\CookieJar;
  * @package Aura.Http
  *
  */
-class Collection implements \IteratorAggregate, \Countable
+class CookieCollection implements \IteratorAggregate, \Countable
 {
     /**
      *

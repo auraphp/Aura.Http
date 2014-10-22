@@ -1,26 +1,26 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Message;
 
-use Aura\Http\Cookie\Collection as Cookies;
+use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\Collection as Headers;
 use Aura\Http\Message;
 use Aura\Http\Exception;
 
 /**
- * 
+ *
  * HTTP Request library.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Request extends Message
 {
@@ -53,9 +53,9 @@ class Request extends Message
     const AUTH_DIGEST     = 'DIGEST';
 
     /**
-     * 
+     *
      * HTTP request method to use.
-     * 
+     *
      * @var string
      *
      */
@@ -64,56 +64,56 @@ class Request extends Message
     /**
      *
      * The URL to request.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $url;
 
     /**
-     * 
+     *
      * The type of authentication to use.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $auth;
 
     /**
-     * 
+     *
      * The username for authentication.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $username;
 
     /**
-     * 
+     *
      * The password for authentication.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $password;
 
     /**
-     * 
+     *
      * Save the response to this stream resource.
-     * 
+     *
      * @var resource
-     * 
+     *
      */
     protected $save_to_stream;
 
     /**
-     * 
+     *
      * Sets the URL for the request.
-     * 
+     *
      * @param string $url The URL for the request.
-     * 
+     *
      * @return self
-     * 
+     *
      */
     public function setUrl($url)
     {
@@ -122,19 +122,19 @@ class Request extends Message
     }
 
     /**
-     * 
+     *
      * Sets the HTTP method for the request (GET, POST, etc).
-     * 
+     *
      * Recognized methods are OPTIONS, GET, HEAD, POST, PUT, DELETE,
      * TRACE, and CONNECT, GET, POST, PUT, DELETE, TRACE, OPTIONS, COPY,
      * LOCK, MKCOL, MOVE, PROPFIND, PROPPATCH AND UNLOCK.
-     * 
+     *
      * @param string $method The method to use for the request.
-     * 
+     *
      * @return self
-     * 
-     * @throws Aura\Http\Exception\UnknownMethod 
-     * 
+     *
+     * @throws Aura\Http\Exception\UnknownMethod
+     *
      */
     public function setMethod($method)
     {
@@ -149,13 +149,13 @@ class Request extends Message
     }
 
     /**
-     * 
+     *
      * Sets the authentication type.
-     * 
+     *
      * @param string $auth A `Request::AUTH_*` constant.
-     * 
+     *
      * @return self
-     * 
+     *
      */
     public function setAuth($auth)
     {
@@ -179,13 +179,13 @@ class Request extends Message
     }
 
     /**
-     * 
+     *
      * Sets the username for authentication.
-     * 
+     *
      * @param string $username The username.
-     * 
+     *
      * @return self
-     * 
+     *
      */
     public function setUsername($username)
     {
@@ -200,13 +200,13 @@ class Request extends Message
     }
 
     /**
-     * 
+     *
      * Sets the password for authentication.
-     * 
+     *
      * @param string $password The password.
-     * 
+     *
      * @return self
-     * 
+     *
      */
     public function setPassword($password)
     {
@@ -215,11 +215,11 @@ class Request extends Message
     }
 
     /**
-     * 
+     *
      * Returns the "username:password" credentials.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getCredentials()
     {
@@ -227,14 +227,14 @@ class Request extends Message
     }
 
     /**
-     * 
+     *
      * The response content from the request should be saved to this stream
      * resource.
-     * 
+     *
      * @param resource $stream The stream resource to save to.
-     * 
+     *
      * @return self
-     * 
+     *
      */
     public function setSaveToStream($stream)
     {
@@ -243,11 +243,11 @@ class Request extends Message
     }
 
     /**
-     * 
+     *
      * Returns the stream resource where response content should be saved to.
-     * 
+     *
      * @return resource
-     * 
+     *
      */
     public function getSaveToStream()
     {

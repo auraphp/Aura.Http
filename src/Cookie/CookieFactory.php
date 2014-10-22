@@ -44,7 +44,7 @@ class CookieFactory
      * @param string $name Cookie name.
      *
      * @param array $params An array of key-value pairs corresponding to
-     * the remaining Cookies constructor params.
+     * the remaining cookie constructor params.
      *
      * @return Cookie
      *

@@ -27,9 +27,9 @@ $di->params['Aura\Http\Adapter\StreamAdapter'] = [
 ];
 
 /**
- * Aura\Http\Cookie\Collection
+ * Aura\Http\Cookie\CookieCollection
  */
-$di->params['Aura\Http\Cookie\Collection'] = [
+$di->params['Aura\Http\Cookie\CookieCollection'] = [
     'factory' => $di->lazyNew('Aura\Http\Cookie\Factory'),
 ];
 
@@ -53,7 +53,7 @@ $di->params['Aura\Http\Manager'] = [
  */
 $di->params['Aura\Http\Message'] = [
     'headers' => $di->lazyNew('Aura\Http\Header\Collection'),
-    'cookies' => $di->lazyNew('Aura\Http\Cookie\Collection'),
+    'cookies' => $di->lazyNew('Aura\Http\Cookie\CookieCollection'),
 ];
 
 /**

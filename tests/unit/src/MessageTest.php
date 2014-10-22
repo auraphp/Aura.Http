@@ -2,7 +2,7 @@
 namespace Aura\Http;
 
 use Aura\Http\Cookie\CookieFactory;
-use Aura\Http\Cookie\Collection as Cookies;
+use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\Factory as HeaderFactory;
 use Aura\Http\Header\Collection as Headers;
 
@@ -14,13 +14,13 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     {
         $this->message = new Message(
             new Headers(new HeaderFactory),
-            new Cookies(new CookieFactory)
+            new CookieCollection(new CookieFactory)
         );
     }
 
-    public function testSetAndGetCookies()
+    public function testSetAndGetCookieCollection()
     {
-        $cookies = new Cookies(new CookieFactory);
+        $cookies = new CookieCollection(new CookieFactory);
         $this->message->setCookies($cookies);
 
         $this->assertSame($this->message->getCookies(), $cookies);

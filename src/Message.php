@@ -10,7 +10,7 @@
  */
 namespace Aura\Http;
 
-use Aura\Http\Cookie\Collection as Cookies;
+use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\Collection as Headers;
 
 /**
@@ -26,7 +26,7 @@ class Message
      *
      * The cookies for this message.
      *
-     * @var Cookies
+     * @var CookieCollection
      *
      */
     protected $cookies;
@@ -64,10 +64,10 @@ class Message
      *
      * @param Headers $headers A Headers object.
      *
-     * @param Cookies $cookies A Cookies object.
+     * @param CookieCollection $cookies A CookieCollection object.
      *
      */
-    public function __construct(Headers $headers, Cookies $cookies)
+    public function __construct(Headers $headers, CookieCollection $cookies)
     {
         $this->headers = $headers;
         $this->cookies = $cookies;
@@ -91,12 +91,12 @@ class Message
      *
      * Sets the cookies for the message.
      *
-     * @param Cookies $cookies The cookies object.
+     * @param CookieCollection $cookies The cookies object.
      *
      * @return void
      *
      */
-    public function setCookies(Cookies $cookies)
+    public function setCookies(CookieCollection $cookies)
     {
         $this->cookies = $cookies;
         return $this;
@@ -106,7 +106,7 @@ class Message
      *
      * Returns the $cookies object.
      *
-     * @return Cookies
+     * @return CookieCollection
      *
      */
     public function getCookies()

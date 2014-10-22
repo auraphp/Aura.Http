@@ -14,3 +14,13 @@ if (is_readable(__DIR__ . '/globals.dist.php')) {
 if (is_readable(__DIR__ . '/globals.php')) {
     require __DIR__ . '/globals.php';
 }
+
+// autoloader for bovigo
+spl_autoload_register(function ($class) {
+    $ns = 'org\\bovigo\\vfs\\';
+    $len = strlen($ns);
+    if (substr($class, 0, $len) == $ns) {
+        $file = substr($class, $len) . '.php';
+        require __DIR__ . '/org.bovigo.vfs/' . $file;
+    }
+});

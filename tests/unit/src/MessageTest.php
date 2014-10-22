@@ -3,7 +3,7 @@ namespace Aura\Http;
 
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Cookie\CookieCollection;
-use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Header\Collection as Headers;
 
 class MessageTest extends \PHPUnit_Framework_TestCase

@@ -37,7 +37,7 @@ $di->params['Aura\Http\Cookie\CookieCollection'] = [
  * Aura\Http\Header\Collection
  */
 $di->params['Aura\Http\Header\Collection'] = [
-    'factory' => $di->lazyNew('Aura\Http\Header\Factory'),
+    'factory' => $di->lazyNew('Aura\Http\Header\HeaderFactory'),
 ];
 
 /**

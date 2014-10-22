@@ -17,7 +17,7 @@ namespace Aura\Http\Header;
  * @package Aura.Http
  *
  */
-class Factory
+class HeaderFactory
 {
 
     /**

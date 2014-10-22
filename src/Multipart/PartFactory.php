@@ -11,7 +11,7 @@
 namespace Aura\Http\Multipart;
 
 use Aura\Http\Header\Collection as Headers;
-use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Header\HeaderFactory;
 
 /**
  *

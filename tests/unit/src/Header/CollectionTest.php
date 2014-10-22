@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Header;
 
-use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Header\Collection as Headers;
 
 /**

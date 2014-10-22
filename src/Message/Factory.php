@@ -13,7 +13,7 @@ namespace Aura\Http\Message;
 use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Header\Collection as Headers;
-use Aura\Http\Header\Factory as HeaderFactory;
+use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Message;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;

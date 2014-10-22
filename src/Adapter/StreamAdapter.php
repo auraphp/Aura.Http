@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Adapter;
 
@@ -18,132 +18,132 @@ use Aura\Http\Multipart\FormData;
 use Aura\Http\Transport\Options;
 
 /**
- * 
+ *
  * Stream adapter.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
-class Stream implements AdapterInterface
+class StreamAdapter implements AdapterInterface
 {
     /**
-     * 
+     *
      * Builds a stack of response messages.
-     * 
+     *
      * @var StackBuilder
-     * 
+     *
      */
     protected $stack_builder;
 
     /**
-     * 
+     *
      * Creates a cookie jar.
-     * 
+     *
      * @var JarFactory
-     * 
+     *
      */
     protected $cookie_jar_factory;
 
     /**
-     * 
+     *
      * A cookie jar.
-     * 
+     *
      * @var Jar
-     * 
+     *
      */
     protected $cookie_jar;
 
     /**
-     * 
+     *
      * The HTTP request to be sent.
-     * 
+     *
      * @var Request
-     * 
+     *
      */
     protected $request;
 
     /**
-     * 
+     *
      * The transport options.
-     * 
+     *
      * @var Options
-     * 
+     *
      */
     protected $options;
 
     /**
-     * 
+     *
      * The context used for the stream.
-     * 
+     *
      * @var resource
-     * 
+     *
      */
     protected $context;
 
     /**
-     * 
+     *
      * The content used for the context.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $context_content = null;
 
     /**
-     * 
+     *
      * Headers to be set into the stream context.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $context_headers = [];
 
     /**
-     * 
+     *
      * Options to be set into the stream context.
-     * 
-     * @var 
-     * 
+     *
+     * @var
+     *
      */
     protected $context_options = [];
 
     /**
-     * 
+     *
      * A digest challenge sent by the remote host.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $challenge = [];
 
     /**
-     * 
+     *
      * Headers returned by the remote host.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $headers;
 
     /**
-     * 
+     *
      * Content returned by the remote host.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $content;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param StackBuilder $stack_builder Builds a stack of response messages.
-     * 
+     *
      * @param FormData $form_data Used for building multipart/form-data.
-     * 
+     *
      * @param JarFactory $cookie_jar_factory For creating a cookie jar.
-     * 
+     *
      */
     public function __construct(
         StackBuilder $stack_builder,
@@ -214,11 +214,11 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Opens the stream connection to the remote host.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function openStream()
     {
@@ -260,11 +260,11 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Reads from the stream connection to the remote host.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function readStream()
     {
@@ -299,11 +299,11 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets the stream context.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setContext()
     {
@@ -328,11 +328,11 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets the content on the stream context.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setContextContent()
     {
@@ -380,11 +380,11 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets the headers on the stream context
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setContextHeaders()
     {
@@ -479,11 +479,11 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets the secure options into the stream context.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setContextOptionsSecure()
     {
@@ -499,14 +499,14 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * A helper for setting stream options.
-     * 
+     *
      * @param array $var_key An array of key-value pairs where the key is
      * a request variable, and the value is a stream option name.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setOptions($var_key)
     {
@@ -520,12 +520,12 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * A helper to determine if the remote response indicates authentication
      * is required.
-     * 
+     *
      * @return bool True if we must authenticate, false if not.
-     * 
+     *
      */
     protected function mustAuthenticate()
     {
@@ -538,7 +538,7 @@ class Stream implements AdapterInterface
      * Checks the response for a HTTP digest challenge, and sets the
      * `$challenge` property if so.
      *
-     * The response must contain the HTTP status code `401` and the 
+     * The response must contain the HTTP status code `401` and the
      * `WWW-Authenticate header` to set `$challenge`.
      *
      * @return void
@@ -581,11 +581,11 @@ class Stream implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Gets the digest credentials to send in an authentication header.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     protected function getDigestCredentials()
     {

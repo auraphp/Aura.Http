@@ -11,16 +11,16 @@ $di->set('http_transport', $di->lazyNew('Aura\Http\Transport'));
 $di->set('http_manager', $di->lazyNew('Aura\Http\Manager'));
 
 /**
- * Aura\Http\Adapter\Curl
+ * Aura\Http\Adapter\CurlAdapter
  */
-$di->params['Aura\Http\Adapter\Curl'] = [
+$di->params['Aura\Http\Adapter\CurlAdapter'] = [
     'stack_builder' => $di->lazyNew('Aura\Http\Message\Response\StackBuilder'),
 ];
 
 /**
- * Aura\Http\Adapter\Stream
+ * Aura\Http\Adapter\StreamAdapter
  */
-$di->params['Aura\Http\Adapter\Stream'] = [
+$di->params['Aura\Http\Adapter\StreamAdapter'] = [
     'stack_builder'      => $di->lazyNew('Aura\Http\Message\Response\StackBuilder'),
     'form_data'          => $di->lazyNew('Aura\Http\Multipart\FormData'),
     'cookie_jar_factory' => $di->lazyNew('Aura\Http\Cookie\JarFactory'),
@@ -77,6 +77,6 @@ $di->params['Aura\Http\Transport'] = [
     'phpfunc' => $di->lazyNew('Aura\Http\PhpFunc'),
     'options' => $di->lazyNew('Aura\Http\Transport\Options'),
     'adapter' => extension_loaded('curl')
-               ? $di->lazyNew('Aura\Http\Adapter\Curl')
-               : $di->lazyNew('Aura\Http\Adapter\Stream'),
+               ? $di->lazyNew('Aura\Http\Adapter\CurlAdapter')
+               : $di->lazyNew('Aura\Http\Adapter\StreamAdapter'),
 ];

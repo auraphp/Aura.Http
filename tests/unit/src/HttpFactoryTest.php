@@ -14,14 +14,14 @@ class HttpFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $http = $this->factory->newInstance('curl');
         $this->assertInstanceOf('Aura\Http\Http', $http);
-        $this->assertInstanceof('Aura\Http\Adapter\Curl', $http->transport->adapter);
+        $this->assertInstanceof('Aura\Http\Adapter\CurlAdapter', $http->transport->adapter);
     }
 
     public function testNewInstance_stream()
     {
         $http = $this->factory->newInstance('stream');
         $this->assertInstanceOf('Aura\Http\Http', $http);
-        $this->assertInstanceof('Aura\Http\Adapter\Stream', $http->transport->adapter);
+        $this->assertInstanceof('Aura\Http\Adapter\StreamAdapter', $http->transport->adapter);
     }
 
     public function testNewInstance_unknown()

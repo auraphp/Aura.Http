@@ -403,10 +403,10 @@ $http->transport->options->setSslVerifyPeer(true);
 The transport uses an `Adapter` to handle the actual sending of requests.
 There are two adapters available:
 
-- `Aura\Http\Request\Adapter\Curl`, which is used automatically when the
+- `Aura\Http\Request\Adapter\CurlAdapter`, which is used automatically when the
   `curl` extension is loaded.  This adapter will stream file resources
   directly to and from disk, without loading the entire file into memory.
 
-- `Aura\Http\Request\Adapter\Stream`, which is the fallback if `curl` is not
+- `Aura\Http\Request\Adapter\StreamAdapter`, which is the fallback if `curl` is not
   loaded. This adapter is not suitable for sending or receiving large files.
   Each file will loaded into memory. This is a limitation in PHP HTTP streams.

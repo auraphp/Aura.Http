@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Http\Adapter;
 
@@ -16,83 +16,83 @@ use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Transport\Options;
 
 /**
- * 
+ *
  * cURL adapter
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
-class Curl implements AdapterInterface
+class CurlAdapter implements AdapterInterface
 {
     /**
-     * 
+     *
      * Builds a stack of response messages.
-     * 
+     *
      * @var StackBuilder
-     * 
+     *
      */
     protected $stack_builder;
 
     /**
-     * 
+     *
      * The HTTP request to be sent.
-     * 
+     *
      * @var Request
-     * 
+     *
      */
     protected $request;
 
     /**
-     * 
+     *
      * The transport options.
-     * 
+     *
      * @var Options
-     * 
+     *
      */
     protected $options;
 
     /**
-     * 
+     *
      * The response headers.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $headers;
 
     /**
-     * 
+     *
      * The response content.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $content;
 
     /**
-     * 
+     *
      * The curl handle for request/response communication.
-     * 
+     *
      * @var resource
-     * 
+     *
      */
     protected $curl;
 
     /**
-     * 
+     *
      * File handle for saving content.
-     * 
+     *
      * @var resource
-     * 
+     *
      */
     protected $save;
 
     /**
      *
      * Constructor.
-     * 
+     *
      * @param StackBuilder $stack_builder Builds a stack of response messages.
-     * 
+     *
      */
     public function __construct(StackBuilder $stack_builder)
     {
@@ -100,17 +100,17 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Executes the request and assembles the response stack.
-     * 
+     *
      * @param Request $request The request to send.
-     * 
+     *
      * @param Options $options The transport options.
-     * 
+     *
      * @return Response\Message\Stack
-     * 
+     *
      * @todo Implement an exception for timeouts.
-     * 
+     *
      */
     public function exec(Request $request, Options $options)
     {
@@ -134,11 +134,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets the curl handle and its options.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setCurl()
     {
@@ -155,11 +155,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Makes the curl connection, then retrieves headers and content.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function connect()
     {
@@ -192,11 +192,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets basic options on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlBasicOptions()
     {
@@ -240,14 +240,14 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Helper method to set curl options.
-     * 
+     *
      * @param array $var_opt An array of key-value pairs where the key is
      * a request variable, and the value is a curl option constant.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlSetopt($var_opt)
     {
@@ -261,11 +261,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets proxy options on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlProxyOptions()
     {
@@ -292,11 +292,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets secure/ssl/tls options on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlSecureOptions()
     {
@@ -312,11 +312,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets the HTTP version on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlHttpVersion()
     {
@@ -335,11 +335,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets the HTTP method on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlMethod()
     {
@@ -363,11 +363,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets authorization options on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlAuth()
     {
@@ -393,11 +393,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets headers and cookies on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlHeaders()
     {
@@ -427,11 +427,11 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets content on the curl handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlContent()
     {
@@ -462,12 +462,12 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * Sets a "writefunction" callback on the curl handle to stream response
      * content to a file handle.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function curlSave()
     {
@@ -485,15 +485,15 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * A callback to retain headers in the $headers property.
-     * 
+     *
      * @param resource $curl The curl handle.
-     * 
+     *
      * @param string $data The header string to be retained.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function saveHeaders($curl, $data)
     {
@@ -502,15 +502,15 @@ class Curl implements AdapterInterface
     }
 
     /**
-     * 
+     *
      * A callback to save content to the $save file handle.
-     * 
+     *
      * @param resource $curl The curl handle.
-     * 
+     *
      * @param string $data The content to be saved.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function saveContent($curl, $data)
     {

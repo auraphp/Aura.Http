@@ -20,8 +20,8 @@ class WiringTest extends \PHPUnit_Framework_TestCase
 
     public function testInstances()
     {
-        $this->assertNewInstance('Aura\Http\Adapter\Curl');
-        $this->assertNewInstance('Aura\Http\Adapter\Stream');
+        $this->assertNewInstance('Aura\Http\Adapter\CurlAdapter');
+        $this->assertNewInstance('Aura\Http\Adapter\StreamAdapter');
         $this->assertNewInstance('Aura\Http\Cookie\Collection');
         $this->assertNewInstance('Aura\Http\Header\Collection');
         $this->assertNewInstance('Aura\Http\Manager');

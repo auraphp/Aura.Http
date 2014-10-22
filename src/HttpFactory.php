@@ -10,8 +10,8 @@
  */
 namespace Aura\Http;
 
-use Aura\Http\Adapter\Curl as AdapterCurl;
-use Aura\Http\Adapter\Stream as AdapterStream;
+use Aura\Http\Adapter\CurlAdapter;
+use Aura\Http\Adapter\StreamAdapter;
 use Aura\Http\Cookie\JarFactory as CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Factory as MessageFactory;
@@ -43,11 +43,11 @@ class HttpFactory
     public function newInstance($type)
     {
         if ($type == 'curl') {
-            $adapter = new AdapterCurl(
+            $adapter = new CurlAdapter(
                 new StackBuilder(new MessageFactory)
             );
         } elseif ($type == 'stream') {
-            $adapter = new AdapterStream(
+            $adapter = new StreamAdapter(
                 new StackBuilder(new MessageFactory),
                 new FormData(new PartFactory),
                 new CookieJarFactory

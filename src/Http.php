@@ -10,7 +10,7 @@
  */
 namespace Aura\Http;
 
-use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Message\MessageFactory;
 use Aura\Http\Transport\TransportInterface;
 use Aura\Http\Message\Message;
 use Aura\Http\Message\Request;
@@ -26,7 +26,7 @@ use Aura\Http\Message\Response;
 class Http
 {
     /**
-     * Aura\Http\Message\Factory object
+     * Aura\Http\Message\MessageFactory object
      *
      * @var MessageFactory
      *

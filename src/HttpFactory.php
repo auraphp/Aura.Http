@@ -14,7 +14,7 @@ use Aura\Http\Adapter\CurlAdapter;
 use Aura\Http\Adapter\StreamAdapter;
 use Aura\Http\Cookie\CookieJarFactory;
 use Aura\Http\Exception;
-use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Message\MessageFactory;
 use Aura\Http\Message\Response\StackBuilder;
 use Aura\Http\Multipart\FormData;
 use Aura\Http\Multipart\PartFactory;

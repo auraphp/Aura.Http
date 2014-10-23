@@ -14,8 +14,6 @@ use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Header\HeaderFactory;
-use Aura\Http\Message\Request;
-use Aura\Http\Message\Response;
 
 /**
  *
@@ -28,7 +26,7 @@ use Aura\Http\Message\Response;
  * @package Aura.Http
  *
  */
-class Factory
+class MessageFactory
 {
     /**
      *

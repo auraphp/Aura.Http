@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http;
 
-use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Message\MessageFactory;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {

@@ -44,7 +44,7 @@ $di->params['Aura\Http\Header\Collection'] = [
  * Aura\Http\Manager
  */
 $di->params['Aura\Http\Manager'] = [
-    'message_factory' => $di->lazyNew('Aura\Http\Message\Factory'),
+    'message_factory' => $di->lazyNew('Aura\Http\Message\MessageFactory'),
     'transport'       => $di->lazyGet('http_transport'),
 ];
 
@@ -60,7 +60,7 @@ $di->params['Aura\Http\Message'] = [
  * Aura\Http\Message\Response\StackBuilder
  */
 $di->params['Aura\Http\Message\Response\StackBuilder'] = [
-    'message_factory' => $di->lazyNew('Aura\Http\Message\Factory'),
+    'message_factory' => $di->lazyNew('Aura\Http\Message\MessageFactory'),
 ];
 
 /**

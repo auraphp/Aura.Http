@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http\Message\Response;
 
-use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Message\MessageFactory;
 
 class StackBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,23 +19,23 @@ class StackBuilderTest extends \PHPUnit_Framework_TestCase
     ];
 
     protected $content = 'Hello World!';
-    
+
     protected $builder;
-    
-    
+
+
     protected function setUp()
     {
         $factory = new MessageFactory;
         $this->builder = new StackBuilder(new MessageFactory);
     }
-    
+
     public function testNewInstance()
     {
         $stack = $this->builder->newInstance($this->headers, $this->content);
-        
+
         // there should be two responses in the stack
         $this->assertSame(2, count($stack));
-        
+
         // the most-recent response
         $response = $stack[0];
         $this->assertEquals('1.1', $response->version);
@@ -55,7 +55,7 @@ class StackBuilderTest extends \PHPUnit_Framework_TestCase
             $this->assertSame($expect[$name], $actual->value);
         }
         $this->assertSame($this->content, $response->content);
-        
+
         // the least-recent response
         $response = $stack[1];
         $this->assertEquals('1.1', $response->version);

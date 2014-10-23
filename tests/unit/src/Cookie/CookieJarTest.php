@@ -3,7 +3,7 @@ namespace Aura\Http\Cookie;
 
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Cookie\CookieJarFactory;
-use Aura\Http\Message\Factory as MessageFactory;
+use Aura\Http\Message\MessageFactory;
 use Aura\Http\Message\Response\StackBuilder;
 use org\bovigo\vfs\vfsStream;
 

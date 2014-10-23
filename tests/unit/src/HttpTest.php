@@ -26,7 +26,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->http->newRequest();
         $this->assertInstanceOf('Aura\Http\Message\Request', $request);
-        $this->http->send($request);
+        $this->http->sendRequest($request);
         $transport = $this->http->transport;
         $this->assertSame($request, $transport->request);
     }
@@ -35,7 +35,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->http->newResponse();
         $this->assertInstanceOf('Aura\Http\Message\Response', $response);
-        $this->http->send($response);
+        $this->http->sendResponse($response);
         $transport = $this->http->transport;
         $this->assertSame($response, $transport->response);
     }

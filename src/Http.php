@@ -98,23 +98,29 @@ class Http
 
     /**
      *
-     * Send Request or Response depending on the transport
+     * Sends a request through the transport.
      *
-     * @param Message $message
+     * @param Request $request
      *
-     * @return Message\Stack
+     * @return Message\ResponseStack
      *
      */
-    public function send(AbstractMessage $message)
+    public function sendRequest(Request $request)
     {
-        if ($message instanceof Request) {
-            return $this->transport->sendRequest($message);
-        }
+        return $this->transport->sendRequest($request);
+    }
 
-        if ($message instanceof Response) {
-            return $this->transport->sendResponse($message);
-        }
-
-        throw new Exception\UnknownMessageType;
+    /**
+     *
+     * Sends a response through the transport.
+     *
+     * @param Response $response
+     *
+     * @return Message\ResponseStack
+     *
+     */
+    public function sendResponse(Response $response)
+    {
+        return $this->transport->sendResponse($response);
     }
 }

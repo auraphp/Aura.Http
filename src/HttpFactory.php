@@ -19,7 +19,7 @@ use Aura\Http\Message\ResponseStackBuilder;
 use Aura\Http\Multipart\FormData;
 use Aura\Http\Multipart\PartFactory;
 use Aura\Http\PhpFunc;
-use Aura\Http\Transport;
+use Aura\Http\Transport\Transport;
 use Aura\Http\Transport\Options as TransportOptions;
 
 /**

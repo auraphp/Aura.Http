@@ -1,77 +1,77 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
-namespace Aura\Http;
+namespace Aura\Http\Transport;
 
 use Aura\Http\Adapter\AdapterInterface;
-use Aura\Http\Transport\Options;
-use Aura\Http\Transport\TransportInterface;
+use Aura\Http\Exception;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
+use Aura\Http\Phpfunc;
 
 /**
- * 
+ *
  * Transports HTTP requests and responses.
- * 
+ *
  * @package Aura.Http
- * 
+ *
  */
 class Transport implements TransportInterface
 {
     /**
-     * 
+     *
      * An object for calling PHP functions; used mostly so we can intercept
      * calls during tests.
-     * 
+     *
      * @var PhpFunc
-     * 
+     *
      */
     protected $phpfunc;
 
     /**
-     * 
+     *
      * An HTTP request adapter.
-     * 
+     *
      * @var AdapterInterface
-     * 
+     *
      */
     protected $adapter;
 
     /**
-     * 
+     *
      * A set of option for this transport instance.
-     * 
+     *
      * @var Options
-     * 
+     *
      */
     protected $options;
 
     /**
-     * 
+     *
      * Whether or not this transport should send responses as if in CGI mode.
-     * 
+     *
      * @var bool
-     * 
+     *
      */
     protected $cgi;
 
     /**
-     * 
+     *
      * Constructor
      *
      * @param PhpFunc $phpfunc
-     * 
+     *
      * @param Options $options
-     * 
-     * @param AdapterInterface $adapter 
-     * 
+     *
+     * @param AdapterInterface $adapter
+     *
      */
     public function __construct(
         PhpFunc             $phpfunc,
@@ -87,13 +87,13 @@ class Transport implements TransportInterface
     }
 
     /**
-     * 
+     *
      * Magic get to return property values.
-     * 
+     *
      * @param string $key The property to return.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function __get($key)
     {
@@ -101,14 +101,14 @@ class Transport implements TransportInterface
     }
 
     /**
-     * 
-     * Optionally send responses as if in CGI mode. (This changes how the 
+     *
+     * Optionally send responses as if in CGI mode. (This changes how the
      * status header is sent.)
-     * 
+     *
      * @param bool $cgi True to force into CGI mode, false to not do so.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setCgi($cgi)
     {
@@ -116,11 +116,11 @@ class Transport implements TransportInterface
     }
 
     /**
-     * 
+     *
      * Is the transport sending responses in CGI mode?
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function isCgi()
     {
@@ -128,14 +128,14 @@ class Transport implements TransportInterface
     }
 
     /**
-     * 
-     * Sends a request through the adapter and returns a response message 
+     *
+     * Sends a request through the adapter and returns a response message
      * stack.
-     * 
+     *
      * @param Request $request The request to send.
-     * 
+     *
      * @return Message\Stack
-     * 
+     *
      */
     public function sendRequest(Request $request)
     {
@@ -143,13 +143,13 @@ class Transport implements TransportInterface
     }
 
     /**
-     * 
+     *
      * Sends a response using PHP functions.
-     * 
+     *
      * @param Response $response The response to send.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function sendResponse(Response $response)
     {
@@ -191,7 +191,7 @@ class Transport implements TransportInterface
                 $cookie->getHttpOnly()
             );
         }
-        
+
         // Include a "close" header. Required per rfc2616 14.10
         // To-Do: make this configurable for apps that support persistent
         // connections.

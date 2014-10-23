@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Http;
+namespace Aura\Http\Transport;
 
 use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Cookie\CookieFactory;
@@ -9,7 +9,6 @@ use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
 use Aura\Http\MockAdapter as MockAdapter;
 use Aura\Http\MockPhpFunc as MockPhpFunc;
-use Aura\Http\Transport\Options;
 use org\bovigo\vfs\vfsStream;
 
 class TransportTest extends \PHPUnit_Framework_TestCase

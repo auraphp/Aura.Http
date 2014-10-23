@@ -34,14 +34,14 @@ class Common extends Config
          * Aura\Http\Adapter\CurlAdapter
          */
         $di->params['Aura\Http\Adapter\CurlAdapter'] = [
-            'stack_builder' => $di->lazyNew('Aura\Http\Message\Response\StackBuilder'),
+            'stack_builder' => $di->lazyNew('Aura\Http\Message\ResponseStackBuilder'),
         ];
 
         /**
          * Aura\Http\Adapter\StreamAdapter
          */
         $di->params['Aura\Http\Adapter\StreamAdapter'] = [
-            'stack_builder'      => $di->lazyNew('Aura\Http\Message\Response\StackBuilder'),
+            'stack_builder'      => $di->lazyNew('Aura\Http\Message\ResponseStackBuilder'),
             'form_data'          => $di->lazyNew('Aura\Http\Multipart\FormData'),
             'cookie_jar_factory' => $di->lazyNew('Aura\Http\Cookie\CookieJarFactory'),
         ];
@@ -77,9 +77,9 @@ class Common extends Config
         ];
 
         /**
-         * Aura\Http\Message\Response\StackBuilder
+         * Aura\Http\Message\ResponseStackBuilder
          */
-        $di->params['Aura\Http\Message\Response\StackBuilder'] = [
+        $di->params['Aura\Http\Message\ResponseStackBuilder'] = [
             'message_factory' => $di->lazyNew('Aura\Http\Message\MessageFactory'),
         ];
 

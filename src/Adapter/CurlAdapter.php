@@ -12,7 +12,7 @@ namespace Aura\Http\Adapter;
 
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
-use Aura\Http\Message\Response\StackBuilder;
+use Aura\Http\Message\ResponseStackBuilder;
 use Aura\Http\Transport\Options;
 
 /**
@@ -91,10 +91,10 @@ class CurlAdapter implements AdapterInterface
      *
      * Constructor.
      *
-     * @param StackBuilder $stack_builder Builds a stack of response messages.
+     * @param ResponseStackBuilder $stack_builder Builds a stack of response messages.
      *
      */
-    public function __construct(StackBuilder $stack_builder)
+    public function __construct(ResponseStackBuilder $stack_builder)
     {
         $this->stack_builder = $stack_builder;
     }

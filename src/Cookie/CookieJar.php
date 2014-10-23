@@ -12,7 +12,7 @@ namespace Aura\Http\Cookie;
 
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Exception;
-use Aura\Http\Message\Response\Stack as ResponseStack;
+use Aura\Http\Message\ResponseStack;
 
 /**
  *

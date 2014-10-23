@@ -13,7 +13,7 @@ namespace Aura\Http\Adapter;
 use Aura\Http\Cookie\CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
-use Aura\Http\Message\Response\StackBuilder;
+use Aura\Http\Message\ResponseStackBuilder;
 use Aura\Http\Multipart\FormData;
 use Aura\Http\Transport\Options;
 
@@ -138,7 +138,7 @@ class StreamAdapter implements AdapterInterface
      *
      * Constructor.
      *
-     * @param StackBuilder $stack_builder Builds a stack of response messages.
+     * @param ResponseStackBuilder $stack_builder Builds a stack of response messages.
      *
      * @param FormData $form_data Used for building multipart/form-data.
      *
@@ -146,7 +146,7 @@ class StreamAdapter implements AdapterInterface
      *
      */
     public function __construct(
-        StackBuilder $stack_builder,
+        ResponseStackBuilder $stack_builder,
         FormData $form_data,
         CookieJarFactory $cookie_jar_factory
     ) {

@@ -8,9 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Http\Message\Response;
-
-use Aura\Http\Message\MessageFactory;
+namespace Aura\Http\Message;
 
 /**
  *
@@ -19,7 +17,7 @@ use Aura\Http\Message\MessageFactory;
  * @package Aura.Http
  *
  */
-class StackBuilder
+class ResponseStackBuilder
 {
     /**
      *
@@ -60,7 +58,7 @@ class StackBuilder
     public function newInstance(array $headers, $content = null, $url = null)
     {
         // a response stack
-        $stack = new Stack;
+        $stack = new ResponseStack;
 
         // have a new response available regardless
         $response = $this->message_factory->newResponse();

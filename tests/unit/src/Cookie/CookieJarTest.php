@@ -4,7 +4,7 @@ namespace Aura\Http\Cookie;
 use Aura\Http\Cookie\CookieFactory;
 use Aura\Http\Cookie\CookieJarFactory;
 use Aura\Http\Message\MessageFactory;
-use Aura\Http\Message\Response\StackBuilder;
+use Aura\Http\Message\ResponseStackBuilder;
 use org\bovigo\vfs\vfsStream;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
@@ -260,7 +260,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
 
         $content = 'Hello World!';
 
-        $builder = new StackBuilder(new MessageFactory);
+        $builder = new ResponseStackBuilder(new MessageFactory);
         $stack = $builder->newInstance($headers, $content, 'http://www.example.com');
 
         $jar = $this->newJar('empty');

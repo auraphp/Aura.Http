@@ -15,7 +15,7 @@ use Aura\Http\Adapter\StreamAdapter;
 use Aura\Http\Cookie\CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\MessageFactory;
-use Aura\Http\Message\Response\StackBuilder;
+use Aura\Http\Message\ResponseStackBuilder;
 use Aura\Http\Multipart\FormData;
 use Aura\Http\Multipart\PartFactory;
 use Aura\Http\PhpFunc;
@@ -44,11 +44,11 @@ class HttpFactory
     {
         if ($type == 'curl') {
             $adapter = new CurlAdapter(
-                new StackBuilder(new MessageFactory)
+                new ResponseStackBuilder(new MessageFactory)
             );
         } elseif ($type == 'stream') {
             $adapter = new StreamAdapter(
-                new StackBuilder(new MessageFactory),
+                new ResponseStackBuilder(new MessageFactory),
                 new FormData(new PartFactory),
                 new CookieJarFactory
             );

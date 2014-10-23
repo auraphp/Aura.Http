@@ -7,15 +7,15 @@ use org\bovigo\vfs\vfsStream;
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     protected $manager;
-    
+
     protected $url;
-    
+
     protected function setUp()
     {
         $this->url = 'http://localhost';
     }
-    
-    // yes, i know it should not touch the network. let me know if you 
+
+    // yes, i know it should not touch the network. let me know if you
     // actually write a test that gets better coverage and reliability.
     public function testExec()
     {
@@ -29,13 +29,13 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         ]);
         $request->setContent('Should be ignored for GET');
         $stack = $this->manager->send($request);
-        
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
-        
+
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
+
         $content = $stack[0]->content;
         $this->assertFalse(empty($content));
     }
-    
+
     public function testExec_connectionFailed()
     {
         $request = $this->manager->newRequest();
@@ -43,29 +43,29 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Aura\Http\Exception\ConnectionFailed');
         $stack = $this->manager->send($request);
     }
-    
+
     public function testExec_version10()
     {
         $request = $this->manager->newRequest();
         $request->setUrl($this->url);
         $request->setVersion('1.0');
         $stack = $this->manager->send($request);
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
         $content = $stack[0]->content;
         $this->assertFalse(empty($content));
     }
-    
+
     public function testExec_noVersion()
     {
         $request = $this->manager->newRequest();
         $request->setUrl($this->url);
         $request->setVersion(null);
         $stack = $this->manager->send($request);
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
         $content = $stack[0]->content;
         $this->assertFalse(empty($content));
     }
-    
+
     public function testExec_post()
     {
         $request = $this->manager->newRequest();
@@ -73,30 +73,30 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         $request->setMethod(Request::METHOD_POST);
         $request->setContent(['foo' => 'bar']);
         $stack = $this->manager->send($request);
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
         $content = $stack[0]->content;
         $this->assertFalse(empty($content));
     }
-    
+
     public function testExec_head()
     {
         $request = $this->manager->newRequest();
         $request->setUrl($this->url);
         $request->setMethod(Request::METHOD_HEAD);
         $stack = $this->manager->send($request);
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
         $content = $stack[0]->content;
         $this->assertTrue(empty($content));
         $headers = $stack[0]->headers->__toString();
         $this->assertFalse(empty($headers));
     }
-    
+
     public function testExec_putFile()
     {
         $request = $this->manager->newRequest();
         $request->setUrl($this->url);
         $request->setMethod(Request::METHOD_PUT);
-        
+
         $structure = array('resource.txt' => 'Hello Resource');
         $root = vfsStream::setup('root', null, $structure);
         $file = vfsStream::url('root/resource.txt');
@@ -104,39 +104,39 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         fwrite($storage, 'foobar');
         rewind($storage);
         $request->setContent($storage);
-        
+
         $stack = $this->manager->send($request);
-        
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
+
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
         $content = $stack[0]->content;
         $this->assertFalse(empty($content));
     }
-    
+
     public function testExec_putString()
     {
         $request = $this->manager->newRequest();
         $request->setUrl($this->url);
         $request->setMethod(Request::METHOD_PUT);
         $request->setContent('foobar');
-        
+
         $stack = $this->manager->send($request);
-        
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
+
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
         $content = $stack[0]->content;
         $this->assertFalse(empty($content));
     }
-    
+
     public function testExec_custom()
     {
         $request = $this->manager->newRequest();
         $request->setUrl($this->url);
         $request->setMethod(Request::METHOD_TRACE);
         $stack = $this->manager->send($request);
-        $this->assertInstanceOf('Aura\Http\Message\Response\Stack', $stack);
+        $this->assertInstanceOf('Aura\Http\Message\ResponseStack', $stack);
         $content = $stack[0]->content;
         $this->assertFalse(empty($content));
     }
-    
+
     public function testExec_saveToFile()
     {
         $request = $this->manager->newRequest();
@@ -150,7 +150,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         $content = $stack[0]->content;
         $this->assertSame($stream, $content);
     }
-    
+
     public function testExec_cookiejar()
     {
         $request = $this->manager->newRequest();

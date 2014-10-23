@@ -29,7 +29,7 @@ class CommonTest extends AbstractContainerTest
             array('Aura\Http\Header\HeaderCollection'),
             array('Aura\Http\Http'),
             array('Aura\Http\Message\Message'),
-            array('Aura\Http\Message\Response\StackBuilder'),
+            array('Aura\Http\Message\ResponseStackBuilder'),
             array('Aura\Http\Multipart\FormData'),
             array('Aura\Http\Transport'),
         );

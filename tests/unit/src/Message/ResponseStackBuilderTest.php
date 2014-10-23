@@ -1,9 +1,7 @@
 <?php
-namespace Aura\Http\Message\Response;
+namespace Aura\Http\Message;
 
-use Aura\Http\Message\MessageFactory;
-
-class StackBuilderTest extends \PHPUnit_Framework_TestCase
+class ResponseStackBuilderTest extends \PHPUnit_Framework_TestCase
 {
     protected $headers = [
         'HTTP/1.1 302 Found',
@@ -26,7 +24,7 @@ class StackBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $factory = new MessageFactory;
-        $this->builder = new StackBuilder(new MessageFactory);
+        $this->builder = new ResponseStackBuilder(new MessageFactory);
     }
 
     public function testNewInstance()

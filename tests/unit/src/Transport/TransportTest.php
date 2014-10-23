@@ -7,8 +7,8 @@ use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\Response;
-use Aura\Http\MockAdapter as MockAdapter;
-use Aura\Http\MockPhpFunc as MockPhpFunc;
+use Aura\Http\FakeAdapter as FakeAdapter;
+use Aura\Http\FakePhpFunc as FakePhpFunc;
 use org\bovigo\vfs\vfsStream;
 
 class TransportTest extends \PHPUnit_Framework_TestCase
@@ -21,9 +21,9 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->phpfunc   = new MockPhpFunc;
+        $this->phpfunc   = new FakePhpFunc;
         $this->options   = new TransportOptions;
-        $this->adapter   = new MockAdapter;
+        $this->adapter   = new FakeAdapter;
 
         $this->transport = new Transport(
             $this->phpfunc,

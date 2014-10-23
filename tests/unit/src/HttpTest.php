@@ -14,7 +14,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->message_factory = new MessageFactory;
-        $this->transport = new MockTransport;
+        $this->transport = new FakeTransport;
 
         $this->http = new Http(
             $this->message_factory,

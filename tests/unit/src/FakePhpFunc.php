@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Http;
 
-class MockPhpFunc extends PhpFunc
+class FakePhpFunc extends PhpFunc
 {
     public $headers = [];
     public $cookies = [];
@@ -9,7 +9,7 @@ class MockPhpFunc extends PhpFunc
     public $file;
     public $line;
     public $content = null;
-    
+
     public function reset()
     {
         $this->headers      = [];
@@ -17,15 +17,13 @@ class MockPhpFunc extends PhpFunc
         $this->content      = null;
         $this->headers_sent = false;
     }
-    
-    // mock the function for this namespace
+
     public function header($string)
     {
         $this->headers[] = $string;
         $this->headers_sent = true;
     }
 
-    // mock the function for this namespace
     public function headers_sent(&$file, &$line)
     {
         if ($this->headers_sent) {
@@ -37,7 +35,6 @@ class MockPhpFunc extends PhpFunc
         }
     }
 
-    // mock the function for this namespace
     public function setcookie(
         $name,
         $value,
@@ -57,7 +54,7 @@ class MockPhpFunc extends PhpFunc
             'httponly' => $httponly,
         ];
     }
-    
+
     public function output($text)
     {
         $this->content .= $text;

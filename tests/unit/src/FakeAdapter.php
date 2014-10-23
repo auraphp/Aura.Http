@@ -5,7 +5,7 @@ use Aura\Http\Adapter\AdapterInterface;
 use Aura\Http\Message\Request;
 use Aura\Http\Transport\TransportOptions;
 
-class MockAdapter implements AdapterInterface
+class FakeAdapter implements AdapterInterface
 {
     public $request;
     public $options;

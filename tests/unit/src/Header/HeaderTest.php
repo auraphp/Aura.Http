@@ -44,7 +44,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     // {
     //     $this->message->setHeader("key\r\n-=foo", 'value');
     //     $this->transport->sendRequest($req);
-    //     $this->assertTrue(array_key_exists('Key-Foo', Mock::$request->headers->getAll()));;
+    //     $this->assertTrue(array_key_exists('Key-Foo', Fake::$request->headers->getAll()));;
     // }
     //
     // public function testSetHeaderDeleteHeaderWithNullOrFalseValue()
@@ -56,26 +56,26 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     //
     //     $this->transport->sendRequest($req);
     //
-    //     $this->assertTrue(isset(Mock::$request->headers->Key));
+    //     $this->assertTrue(isset(Fake::$request->headers->Key));
     //
     //     $this->message->setHeader("key", false);
     //
     //     $this->transport->sendRequest($req);
     //
-    //     $this->assertFalse(isset(Mock::$request->headers->Key));
+    //     $this->assertFalse(isset(Fake::$request->headers->Key));
     //
     //     // null
     //     $this->message->setHeader("key", 'value');
     //
     //     $this->transport->sendRequest($req);
     //
-    //     $this->assertTrue(isset(Mock::$request->headers->Key));
+    //     $this->assertTrue(isset(Fake::$request->headers->Key));
     //
     //     $this->message->setHeader("key", null);
     //
     //     $this->transport->sendRequest($req);
     //
-    //     $this->assertFalse(isset(Mock::$request->headers->Key));
+    //     $this->assertFalse(isset(Fake::$request->headers->Key));
     // }
     //
     // public function testSetHeaderReplaceValue()
@@ -86,13 +86,13 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     //
     //     $this->transport->sendRequest($req);
     //
-    //     $this->assertSame('value', Mock::$request->headers->Key->getValue());
+    //     $this->assertSame('value', Fake::$request->headers->Key->getValue());
     //
     //     $this->message->setHeader("key", 'value2');
     //
     //     $this->transport->sendRequest($req);
     //
-    //     $this->assertSame('value2', Mock::$request->headers->Key->getValue());
+    //     $this->assertSame('value2', Fake::$request->headers->Key->getValue());
     // }
     //
     // public function testSetHeaderMultiValue()
@@ -105,7 +105,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     //
     //     $expected = ['value', 'value2'];
     //
-    //     foreach (Mock::$request->headers->get('Key') as $i => $value) {
+    //     foreach (Fake::$request->headers->get('Key') as $i => $value) {
     //         $this->assertSame('Key', $value->getLabel());
     //         $this->assertSame($expected[$i], $value->getValue());
     //     }

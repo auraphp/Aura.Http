@@ -9,6 +9,6 @@ class StreamTest extends AbstractTest
     {
         parent::setUp();
         $factory = new HttpFactory;
-        $this->manager = $factory->newInstance('stream');
+        $this->http = $factory->newInstance('stream');
     }
 }

@@ -9,6 +9,6 @@ class CurlTest extends AbstractTest
     {
         parent::setUp();
         $factory = new HttpFactory;
-        $this->manager = $factory->newInstance('curl');
+        $this->http = $factory->newInstance('curl');
     }
 }

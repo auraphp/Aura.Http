@@ -11,7 +11,12 @@ matrix:
 
 before_install:
  - sudo apt-get update -qq
- - sudo apt-get install -qq apache2 
-before_script:
-  - cd tests
-script: phpunit
+ - sudo apt-get install -qq apache2
+script:
+  - phpunit -c tests/unit/ --coverage-clover=coverage.clover
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+notifications:
+  - email: true
+  - irc: "irc.freenode.org#auraphp"

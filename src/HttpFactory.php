@@ -20,7 +20,7 @@ use Aura\Http\Multipart\FormData;
 use Aura\Http\Multipart\PartFactory;
 use Aura\Http\PhpFunc;
 use Aura\Http\Transport\Transport;
-use Aura\Http\Transport\Options as TransportOptions;
+use Aura\Http\Transport\TransportOptions as TransportOptions;
 
 /**
  *

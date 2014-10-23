@@ -95,7 +95,7 @@ class Common extends Config
          */
         $di->params['Aura\Http\Transport'] = [
             'phpfunc' => $di->lazyNew('Aura\Http\PhpFunc'),
-            'options' => $di->lazyNew('Aura\Http\Transport\Options'),
+            'options' => $di->lazyNew('Aura\Http\Transport\TransportOptions'),
             'adapter' => extension_loaded('curl')
                        ? $di->lazyNew('Aura\Http\Adapter\CurlAdapter')
                        : $di->lazyNew('Aura\Http\Adapter\StreamAdapter'),

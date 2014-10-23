@@ -3,14 +3,14 @@ namespace Aura\Http;
 
 use Aura\Http\Adapter\AdapterInterface;
 use Aura\Http\Message\Request;
-use Aura\Http\Transport\Options;
+use Aura\Http\Transport\TransportOptions;
 
 class MockAdapter implements AdapterInterface
 {
     public $request;
     public $options;
-    
-    public function exec(Request $request, Options $options)
+
+    public function exec(Request $request, TransportOptions $options)
     {
         $this->request = $request;
         $this->options = $options;

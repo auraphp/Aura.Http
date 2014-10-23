@@ -22,7 +22,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->phpfunc   = new MockPhpFunc;
-        $this->options   = new Options;
+        $this->options   = new TransportOptions;
         $this->adapter   = new MockAdapter;
 
         $this->transport = new Transport(

@@ -13,7 +13,7 @@ namespace Aura\Http\Adapter;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
 use Aura\Http\Message\ResponseStackBuilder;
-use Aura\Http\Transport\Options;
+use Aura\Http\Transport\TransportOptions;
 
 /**
  *
@@ -105,14 +105,14 @@ class CurlAdapter implements AdapterInterface
      *
      * @param Request $request The request to send.
      *
-     * @param Options $options The transport options.
+     * @param TransportOptions $options The transport options.
      *
      * @return Response\Message\Stack
      *
      * @todo Implement an exception for timeouts.
      *
      */
-    public function exec(Request $request, Options $options)
+    public function exec(Request $request, TransportOptions $options)
     {
         $this->request = $request;
         $this->options = $options;

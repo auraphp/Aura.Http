@@ -12,12 +12,12 @@ namespace Aura\Http\Transport;
 
 /**
  *
- * The Aura Response class.
+ * Options for the transport.
  *
  * @package Aura.Http
  *
  */
-class Options
+class TransportOptions
 {
     /**
      *

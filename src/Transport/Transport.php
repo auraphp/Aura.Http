@@ -48,7 +48,7 @@ class Transport implements TransportInterface
      *
      * A set of option for this transport instance.
      *
-     * @var Options
+     * @var TransportOptions
      *
      */
     protected $options;
@@ -68,21 +68,21 @@ class Transport implements TransportInterface
      *
      * @param PhpFunc $phpfunc
      *
-     * @param Options $options
+     * @param TransportOptions $options
      *
      * @param AdapterInterface $adapter
      *
      */
     public function __construct(
-        PhpFunc             $phpfunc,
-        Options             $options,
-        AdapterInterface    $adapter
+        PhpFunc $phpfunc,
+        TransportOptions $options,
+        AdapterInterface $adapter
     ) {
         $this->phpfunc = $phpfunc;
         $this->options = $options;
         $this->adapter = $adapter;
 
-        $cgi = (strpos(php_sapi_name(), 'cgi') !== false);
+        $cgi = (strpos($this->phpfunc->php_sapi_name(), 'cgi') !== false);
         $this->setCgi($cgi);
     }
 

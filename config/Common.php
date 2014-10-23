@@ -64,7 +64,7 @@ class Common extends Config
          * Aura\Http\Http
          */
         $di->params['Aura\Http\Http'] = [
-            'message_factory' => $di->lazyNew('Aura\Http\Message\Factory'),
+            'message_factory' => $di->lazyNew('Aura\Http\Message\MessageFactory'),
             'transport'       => $di->lazyGet('aura/http:transport'),
         ];
 
@@ -80,7 +80,7 @@ class Common extends Config
          * Aura\Http\Message\Response\StackBuilder
          */
         $di->params['Aura\Http\Message\Response\StackBuilder'] = [
-            'message_factory' => $di->lazyNew('Aura\Http\Message\Factory'),
+            'message_factory' => $di->lazyNew('Aura\Http\Message\MessageFactory'),
         ];
 
         /**

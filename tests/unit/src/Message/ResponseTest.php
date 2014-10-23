@@ -7,7 +7,7 @@ use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Message\MessageTest;
 
-class ResponseTest extends MessageTest
+class ResponseTest extends AbstractMessageTest
 {
     protected function setUp()
     {

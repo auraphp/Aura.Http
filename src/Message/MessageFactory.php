@@ -17,30 +17,13 @@ use Aura\Http\Header\HeaderFactory;
 
 /**
  *
- * Factory class to create new instances of
- *
- * Aura\Http\Message\Message
- * Aura\Http\Message\Request
- * Aura\Http\Message\Response
+ * Factory class to create new Request and Response instances.
  *
  * @package Aura.Http
  *
  */
 class MessageFactory
 {
-    /**
-     *
-     * Creates the object of Aura\Http\Message\Message
-     *
-     * @return Message An object of Aura\Http\Message\Message
-     */
-    public function newMessage()
-    {
-        $headers = new HeaderCollection(new HeaderFactory);
-        $cookies = new CookieCollection(new CookieFactory);
-        return new Message($headers, $cookies);
-    }
-
     /**
      *
      * Creates an object of Aura\Http\Message\Request

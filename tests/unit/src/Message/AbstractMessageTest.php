@@ -6,7 +6,7 @@ use Aura\Http\Cookie\CookieCollection;
 use Aura\Http\Header\HeaderFactory;
 use Aura\Http\Header\HeaderCollection;
 
-class MessageTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 {
     protected $message;
 

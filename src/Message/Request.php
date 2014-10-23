@@ -21,7 +21,7 @@ use Aura\Http\Exception;
  * @package Aura.Http
  *
  */
-class Request extends Message
+class Request extends AbstractMessage
 {
     /**
      * HTTP method constants.

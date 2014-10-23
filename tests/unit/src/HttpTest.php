@@ -39,11 +39,4 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $transport = $this->http->transport;
         $this->assertSame($response, $transport->response);
     }
-
-    public function test_unknown()
-    {
-        $message = $this->message_factory->newMessage();
-        $this->setExpectedException('Aura\Http\Exception\UnknownMessageType');
-        $this->http->send($message);
-    }
 }

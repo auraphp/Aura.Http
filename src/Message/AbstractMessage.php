@@ -20,7 +20,7 @@ use Aura\Http\Header\HeaderCollection;
  * @package Aura.Http
  *
  */
-class Message
+abstract class AbstractMessage
 {
     /**
      *

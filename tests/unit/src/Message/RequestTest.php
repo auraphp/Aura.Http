@@ -8,7 +8,7 @@ use Aura\Http\Header\HeaderCollection;
 use Aura\Http\Message\MessageTest;
 use org\bovigo\vfs\vfsStream;
 
-class RequestTest extends MessageTest
+class RequestTest extends AbstractMessageTest
 {
     protected function setUp()
     {

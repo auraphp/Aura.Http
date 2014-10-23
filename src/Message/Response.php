@@ -19,7 +19,7 @@ use Aura\Http\Exception;
  * @package Aura.Http
  *
  */
-class Response extends Message
+class Response extends AbstractMessage
 {
     /**
      *

@@ -27,7 +27,7 @@ class Common extends Config
         /**
          * Services
          */
-        $di->set('aura/http:transport', $di->lazyNew('Aura\Http\Transport'));
+        $di->set('aura/http:transport', $di->lazyNew('Aura\Http\Transport\Transport'));
         $di->set('aura/http:http', $di->lazyNew('Aura\Http\Http'));
 
         /**
@@ -69,9 +69,9 @@ class Common extends Config
         ];
 
         /**
-         * Aura\Http\Message
+         * Aura\Http\Message\AbstractMessage
          */
-        $di->params['Aura\Http\Message'] = [
+        $di->params['Aura\Http\Message\AbstractMessage'] = [
             'headers' => $di->lazyNew('Aura\Http\Header\HeaderCollection'),
             'cookies' => $di->lazyNew('Aura\Http\Cookie\CookieCollection'),
         ];
@@ -91,9 +91,9 @@ class Common extends Config
         ];
 
         /**
-         * Aura\Http\Transport
+         * Aura\Http\Transport\Transport
          */
-        $di->params['Aura\Http\Transport'] = [
+        $di->params['Aura\Http\Transport\Transport'] = [
             'phpfunc' => $di->lazyNew('Aura\Http\PhpFunc'),
             'options' => $di->lazyNew('Aura\Http\Transport\TransportOptions'),
             'adapter' => extension_loaded('curl')

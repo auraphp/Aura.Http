@@ -12,10 +12,15 @@ class CommonTest extends AbstractContainerTest
         );
     }
 
+    protected function getAutoResolve()
+    {
+        return false;
+    }
+
     public function provideGet()
     {
         return array(
-            array('aura/http:transport', 'Aura\Http\Transport'),
+            array('aura/http:transport', 'Aura\Http\Transport\Transport'),
             array('aura/http:http', 'Aura\Http\Http'),
         );
     }
@@ -28,10 +33,11 @@ class CommonTest extends AbstractContainerTest
             array('Aura\Http\Cookie\CookieCollection'),
             array('Aura\Http\Header\HeaderCollection'),
             array('Aura\Http\Http'),
-            array('Aura\Http\Message\Message'),
+            array('Aura\Http\Message\Request'),
+            array('Aura\Http\Message\Response'),
             array('Aura\Http\Message\ResponseStackBuilder'),
             array('Aura\Http\Multipart\FormData'),
-            array('Aura\Http\Transport'),
+            array('Aura\Http\Transport\Transport'),
         );
     }
 }

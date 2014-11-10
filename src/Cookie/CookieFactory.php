@@ -23,22 +23,6 @@ class CookieFactory
 {
     /**
      *
-     * Base values for a single cookie.
-     *
-     * @var array
-     *
-     */
-    protected $params = [
-        'value'    => null,
-        'expire'   => 0,
-        'path'     => null,
-        'domain'   => null,
-        'secure'   => false,
-        'httponly' => true,
-    ];
-
-    /**
-     *
      * Creates and returns a new Cookie object.
      *
      * @param string $name Cookie name.
@@ -51,7 +35,17 @@ class CookieFactory
      */
     public function newInstance($name = null, array $params = array())
     {
-        $params = array_merge($this->params, $params);
+        $default = [
+            'value'    => null,
+            'expire'   => 0,
+            'path'     => null,
+            'domain'   => null,
+            'secure'   => false,
+            'httponly' => true,
+        ];
+
+        $params = array_merge($default, $params);
+
         return new Cookie(
             $name,
             $params['value'],

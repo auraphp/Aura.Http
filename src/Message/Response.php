@@ -22,58 +22,48 @@ use Aura\Http\Exception;
 class Response extends AbstractMessage
 {
     /**
-     *
-     * List of default HTTP status messages.
-     *
-     * @var array
-     *
+     * Constants for response status codes and reason phrases.
      */
-    protected $status_text_default = [
-        '100' => 'Continue',
-        '101' => 'Switching Protocols',
-
-        '200' => 'OK',
-        '201' => 'Created',
-        '202' => 'Accepted',
-        '203' => 'Non-Authoritative Information',
-        '204' => 'No Content',
-        '205' => 'Reset Content',
-        '206' => 'Partial Content',
-
-        '300' => 'Multiple Choices',
-        '301' => 'Moved Permanently',
-        '302' => 'Found',
-        '303' => 'See Other',
-        '304' => 'Not Modified',
-        '305' => 'Use Proxy',
-        '307' => 'Temporary Redirect',
-
-        '400' => 'Bad Request',
-        '401' => 'Unauthorized',
-        '402' => 'Payment Required',
-        '403' => 'Forbidden',
-        '404' => 'Not Found',
-        '405' => 'Method Not Allowed',
-        '406' => 'Not Acceptable',
-        '407' => 'Proxy Authentication Required',
-        '408' => 'Request Timeout',
-        '409' => 'Conflict',
-        '410' => 'Gone',
-        '411' => 'Length Required',
-        '412' => 'Precondition Failed',
-        '413' => 'Request Entity Too Large',
-        '414' => 'Request-URI Too Long',
-        '415' => 'Unsupported Media Type',
-        '416' => 'Requested Range Not Satisfiable',
-        '417' => 'Expectation Failed',
-
-        '500' => 'Internal Server Error',
-        '501' => 'Not Implemented',
-        '502' => 'Bad Gateway',
-        '503' => 'Service Unavailable',
-        '504' => 'Gateway Timeout',
-        '505' => 'HTTP Version Not Supported',
-    ];
+    const STATUS_100 = 'Continue';
+    const STATUS_101 = 'Switching Protocols';
+    const STATUS_200 = 'OK';
+    const STATUS_201 = 'Created';
+    const STATUS_202 = 'Accepted';
+    const STATUS_203 = 'Non-Authoritative Information';
+    const STATUS_204 = 'No Content';
+    const STATUS_205 = 'Reset Content';
+    const STATUS_206 = 'Partial Content';
+    const STATUS_300 = 'Multiple Choices';
+    const STATUS_301 = 'Moved Permanently';
+    const STATUS_302 = 'Found';
+    const STATUS_303 = 'See Other';
+    const STATUS_304 = 'Not Modified';
+    const STATUS_305 = 'Use Proxy';
+    const STATUS_307 = 'Temporary Redirect';
+    const STATUS_400 = 'Bad Request';
+    const STATUS_401 = 'Unauthorized';
+    const STATUS_402 = 'Payment Required';
+    const STATUS_403 = 'Forbidden';
+    const STATUS_404 = 'Not Found';
+    const STATUS_405 = 'Method Not Allowed';
+    const STATUS_406 = 'Not Acceptable';
+    const STATUS_407 = 'Proxy Authentication Required';
+    const STATUS_408 = 'Request Timeout';
+    const STATUS_409 = 'Conflict';
+    const STATUS_410 = 'Gone';
+    const STATUS_411 = 'Length Required';
+    const STATUS_412 = 'Precondition Failed';
+    const STATUS_413 = 'Request Entity Too Large';
+    const STATUS_414 = 'Request-URI Too Long';
+    const STATUS_415 = 'Unsupported Media Type';
+    const STATUS_416 = 'Requested Range Not Satisfiable';
+    const STATUS_417 = 'Expectation Failed';
+    const STATUS_500 = 'Internal Server Error';
+    const STATUS_501 = 'Not Implemented';
+    const STATUS_502 = 'Bad Gateway';
+    const STATUS_503 = 'Service Unavailable';
+    const STATUS_504 = 'Gateway Timeout';
+    const STATUS_505 = 'HTTP Version Not Supported';
 
     /**
      *
@@ -109,8 +99,9 @@ class Response extends AbstractMessage
         }
         $this->status_code = $code;
 
-        if (isset($this->status_text_default[$code])) {
-            $this->setStatusText($this->status_text_default[$code]);
+        $const = "static::STATUS_{$code}";
+        if (defined($const)) {
+            $this->setStatusText(constant($const));
         } else {
             $this->setStatusText(null);
         }

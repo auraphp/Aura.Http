@@ -314,6 +314,11 @@ class Stream implements AdapterInterface
 
         // what scheme are we using?
         $url = parse_url($this->request->url);
+
+        if (empty($url['scheme'])) {
+            $url['scheme'] = 'http';
+        }
+
         if ($url['scheme'] == 'https') {
             // secure scheme
             $this->setContextOptionsSecure();

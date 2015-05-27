@@ -456,6 +456,12 @@ class CurlAdapter implements AdapterInterface
             // a file resource
             curl_setopt($this->curl, CURLOPT_INFILE, $content);
         } else {
+            // CURLOPT_PUT only works with INFILE, to use a string you must use 
+            // customrequest instead             
+            if($method == Request::METHOD_PUT) {
+                curl_setopt($this->curl, CURLOPT_PUT, false);
+                curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+           }
             // anything else
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $content);
         }

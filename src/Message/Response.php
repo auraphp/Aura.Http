@@ -90,6 +90,8 @@ class Response extends AbstractMessage
      *
      * @param int $code An HTTP status code, such as 200, 302, 404, etc.
      *
+     * @return self
+     *
      */
     public function setStatusCode($code)
     {
@@ -127,7 +129,7 @@ class Response extends AbstractMessage
      *
      * @param string $text The status text.
      *
-     * @return void
+     * @return self
      *
      */
     public function setStatusText($text)

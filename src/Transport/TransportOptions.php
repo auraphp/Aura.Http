@@ -266,7 +266,7 @@ class TransportOptions
      *
      * Gets the proxy "username:password" credentials.
      *
-     * @return string
+     * @return string|void
      *
      */
     public function getProxyCredentials()

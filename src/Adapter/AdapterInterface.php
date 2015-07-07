@@ -11,6 +11,7 @@
 namespace Aura\Http\Adapter;
 
 use Aura\Http\Message\Request;
+use Aura\Http\Message\ResponseStack;
 use Aura\Http\Transport\TransportOptions;
 
 /**
@@ -30,7 +31,7 @@ interface AdapterInterface
      *
      * @param TransportOptions $options The transport options.
      *
-     * @return Response\ResponseStack A stack of responses.
+     * @return ResponseStack A stack of responses.
      *
      */
     public function exec(Request $request, TransportOptions $options);

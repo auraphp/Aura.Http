@@ -26,7 +26,7 @@ class CookieJarFactory
      * @param resource|string $storage A string file name, or a stream
      * resource, for cookie storage.
      *
-     * @return Jar
+     * @return CookieJar
      *
      */
     public function newInstance($storage)

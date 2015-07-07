@@ -11,6 +11,7 @@
 namespace Aura\Http;
 
 use Aura\Http\Message\MessageFactory;
+use Aura\Http\Transport\Transport;
 use Aura\Http\Transport\TransportInterface;
 use Aura\Http\Message\AbstractMessage;
 use Aura\Http\Message\Request;
@@ -36,7 +37,7 @@ class Http
     /**
      * An object of type Aura\Http\Transport\TransportInterface
      *
-     * @var Aura\Http\Transport\TransportInterface
+     * @var \Aura\Http\Transport\TransportInterface
      *
      */
     protected $transport;

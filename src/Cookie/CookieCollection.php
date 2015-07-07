@@ -26,7 +26,7 @@ class CookieCollection implements \IteratorAggregate, \Countable
      *
      * The list of all cookies.
      *
-     * @var array
+     * @var Cookie[]
      *
      */
     protected $list = [];

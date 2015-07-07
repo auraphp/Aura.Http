@@ -93,7 +93,7 @@ abstract class AbstractMessage
      *
      * @param CookieCollection $cookies The cookies object.
      *
-     * @return void
+     * @return self
      *
      */
     public function setCookies(CookieCollection $cookies)

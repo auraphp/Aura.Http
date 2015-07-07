@@ -10,6 +10,7 @@
  */
 namespace Aura\Http\Adapter;
 
+use Aura\Http\Cookie\CookieJar;
 use Aura\Http\Cookie\CookieJarFactory;
 use Aura\Http\Exception;
 use Aura\Http\Message\Request;
@@ -30,7 +31,7 @@ class StreamAdapter implements AdapterInterface
      *
      * Builds a stack of response messages.
      *
-     * @var StackBuilder
+     * @var ResponseStackBuilder
      *
      */
     protected $stack_builder;
@@ -39,7 +40,7 @@ class StreamAdapter implements AdapterInterface
      *
      * Creates a cookie jar.
      *
-     * @var JarFactory
+     * @var CookieJarFactory
      *
      */
     protected $cookie_jar_factory;
@@ -48,7 +49,7 @@ class StreamAdapter implements AdapterInterface
      *
      * A cookie jar.
      *
-     * @var Jar
+     * @var CookieJar
      *
      */
     protected $cookie_jar;
@@ -66,7 +67,7 @@ class StreamAdapter implements AdapterInterface
      *
      * The transport options.
      *
-     * @var Options
+     * @var TransportOptions
      *
      */
     protected $options;
@@ -142,7 +143,7 @@ class StreamAdapter implements AdapterInterface
      *
      * @param FormData $form_data Used for building multipart/form-data.
      *
-     * @param JarFactory $cookie_jar_factory For creating a cookie jar.
+     * @param CookieJarFactory $cookie_jar_factory For creating a cookie jar.
      *
      */
     public function __construct(

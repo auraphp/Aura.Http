@@ -43,7 +43,7 @@ class HeaderCollection implements \IteratorAggregate, \Countable
      *
      * Constructor
      *
-     * @param Factory $factory A factory to create header objects.
+     * @param HeaderFactory $factory A factory to create header objects.
      *
      */
     public function __construct(HeaderFactory $factory)
@@ -138,7 +138,7 @@ class HeaderCollection implements \IteratorAggregate, \Countable
      *
      * @param string $label
      *
-     * @return null|Aura\Http\Header|array
+     * @return null|\Aura\Http\Header\Header|array
      *
      */
     public function get($label)

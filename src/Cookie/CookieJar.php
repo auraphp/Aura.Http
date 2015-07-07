@@ -29,7 +29,7 @@ class CookieJar
      *
      * The list of cookies.
      *
-     * @var array
+     * @var Cookie[]
      *
      */
     protected $list = [];
@@ -248,7 +248,7 @@ class CookieJar
      *
      * @return array
      *
-     * @throws Aura\Http\Exception If the matching URL does not contain a
+     * @throws \Aura\Http\Exception If the matching URL does not contain a
      * scheme or domain.
      *
      */

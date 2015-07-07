@@ -46,7 +46,7 @@ class CurlAdapter implements AdapterInterface
      *
      * The transport options.
      *
-     * @var Options
+     * @var TransportOptions
      *
      */
     protected $options;

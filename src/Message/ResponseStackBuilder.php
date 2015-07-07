@@ -52,7 +52,7 @@ class ResponseStackBuilder
      * @param string $url The default URL for cookies (typically the request
      * URL).
      *
-     * @return Stack
+     * @return ResponseStack
      *
      */
     public function newInstance(array $headers, $content = null, $url = null)

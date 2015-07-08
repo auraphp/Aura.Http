@@ -443,10 +443,11 @@ class CurlAdapter implements AdapterInterface
             return;
         }
 
-        // send only for POST or PUT
+        // send for POST or PUT or DELETE all of which allow bodies
         $method = $this->request->method;
         $post_or_put = $method == Request::METHOD_POST
-                    || $method == Request::METHOD_PUT;
+                    || $method == Request::METHOD_PUT
+                    || $method == Request::METHOD_DELETE;
         if (! $post_or_put) {
             return;
         }

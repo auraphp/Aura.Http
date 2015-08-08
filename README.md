@@ -71,12 +71,12 @@ the `Manager`.
 $response = $http->newResponse();
 $response->headers->set('Content-Type', 'text/plain');
 $response->setContent('Hello World!');
-$http->send($response);
+$http->sendResponse($response);
 
 // make a request and get a response stack
 $request = $http->newRequest();
 $request->setUrl('http://example.com');
-$stack = $http->send($request);
+$stack = $http->sendRequest($request);
 echo $stack[0]->content;
 ```
 
@@ -232,7 +232,7 @@ response using the HTTP `Manager` object.
 
 ```php
 <?php
-$http->send($response);
+$http->sendResponse($response);
 ```
 
 This will send all the headers using [header()](http://php.net/header) and all
@@ -354,7 +354,7 @@ You can send the request via the `Manager` object; it returns a `ResponseStack`.
 
 ```php
 <?php
-$stack = $http->send($request);
+$stack = $http->sendRequest($request);
 // $stack[0]->headers contains the headers of the last response
 // $stack[0]->content contains the content of the last response
 ```
@@ -373,7 +373,7 @@ Making a GET request to the Github API to list Aura's repositories:
 <?php
 $request->setUrl('https://api.github.com/orgs/auraphp/repos');
 $request->getHeaders()->add('User-Agent', 'Aura Bot v1');
-$stack = $http->send($request);
+$stack = $http->sendRequest($request);
 $repos = json_decode($stack[0]->content);
 foreach ($repos as $repo) {
     echo $repo->name . PHP_EOL;
@@ -389,7 +389,7 @@ $request->setUrl('http://example.com/submit.php');
 $request->setMethod(Request::METHOD_POST);
 $request->setContent(json_encode(['hello' => 'world']));
 $request->headers->set('Content-Type', 'application/json');
-$stack = $http->send($request);
+$stack = $http->sendRequest($request);
 ```
 
 Saving the response content to a file:
@@ -399,7 +399,7 @@ Saving the response content to a file:
 $fp = fopen('/path/to/download.ext', 'wb+');
 $request->setUrl('http://example.com/download.ext');
 $request->setSaveToStream($fp);
-$stack = $http->send($request);
+$stack = $http->sendRequest($request);
 // $stack[0]->content will be a file stream
 ```
 

@@ -67,6 +67,7 @@ class Response extends Message
         '415' => 'Unsupported Media Type',
         '416' => 'Requested Range Not Satisfiable',
         '417' => 'Expectation Failed',
+        '451' => 'Unavailable For Legal Reasons',
 
         '500' => 'Internal Server Error',
         '501' => 'Not Implemented',

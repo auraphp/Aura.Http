@@ -457,15 +457,40 @@ class CurlAdapter implements AdapterInterface
             // a file resource
             curl_setopt($this->curl, CURLOPT_INFILE, $content);
         } else {
-            // CURLOPT_PUT only works with INFILE, to use a string you must use 
-            // customrequest instead             
+            // CURLOPT_PUT only works with INFILE, to use a string you must use
+            // customrequest instead
             if($method == Request::METHOD_PUT) {
                 curl_setopt($this->curl, CURLOPT_PUT, false);
                 curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PUT');
            }
             // anything else
+            if (is_array($content)) {
+                $content = $this->rebuildWithCurlFile($content);
+            }
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $content);
         }
+    }
+
+    public function rebuildWithCurlFile(array $array)
+    {
+        // Only when PHP 5.5+
+        if (! class_exists('CURLFile')) {
+            return $array;
+        }
+        foreach ($array as $name => $value) {
+            // add parts
+            if (is_array($value)) {
+                // recursively descend
+                $array[$name] = $this->rebuildWithCurlFile($value);
+            } else {
+                if ($value{0} == '@') {
+                    // treat as a file upload
+                    $file = substr($value, 1);
+                    $array[$name] = new \CURLFile($file);
+                }
+            }
+        }
+        return $array;
     }
 
     /**

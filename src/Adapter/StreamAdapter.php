@@ -323,7 +323,8 @@ class StreamAdapter implements AdapterInterface
         // set context
         $this->context = stream_context_create(
             [
-            $url['scheme'] => $this->context_options,
+            // use 'http' even for 'https'
+            'http' => $this->context_options,
             ]
         );
     }

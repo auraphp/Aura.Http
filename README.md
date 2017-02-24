@@ -17,9 +17,9 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Http/release
 
 ### Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Http/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
-[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Http/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
-[![Build Status](https://travis-ci.org/auraphp/Aura.Http.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Html)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Http/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Http/)
+[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Http/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Http/)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Http.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Http)
 
 To run the unit tests at the command line, issue `phpunit -c tests/unit/`. (This requires [PHPUnit][] to be available as `phpunit`.)
 
